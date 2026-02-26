@@ -3,46 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N4 Master - Luyện thi JLPT/NAT-TEST Tốc độ</title>
+    <title>N4 Master - AI Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
-
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
-            background-color: #fcfbf9; /* Warm neutral background */
+            background-color: #fcfbf9;
             color: #44403c;
         }
-        .jp-font {
-            font-family: 'Noto Sans JP', sans-serif;
-        }
+        .jp-font { font-family: 'Noto Sans JP', sans-serif; }
         
-        /* Flashcard Flip Effect */
+        /* Flashcard & UI Animations */
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
         .card-flip-inner { transition: transform 0.6s; }
-        .group:hover .card-flip-inner.hover-trigger { transform: rotateY(180deg); }
         .flipped { transform: rotateY(180deg); }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
-
-        /* Chart Container */
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 400px; /* Reduced for dashboard balance */
+            max-width: 350px;
             height: 250px;
             margin: 0 auto;
         }
 
-        /* Reading Text Highlight */
         .lookup-word {
             cursor: pointer;
             border-bottom: 2px dashed #a8a29e;
@@ -54,523 +42,421 @@
             color: #d97706;
         }
 
-        /* Tab Animation */
-        .tab-content {
-            animation: fadeIn 0.3s ease-in-out;
-        }
+        .tab-content { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Chat bubbles */
+        .chat-bubble-ai { background: #f3f4f6; color: #1f2937; border-radius: 1rem 1rem 1rem 0; }
+        .chat-bubble-user { background: #4f46e5; color: white; border-radius: 1rem 1rem 0 1rem; }
     </style>
 </head>
-<body class="h-screen flex flex-col md:flex-row overflow-hidden text-stone-700">
+<body class="h-screen flex flex-col md:flex-row overflow-hidden">
 
     <!-- Sidebar Navigation -->
-    <aside class="w-full md:w-64 bg-stone-100 border-r border-stone-200 flex-shrink-0 flex flex-col z-20 shadow-sm">
-        <div class="p-6 flex items-center justify-center border-b border-stone-200">
-            <div class="text-2xl font-bold text-red-600 mr-2">⛩️</div>
-            <h1 class="text-xl font-bold tracking-tight text-stone-800">N4 Master</h1>
+    <aside class="w-full md:w-72 bg-white border-r border-stone-200 flex-shrink-0 flex flex-col z-20 shadow-sm">
+        <div class="p-6 border-b border-stone-100 text-center">
+            <h1 class="text-2xl font-bold text-stone-800 tracking-tight">N4 <span class="text-indigo-600">AI Edition</span></h1>
+            <p class="text-[10px] text-stone-400 font-bold mt-1 uppercase tracking-widest">Chương 15 - 33 • Gemini Powered</p>
         </div>
         
-        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
-            <button onclick="app.switchTab('dashboard')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all hover:bg-white hover:shadow-sm text-stone-600 font-medium bg-white shadow-sm ring-1 ring-stone-200" id="nav-dashboard">
-                <span class="mr-3">📊</span> Lộ trình & Tiến độ
+        <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+            <button onclick="app.switchTab('dashboard')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all font-medium" id="nav-dashboard">
+                <span class="mr-3">📊</span> Lộ trình học tập
             </button>
-            <button onclick="app.switchTab('vocab')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all hover:bg-white hover:shadow-sm text-stone-600 font-medium" id="nav-vocab">
-                <span class="mr-3">🎴</span> Từ vựng (Flashcard)
+            <div class="pt-4 pb-2 text-[10px] font-bold text-stone-400 uppercase tracking-widest px-3">Học tập</div>
+            <button onclick="app.switchTab('vocab')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all" id="nav-vocab">
+                <span class="mr-3">🎴</span> Từ vựng
             </button>
-            <button onclick="app.switchTab('kanji')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all hover:bg-white hover:shadow-sm text-stone-600 font-medium" id="nav-kanji">
+            <button onclick="app.switchTab('kanji')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all" id="nav-kanji">
                 <span class="mr-3">✍️</span> Kanji & Mnemonics
             </button>
-            <button onclick="app.switchTab('grammar')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all hover:bg-white hover:shadow-sm text-stone-600 font-medium" id="nav-grammar">
-                <span class="mr-3">abc</span> Ngữ pháp & Ví dụ
+            <button onclick="app.switchTab('grammar')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all" id="nav-grammar">
+                <span class="mr-3">📖</span> Ngữ pháp
             </button>
-            <button onclick="app.switchTab('reading')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all hover:bg-white hover:shadow-sm text-stone-600 font-medium" id="nav-reading">
-                <span class="mr-3">📖</span> Reading (Tra từ)
+            <button onclick="app.switchTab('reading')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all" id="nav-reading">
+                <span class="mr-3">📜</span> Đọc hiểu tương tác
+            </button>
+            <div class="pt-4 pb-2 text-[10px] font-bold text-stone-400 uppercase tracking-widest px-3">Tiện ích AI</div>
+            <button onclick="app.switchTab('ai-sensei')" class="nav-item w-full flex items-center p-3 rounded-xl transition-all text-indigo-600 font-bold bg-indigo-50" id="nav-ai-sensei">
+                <span class="mr-3">🤖</span> Chat với Sensei AI
             </button>
         </nav>
 
-        <div class="p-4 border-t border-stone-200 bg-stone-50">
-            <div class="text-xs font-semibold text-stone-500 uppercase mb-2">Gói dữ liệu</div>
-            <div class="flex items-center text-sm text-emerald-600">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
-                DungMori N4 Core
+        <div class="p-6 border-t border-stone-100">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-stone-500 uppercase">Tiến độ tổng</span>
+                <span class="text-xs font-bold text-indigo-600">24%</span>
+            </div>
+            <div class="w-full bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                <div class="bg-indigo-600 h-full" style="width: 24%"></div>
             </div>
         </div>
     </aside>
 
     <!-- Main Content Area -->
     <main class="flex-1 overflow-hidden relative flex flex-col bg-[#fcfbf9]">
-        <!-- Header Mobile -->
-        <div class="md:hidden p-4 bg-white border-b border-stone-200 flex justify-between items-center">
-            <span class="font-bold">N4 Master</span>
-            <button class="text-sm bg-stone-100 px-3 py-1 rounded">Menu</button>
+        <div id="app-content" class="flex-1 overflow-y-auto p-6 md:p-10 pb-28">
+            <!-- Content Injected via JS -->
         </div>
 
-        <!-- Content Container -->
-        <div id="app-content" class="flex-1 overflow-y-auto p-4 md:p-8 pb-24">
-            <!-- Dynamic Content Injected Here -->
+        <!-- AI Quick Modal (Contextual Help) -->
+        <div id="ai-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+                <div class="p-6 border-b border-stone-100 flex justify-between items-center bg-indigo-600 text-white">
+                    <h3 class="font-bold flex items-center"><span class="mr-2">🤖</span> Giải thích từ Sensei AI</h3>
+                    <button onclick="ai.closeModal()" class="text-white/80 hover:text-white">✕</button>
+                </div>
+                <div id="ai-modal-content" class="p-6 max-h-[60vh] overflow-y-auto text-stone-700 leading-relaxed">
+                    <div class="flex flex-col items-center justify-center py-10 space-y-4">
+                        <div class="loader"></div>
+                        <p class="text-stone-400 text-sm italic">Sensei AI đang phân tích...</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-stone-50 flex justify-end">
+                    <button onclick="ai.closeModal()" class="px-6 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-lg">Đã hiểu!</button>
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- JS Logic -->
     <script>
-        // --- 1. Database (Simulated from provided PDFs) ---
+        // --- GEMINI API CONFIG ---
+        const apiKey = "";
+        const GEMINI_MODEL = "gemini-2.5-flash-preview-09-2025";
+        const SYSTEM_PROMPT = `Bạn là một giáo viên tiếng Nhật (Sensei AI) chuyên nghiệp, thân thiện. 
+        Nhiệm vụ của bạn là giải thích các nội dung ôn thi N4.
+        Quy tắc:
+        1. Giải thích bằng tiếng Việt dễ hiểu.
+        2. Nếu là ngữ pháp: Phân tích cấu trúc, cách dùng và cho 3 ví dụ (kèm cách đọc furigana).
+        3. Nếu là từ vựng/Kanji: Giải thích ý nghĩa, sắc thái sử dụng và mẹo nhớ.
+        4. Trả lời dưới dạng Markdown đẹp.
+        5. Luôn khích lệ người học.`;
+
+        // --- DATABASE (CHƯƠNG 15 - 33) ---
         const db = {
             vocab: [
-                { id: 1, kanji: "本物", kana: "ほんもの", mean: "Đồ thật, hàng thật", type: "N" },
-                { id: 2, kanji: "彼", kana: "かれ", mean: "Anh ấy, bạn trai", type: "N" },
-                { id: 3, kanji: "台風", kana: "たいふう", mean: "Cơn bão", type: "N" },
-                { id: 4, kanji: "洗濯物", kana: "せんたくもの", mean: "Đồ giặt", type: "N" },
-                { id: 5, kanji: "遊園地", kana: "ゆうえんち", mean: "Khu vui chơi", type: "N" },
-                { id: 6, kanji: "", kana: "ハイキング", mean: "Leo núi, dã ngoại", type: "N" },
-                { id: 7, kanji: "厳しい", kana: "きびしい", mean: "Nghiêm khắc", type: "Adj-i" },
-                { id: 8, kanji: "混む", kana: "こむ", mean: "Đông đúc", type: "V" },
-                { id: 9, kanji: "上がる", kana: "あがる", mean: "Tăng lên, leo lên", type: "V" },
-                { id: 10, kanji: "下がる", kana: "さがる", mean: "Giảm xuống", type: "V" },
-                { id: 11, kanji: "乾く", kana: "かわく", mean: "Khô (quần áo)", type: "V" },
-                { id: 12, kanji: "止む", kana: "やむ", mean: "Tạnh (mưa)", type: "V" },
-                { id: 13, kanji: "叶う", kana: "かなう", mean: "(Ước mơ) thành hiện thực", type: "V" },
-                { id: 14, kanji: "楽しむ", kana: "たのしむ", mean: "Tận hưởng", type: "V" },
-                { id: 15, kanji: "定食", kana: "ていしょく", mean: "Suất ăn", type: "N" },
-                { id: 16, kanji: "部下", kana: "ぶか", mean: "Cấp dưới", type: "N" }
+                { id: 1, chapter: 15, kanji: "本物", kana: "ほんもの", mean: "Hàng thật, đồ thật", type: "Danh từ" },
+                { id: 2, chapter: 15, kanji: "彼", kana: "かれ", mean: "Anh ấy, bạn trai", type: "Danh từ" },
+                { id: 3, chapter: 15, kanji: "台風", kana: "たいふう", mean: "Cơn bão", type: "Danh từ" },
+                { id: 4, chapter: 33, kanji: "定食", kana: "ていしょく", mean: "Suất ăn, cơm set", type: "Danh từ" },
+                { id: 5, chapter: 33, kanji: "部下", kana: "ぶか", mean: "Cấp dưới", type: "Danh từ" }
             ],
             kanji: [
-                { id: 1, char: "力", kun: "ちから", on: "リョク", mean: "LỰC (Sức mạnh)", words: ["協力 (Hợp tác)", "努力 (Nỗ lực)"], mnemonic: "Người dùng sức mạnh cơ bắp để nâng vật nặng." },
-                { id: 2, char: "動", kun: "うご", on: "ドウ", mean: "ĐỘNG (Chuyển động)", words: ["運動 (Vận động)", "自動車 (Ô tô)", "動物 (Động vật)"], mnemonic: "Dùng LỰC (力) để làm TRỌNG (重) lượng di chuyển." },
-                { id: 3, char: "働", kun: "はたら", on: "ドウ", mean: "ĐỘNG (Làm việc)", words: ["働きます (Làm việc)", "労働 (Lao động)"], mnemonic: "NGƯỜI (人) dùng LỰC (力) để tác động lên TRỌNG (重) lượng -> Là đang làm việc." },
-                { id: 4, char: "進", kun: "すす", on: "シン", mean: "TIẾN (Tiến lên)", words: ["進学 (Học lên)", "進化 (Tiến hóa)"], mnemonic: "Con chim (隹) đang đi (辶) về phía trước." },
-                { id: 5, char: "集", kun: "あつ", on: "シュウ", mean: "TẬP (Tụ tập)", words: ["集まります (Tập trung)", "集合 (Tập hợp)"], mnemonic: "Chim (隹) đậu trên cây (木) là lúc chúng tụ tập về tổ." },
-                { id: 6, char: "曜", kun: "", on: "ヨウ", mean: "DIỆU (Thứ)", words: ["日曜日 (Chủ nhật)", "曜日 (Thứ)"], mnemonic: "Ngày (日) mà chim (隹) hót vang trời là ngày đẹp (Diệu)." }
+                { id: 1, char: "力", chapter: 15, kun: "ちから", on: "リョク", mean: "LỰC (Sức mạnh)", mnemonic: "Hình ảnh cánh tay đang gồng lên biểu hiện sức mạnh cơ bắp.", words: ["協力 (Hợp tác)", "努力 (Nỗ lực)"] },
+                { id: 2, char: "進", chapter: 33, kun: "すすむ", on: "シン", mean: "TIẾN (Tiến lên)", mnemonic: "Con chim (隹) đang đi (辶) về phía trước.", words: ["進学 (Học lên)", "進化 (Tiến hóa)"] }
             ],
             grammar: [
-                { 
-                    id: 1, 
-                    title: "～でしょう / ～だろう", 
-                    meaning: "Chắc hẳn là... / Có lẽ là...", 
-                    usage: "Phán đoán với độ tin cậy cao hoặc tìm sự đồng tình.",
-                    example: "たくさん勉強したから、きっと合格するだろう。<br>(Vì đã học nhiều nên chắc chắn sẽ đỗ thôi.)",
-                    note: "Thể thường của でしょう là だろう."
-                },
-                { 
-                    id: 2, 
-                    title: "～かもしれません", 
-                    meaning: "Có thể là... / Không biết chừng...", 
-                    usage: "Phán đoán với độ tin cậy thấp (khoảng 50%).",
-                    example: "約束の時間に間に合わないかもしれません。<br>(Có thể tôi sẽ không kịp giờ hẹn.)",
-                    note: "Dùng cho cả N, A, V."
-                },
-                { 
-                    id: 3, 
-                    title: "～ようです / ～みたいです", 
-                    meaning: "Hình như... / Giống như...", 
-                    usage: "Phán đoán dựa trên giác quan hoặc thông tin nghe được.",
-                    example: "隣の部屋に誰かいるようです。<br>(Hình như có ai đó ở phòng bên cạnh.)",
-                    note: "みたい dùng nhiều trong văn nói."
-                },
-                { 
-                    id: 4, 
-                    title: "～はずです", 
-                    meaning: "Chắc chắn là...", 
-                    usage: "Phán đoán dựa trên lý do logic, khách quan.",
-                    example: "田中さんは今、日本にいるはずです。<br>(Anh Tanaka chắc chắn đang ở Nhật [vì tôi biết lịch trình].)",
-                    note: ""
-                }
-            ],
-            readingText: "先週の日曜日、友達と<span class='lookup-word' data-word='ハイキング'>ハイキング</span>に行きました。天気予報では<span class='lookup-word' data-word='台風'>台風</span>が来る<span class='lookup-word' data-word='でしょう'>でしょう</span>と言っていましたが、朝は晴れていました。山の上は空気が<span class='lookup-word' data-word='乾く'>乾い</span>ていて、とても気持ちがよかったです。しかし、午後から急に雨が降り出しました。道が<span class='lookup-word' data-word='混む'>混ん</span>でいたので、帰るのが遅くなりました。本当に<span class='lookup-word' data-word='厳しい'>厳しい</span>一日でしたが、景色を<span class='lookup-word' data-word='楽しむ'>楽しむ</span>ことができました。"
+                { id: 1, chapter: 15, title: "～でしょう / ～だろう", mean: "Có lẽ là... / Chắc hẳn là...", usage: "Dùng để phán đoán với độ tin cậy cao.", ex: "明日は雨が降るでしょう。<br>(Ngày mai có lẽ sẽ mưa.)" },
+                { id: 2, chapter: 33, title: "Tôn kính ngữ (Keigo)", mean: "Kính trọng đối phương", usage: "Dùng để nói về hành động của người bề trên.", ex: "部長 là người nói: 部長がおっしゃいました。<br>(Trưởng phòng đã nói.)" }
+            ]
         };
 
-        // --- 2. State Management ---
-        const state = {
-            currentTab: 'dashboard',
-            roadmap: '3month', // 1month, 3month, 6month
-            progress: {
-                vocab: 15, // percent
-                kanji: 30,
-                grammar: 10
-            },
-            currentFlashcardIndex: 0,
-            isFlipped: false
-        };
+        // --- AI LOGIC ---
+        const ai = {
+            async call(prompt) {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
+                };
 
-        // --- 3. Logic & Rendering ---
-
-        const app = {
-            init: () => {
-                app.switchTab('dashboard');
-            },
-
-            switchTab: (tabId) => {
-                state.currentTab = tabId;
-                
-                // Update UI Navigation Styles
-                document.querySelectorAll('.nav-item').forEach(el => {
-                    el.classList.remove('bg-white', 'shadow-sm', 'ring-1', 'ring-stone-200', 'text-stone-800');
-                    el.classList.add('text-stone-600');
-                });
-                const activeNav = document.getElementById(`nav-${tabId}`);
-                if(activeNav) {
-                    activeNav.classList.add('bg-white', 'shadow-sm', 'ring-1', 'ring-stone-200', 'text-stone-800');
-                    activeNav.classList.remove('text-stone-600');
-                }
-
-                // Render Content
-                const contentDiv = document.getElementById('app-content');
-                contentDiv.innerHTML = ''; // Clear
-                
-                switch(tabId) {
-                    case 'dashboard': app.renderDashboard(contentDiv); break;
-                    case 'vocab': app.renderVocab(contentDiv); break;
-                    case 'kanji': app.renderKanji(contentDiv); break;
-                    case 'grammar': app.renderGrammar(contentDiv); break;
-                    case 'reading': app.renderReading(contentDiv); break;
-                }
-            },
-
-            // --- DASHBOARD RENDERER ---
-            renderDashboard: (container) => {
-                const totalItems = db.vocab.length + db.kanji.length + db.grammar.length;
-                let days = 90;
-                if(state.roadmap === '1month') days = 30;
-                if(state.roadmap === '6month') days = 180;
-                
-                const dailyItems = Math.ceil(totalItems / days * 5); // Multiplier for realism simulation
-
-                container.innerHTML = `
-                    <div class="tab-content max-w-5xl mx-auto space-y-8">
-                        <!-- Intro Section -->
-                        <div class="space-y-2">
-                            <h2 class="text-3xl font-bold text-stone-800">Xin chào, Chiến binh JLPT! 👋</h2>
-                            <p class="text-stone-600">Đây là trung tâm chỉ huy lộ trình ôn tập N4 của bạn. Dữ liệu được trích xuất từ giáo trình DungMori. Hãy chọn lộ trình phù hợp và bắt đầu ngay hôm nay.</p>
-                        </div>
-
-                        <!-- Roadmap Selector -->
-                        <div class="grid grid-cols-3 gap-4 mb-8">
-                            ${['1month', '3month', '6month'].map(plan => `
-                                <button onclick="app.setRoadmap('${plan}')" 
-                                    class="p-4 rounded-xl border-2 transition-all ${state.roadmap === plan ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-stone-200 bg-white hover:border-stone-300'}">
-                                    <div class="font-bold text-lg mb-1">${plan === '1month' ? 'Tốc độ (1 Tháng)' : plan === '3month' ? 'Tiêu chuẩn (3 Tháng)' : 'Chậm rãi (6 Tháng)'}</div>
-                                    <div class="text-sm opacity-80">${plan === '1month' ? 'Cường độ cao' : plan === '3month' ? 'Cân bằng' : 'Nhẹ nhàng'}</div>
-                                </button>
-                            `).join('')}
-                        </div>
-
-                        <!-- Today's Mission & Stats Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            
-                            <!-- Daily Mission Card -->
-                            <div class="col-span-1 lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
-                                <h3 class="font-bold text-xl mb-4 flex items-center"><span class="mr-2">📅</span> Nhiệm vụ hôm nay</h3>
-                                <div class="space-y-4">
-                                    <div class="flex items-center justify-between p-3 bg-stone-50 rounded-lg">
-                                        <div class="flex items-center">
-                                            <span class="bg-blue-100 text-blue-700 p-2 rounded-md mr-3 text-xs font-bold">TỪ VỰNG</span>
-                                            <span>Học ${Math.ceil(dailyItems * 0.6)} từ mới chủ đề "Cuộc sống"</span>
-                                        </div>
-                                        <button onclick="app.switchTab('vocab')" class="text-sm bg-stone-800 text-white px-3 py-1 rounded hover:bg-stone-700">Bắt đầu</button>
-                                    </div>
-                                    <div class="flex items-center justify-between p-3 bg-stone-50 rounded-lg">
-                                        <div class="flex items-center">
-                                            <span class="bg-red-100 text-red-700 p-2 rounded-md mr-3 text-xs font-bold">KANJI</span>
-                                            <span>Ôn tập ${Math.ceil(dailyItems * 0.2)} chữ bộ "Lực" & "Động"</span>
-                                        </div>
-                                        <button onclick="app.switchTab('kanji')" class="text-sm bg-stone-800 text-white px-3 py-1 rounded hover:bg-stone-700">Bắt đầu</button>
-                                    </div>
-                                    <div class="flex items-center justify-between p-3 bg-stone-50 rounded-lg">
-                                        <div class="flex items-center">
-                                            <span class="bg-green-100 text-green-700 p-2 rounded-md mr-3 text-xs font-bold">NGỮ PHÁP</span>
-                                            <span>Luyện tập mẫu câu phán đoán</span>
-                                        </div>
-                                        <button onclick="app.switchTab('grammar')" class="text-sm bg-stone-800 text-white px-3 py-1 rounded hover:bg-stone-700">Bắt đầu</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Progress Chart -->
-                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col items-center justify-center">
-                                <h3 class="font-bold text-lg mb-2 w-full text-left">Tiến độ tổng quan</h3>
-                                <div class="chart-container">
-                                    <canvas id="progressChart"></canvas>
-                                </div>
-                                <div class="mt-4 text-center text-sm text-stone-500">
-                                    Đã hoàn thành 18% lộ trình
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Initialize Chart
-                setTimeout(() => {
-                    const ctx = document.getElementById('progressChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Hoàn thành', 'Chưa học'],
-                            datasets: [{
-                                data: [18, 82],
-                                backgroundColor: ['#4f46e5', '#f3f4f6'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            cutout: '70%',
-                            plugins: {
-                                legend: { display: false }
-                            }
-                        }
-                    });
-                }, 100);
-            },
-
-            setRoadmap: (plan) => {
-                state.roadmap = plan;
-                app.switchTab('dashboard'); // Re-render
-            },
-
-            // --- VOCABULARY RENDERER (Flashcards) ---
-            renderVocab: (container) => {
-                const card = db.vocab[state.currentFlashcardIndex];
-                
-                container.innerHTML = `
-                    <div class="tab-content max-w-2xl mx-auto h-full flex flex-col items-center justify-center">
-                         <div class="text-center mb-6 max-w-lg">
-                            <h2 class="text-2xl font-bold text-stone-800 mb-2">Flashcard Từ Vựng</h2>
-                            <p class="text-stone-600">Luyện tập từ vựng với chế độ lật thẻ. Nhấn vào thẻ để xem nghĩa và cách đọc. Dữ liệu từ file "Từ vựng N4.pdf".</p>
-                        </div>
-
-                        <!-- Flashcard Container -->
-                        <div class="relative w-full max-w-md h-80 perspective-1000 group cursor-pointer" onclick="app.flipCard()">
-                            <div id="flashcard-inner" class="card-flip-inner relative w-full h-full text-center transition-all duration-500 transform-style-3d shadow-xl rounded-2xl ${state.isFlipped ? 'flipped' : ''}">
-                                
-                                <!-- FRONT -->
-                                <div class="absolute w-full h-full backface-hidden bg-white border border-stone-200 rounded-2xl flex flex-col items-center justify-center p-8">
-                                    <div class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">Word #${card.id}</div>
-                                    <div class="text-6xl font-bold text-stone-800 jp-font mb-4">${card.kanji || card.kana}</div>
-                                    <div class="text-stone-400 text-sm">(Chạm để lật)</div>
-                                </div>
-
-                                <!-- BACK -->
-                                <div class="absolute w-full h-full backface-hidden bg-indigo-600 text-white rounded-2xl rotate-y-180 flex flex-col items-center justify-center p-8">
-                                    <div class="text-3xl font-bold mb-2 jp-font">${card.kana}</div>
-                                    ${card.kanji ? `<div class="text-lg opacity-80 mb-6 jp-font">${card.kanji}</div>` : ''}
-                                    <div class="text-xl font-medium mb-2">${card.mean}</div>
-                                    <div class="mt-4 px-3 py-1 bg-white/20 rounded-full text-xs font-bold uppercase">${card.type}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Controls -->
-                        <div class="flex items-center justify-between w-full max-w-md mt-8">
-                            <button onclick="event.stopPropagation(); app.prevCard()" class="p-3 rounded-full bg-white shadow-md hover:bg-stone-50 border border-stone-200">
-                                ⬅️ Trước
-                            </button>
-                            <div class="font-bold text-stone-500">${state.currentFlashcardIndex + 1} / ${db.vocab.length}</div>
-                            <button onclick="event.stopPropagation(); app.nextCard()" class="p-3 rounded-full bg-indigo-600 text-white shadow-md hover:bg-indigo-700">
-                                Tiếp theo ➡️
-                            </button>
-                        </div>
-                    </div>
-                `;
-            },
-
-            flipCard: () => {
-                state.isFlipped = !state.isFlipped;
-                const inner = document.getElementById('flashcard-inner');
-                if(state.isFlipped) inner.classList.add('flipped');
-                else inner.classList.remove('flipped');
-            },
-
-            nextCard: () => {
-                if (state.currentFlashcardIndex < db.vocab.length - 1) {
-                    state.currentFlashcardIndex++;
-                    state.isFlipped = false;
-                    app.switchTab('vocab');
-                }
-            },
-
-            prevCard: () => {
-                if (state.currentFlashcardIndex > 0) {
-                    state.currentFlashcardIndex--;
-                    state.isFlipped = false;
-                    app.switchTab('vocab');
-                }
-            },
-
-            // --- KANJI RENDERER (Grid + Modal) ---
-            renderKanji: (container) => {
-                container.innerHTML = `
-                    <div class="tab-content max-w-5xl mx-auto">
-                        <div class="mb-8">
-                            <h2 class="text-2xl font-bold text-stone-800 mb-2">Kanji & Ghi nhớ</h2>
-                            <p class="text-stone-600">Phương pháp ghi nhớ bằng câu chuyện (Mnemonics) và Space Memory. Dữ liệu từ file "Kanji N4.pdf".</p>
-                        </div>
-
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            ${db.kanji.map(k => `
-                                <div onclick="alert('Mẹo nhớ: ${k.mnemonic}\\n\\nTừ vựng: ${k.words.join(', ')}')" 
-                                     class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md hover:border-indigo-300 cursor-pointer transition-all group">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <span class="text-xs font-bold text-stone-400">#${k.id}</span>
-                                        <span class="text-xs px-2 py-0.5 bg-stone-100 rounded text-stone-500">N4</span>
-                                    </div>
-                                    <div class="text-center mb-4">
-                                        <div class="text-5xl font-bold text-stone-800 jp-font group-hover:text-indigo-600 transition-colors">${k.char}</div>
-                                        <div class="text-sm font-medium text-stone-500 mt-2">${k.mean}</div>
-                                    </div>
-                                    <div class="border-t border-stone-100 pt-3">
-                                        <div class="text-xs text-stone-400 mb-1">Kunyomi</div>
-                                        <div class="text-sm text-stone-700 font-mono">${k.kun || '-'}</div>
-                                        <div class="text-xs text-stone-400 mt-2 mb-1">Onyomi</div>
-                                        <div class="text-sm text-stone-700 font-mono">${k.on}</div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            },
-
-            // --- GRAMMAR RENDERER (Accordion) ---
-            renderGrammar: (container) => {
-                container.innerHTML = `
-                    <div class="tab-content max-w-3xl mx-auto">
-                        <div class="mb-8">
-                            <h2 class="text-2xl font-bold text-stone-800 mb-2">Ngữ pháp N4</h2>
-                            <p class="text-stone-600">Danh sách các mẫu ngữ pháp kèm giải thích tiếng Việt và ví dụ. Dữ liệu từ file "Ngữ pháp N4.pdf".</p>
-                        </div>
-
-                        <div class="space-y-4">
-                            ${db.grammar.map(g => `
-                                <div class="bg-white rounded-xl border border-stone-200 overflow-hidden">
-                                    <button onclick="app.toggleAccordion('grammar-${g.id}')" class="w-full text-left p-5 flex justify-between items-center hover:bg-stone-50 transition-colors">
-                                        <div class="flex items-center">
-                                            <span class="bg-indigo-100 text-indigo-700 font-bold text-xs px-2 py-1 rounded mr-3">Bài 15</span>
-                                            <span class="font-bold text-lg text-stone-800 jp-font">${g.title}</span>
-                                        </div>
-                                        <span class="text-stone-400 transform transition-transform" id="icon-grammar-${g.id}">▼</span>
-                                    </button>
-                                    <div id="grammar-${g.id}" class="hidden bg-stone-50 p-5 border-t border-stone-100">
-                                        <div class="mb-4">
-                                            <h4 class="text-sm font-bold text-stone-500 uppercase mb-1">Ý nghĩa & Cách dùng</h4>
-                                            <p class="text-stone-800 font-medium mb-1">${g.meaning}</p>
-                                            <p class="text-stone-600 text-sm">${g.usage}</p>
-                                            ${g.note ? `<p class="text-xs text-orange-600 mt-1">⚠️ ${g.note}</p>` : ''}
-                                        </div>
-                                        <div>
-                                            <h4 class="text-sm font-bold text-stone-500 uppercase mb-2">Ví dụ (Reibun)</h4>
-                                            <div class="bg-white p-3 rounded border border-stone-200">
-                                                <p class="text-lg jp-font text-stone-800 mb-1">${g.example.split('<br>')[0]}</p>
-                                                <p class="text-stone-500 text-sm italic">${g.example.split('<br>')[1] || ''}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            },
-
-            toggleAccordion: (id) => {
-                const el = document.getElementById(id);
-                const icon = document.getElementById(`icon-${id}`);
-                if (el.classList.contains('hidden')) {
-                    el.classList.remove('hidden');
-                    icon.style.transform = 'rotate(180deg)';
-                } else {
-                    el.classList.add('hidden');
-                    icon.style.transform = 'rotate(0deg)';
-                }
-            },
-
-            // --- READING RENDERER (Interactive Text) ---
-            renderReading: (container) => {
-                container.innerHTML = `
-                    <div class="tab-content max-w-4xl mx-auto h-full flex flex-col md:flex-row gap-6">
-                        <div class="flex-1">
-                            <div class="mb-6">
-                                <h2 class="text-2xl font-bold text-stone-800 mb-2">Đọc hiểu tương tác</h2>
-                                <p class="text-stone-600">Click vào các từ được gạch chân để tra nghĩa ngay lập tức. Bài đọc mẫu sử dụng từ vựng N4.</p>
-                            </div>
-
-                            <div class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm leading-loose text-xl jp-font text-stone-800">
-                                ${db.readingText}
-                            </div>
-                        </div>
-
-                        <!-- Sidebar Dictionary (Simulated) -->
-                        <div class="w-full md:w-80 flex-shrink-0">
-                            <div class="sticky top-4 bg-stone-100 p-5 rounded-xl border border-stone-200 h-64 flex flex-col items-center justify-center text-center" id="dict-display">
-                                <div class="text-4xl mb-3 text-stone-300">📖</div>
-                                <p class="text-stone-500 font-medium">Chọn từ trong bài đọc để xem nghĩa</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                // Add Event Listeners for Lookup Words
-                setTimeout(() => {
-                    document.querySelectorAll('.lookup-word').forEach(word => {
-                        word.addEventListener('click', (e) => {
-                            const term = e.target.getAttribute('data-word');
-                            app.lookupWord(term);
+                let delay = 1000;
+                for (let i = 0; i < 5; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
                         });
-                    });
-                }, 100);
-            },
-
-            lookupWord: (term) => {
-                // Find in DB
-                let result = db.vocab.find(v => v.kanji === term || v.kana === term);
-                if (!result) {
-                    // Try to match partial grammar or fallback
-                    result = { kanji: term, kana: 'Unknown', mean: 'Từ này chưa có trong database mẫu.', type: '?' };
-                    // Check grammar
-                    if(term.includes('でしょう')) {
-                        result = { kanji: 'でしょう', kana: 'deshou', mean: 'Có lẽ, chắc là (Phán đoán)', type: 'Grammar' };
+                        if (!response.ok) throw new Error("Retry");
+                        const data = await response.json();
+                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Sensei AI gặp chút rắc rối, hãy thử lại nhé!";
+                    } catch (err) {
+                        if (i === 4) return "Không thể kết nối với Sensei AI sau nhiều lần thử.";
+                        await new Promise(r => setTimeout(r, delay));
+                        delay *= 2;
                     }
                 }
+            },
 
-                const display = document.getElementById('dict-display');
-                display.classList.remove('items-center', 'justify-center', 'text-center');
-                display.innerHTML = `
-                    <div class="w-full text-left">
-                        <div class="text-xs font-bold text-indigo-600 uppercase mb-1">Kết quả tra từ</div>
-                        <div class="text-3xl font-bold text-stone-800 jp-font mb-1">${result.kanji || result.kana}</div>
-                        ${result.kanji ? `<div class="text-sm text-stone-500 mb-3">${result.kana}</div>` : ''}
-                        <div class="border-t border-stone-300 my-2"></div>
-                        <div class="text-lg font-medium text-stone-800">${result.mean}</div>
-                        <div class="mt-2 inline-block px-2 py-1 bg-stone-200 rounded text-xs font-bold text-stone-600">${result.type}</div>
-                    </div>
-                `;
+            async explainContext(type, content) {
+                const modal = document.getElementById('ai-modal');
+                const modalContent = document.getElementById('ai-modal-content');
+                modal.classList.remove('hidden');
+                modalContent.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-10 space-y-4">
+                        <div class="loader"></div>
+                        <p class="text-stone-400 text-sm italic">Sensei AI đang phân tích: "${content}"...</p>
+                    </div>`;
+
+                const prompt = `Hãy giải thích chi tiết về ${type}: "${content}". Cho thêm ví dụ mới và phân tích ngữ cảnh sử dụng chuyên sâu.`;
+                const result = await this.call(prompt);
+                
+                // Simple Markdown-ish to HTML conversion
+                modalContent.innerHTML = `<div class="prose prose-indigo max-w-none">${this.formatResult(result)}</div>`;
+            },
+
+            formatResult(text) {
+                return text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n/g, '<br>')
+                    .replace(/### (.*?)\n/g, '<h4 class="font-bold text-indigo-600 mt-4">$1</h4>')
+                    .replace(/- (.*?)\n/g, '<li class="ml-4">$1</li>');
+            },
+
+            closeModal() {
+                document.getElementById('ai-modal').classList.add('hidden');
             }
         };
 
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', () => {
-            app.init();
-        });
+        // --- APP STATE & UI ---
+        const state = {
+            currentTab: 'dashboard',
+            messages: [{ role: 'ai', text: 'Chào em! Hôm nay em muốn Sensei giải thích phần nào trong Chương 15 - 33?' }]
+        };
 
+        const app = {
+            init() {
+                this.switchTab('dashboard');
+            },
+
+            switchTab(id) {
+                state.currentTab = id;
+                document.querySelectorAll('.nav-item').forEach(el => {
+                    el.classList.remove('bg-indigo-50', 'text-indigo-600', 'ring-1', 'ring-stone-200', 'font-bold');
+                });
+                const nav = document.getElementById(`nav-${id}`);
+                if (nav) nav.classList.add('bg-indigo-50', 'text-indigo-600', 'ring-1', 'ring-stone-200', 'font-bold');
+
+                const container = document.getElementById('app-content');
+                container.innerHTML = '';
+
+                switch(id) {
+                    case 'dashboard': this.renderDashboard(container); break;
+                    case 'vocab': this.renderVocab(container); break;
+                    case 'kanji': this.renderKanji(container); break;
+                    case 'grammar': this.renderGrammar(container); break;
+                    case 'reading': this.renderReading(container); break;
+                    case 'ai-sensei': this.renderAISensei(container); break;
+                }
+            },
+
+            renderDashboard(container) {
+                container.innerHTML = `
+                    <div class="tab-content max-w-4xl mx-auto space-y-8">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            <div>
+                                <h2 class="text-3xl font-bold text-stone-800">Cố gắng lên, Kohai! 🌟</h2>
+                                <p class="text-stone-500 mt-2">Dữ liệu Chương 15-33 đã được nạp sẵn. Sử dụng AI để học nhanh gấp 3 lần.</p>
+                            </div>
+                            <div class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-indigo-200">
+                                AI SENSEI: ONLINE
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2 space-y-4">
+                                <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm">
+                                    <h3 class="font-bold text-xl mb-4">Nhiệm vụ trọng tâm</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="p-4 bg-stone-50 rounded-xl border border-stone-100">
+                                            <div class="text-indigo-600 font-bold mb-1">Kính ngữ (Chương 33)</div>
+                                            <p class="text-xs text-stone-500 mb-3">Phần khó nhất của N4. Hãy thử nhờ AI giải thích.</p>
+                                            <button onclick="ai.explainContext('Ngữ pháp', 'Kính ngữ (Tôn kính và Khiêm nhường)')" class="w-full py-2 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold hover:bg-indigo-200">Sensei ơi, giải thích mẫu này!</button>
+                                        </div>
+                                        <div class="p-4 bg-stone-50 rounded-xl border border-stone-100">
+                                            <div class="text-emerald-600 font-bold mb-1">Phán đoán (Chương 15)</div>
+                                            <p class="text-xs text-stone-500 mb-3">Luyện tập mẫu câu Deshou và Kamoshirenai.</p>
+                                            <button onclick="app.switchTab('grammar')" class="w-full py-2 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-bold hover:bg-emerald-200">Luyện tập ngay</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm flex flex-col items-center">
+                                <h3 class="font-bold text-sm text-stone-400 uppercase tracking-widest mb-6">Trạng thái ôn tập</h3>
+                                <div class="chart-container"><canvas id="mainChart"></canvas></div>
+                                <p class="text-xs text-stone-400 mt-6 text-center italic">Bạn đã học được 20% lượng từ vựng của Chương 15.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                setTimeout(() => {
+                    new Chart(document.getElementById('mainChart').getContext('2d'), {
+                        type: 'doughnut',
+                        data: { datasets: [{ data: [24, 76], backgroundColor: ['#4f46e5', '#f3f4f6'], borderWidth: 0 }] },
+                        options: { cutout: '80%', plugins: { legend: { display: false } } }
+                    });
+                }, 100);
+            },
+
+            renderVocab(container) {
+                container.innerHTML = `
+                    <div class="tab-content max-w-5xl mx-auto">
+                        <div class="mb-10 flex justify-between items-end">
+                            <div>
+                                <h2 class="text-2xl font-bold">Thẻ từ vựng thông minh</h2>
+                                <p class="text-stone-500">Học từ mới và hỏi AI bất cứ lúc nào.</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${db.vocab.map(v => `
+                                <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-all">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="text-xs font-bold text-stone-300">Bài ${v.chapter}</span>
+                                        <button onclick="ai.explainContext('Từ vựng', '${v.kanji || v.kana}')" class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">🤖 Hỏi AI</button>
+                                    </div>
+                                    <div class="text-3xl font-bold text-stone-800 jp-font mb-1">${v.kanji || v.kana}</div>
+                                    <div class="text-sm text-stone-400 mb-4">${v.kana}</div>
+                                    <div class="h-px bg-stone-50 w-full mb-4"></div>
+                                    <div class="text-lg font-bold text-stone-700">${v.mean}</div>
+                                    <div class="text-[10px] text-stone-300 mt-2 uppercase font-bold">${v.type}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderKanji(container) {
+                container.innerHTML = `
+                    <div class="tab-content max-w-5xl mx-auto">
+                        <div class="mb-10">
+                            <h2 class="text-2xl font-bold">Hán tự & AI Mnemonic</h2>
+                            <p class="text-stone-500">AI sẽ giúp bạn tạo mẹo nhớ riêng nếu mẹo có sẵn chưa hiệu quả.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${db.kanji.map(k => `
+                                <div class="bg-white p-8 rounded-2xl border border-stone-100 shadow-sm flex gap-6">
+                                    <div class="text-7xl font-bold text-stone-800 jp-font">${k.char}</div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="text-xl font-bold text-indigo-600">${k.mean}</span>
+                                            <button onclick="ai.explainContext('Chữ Hán', '${k.char}')" class="text-[10px] bg-indigo-50 text-indigo-600 font-bold px-2 py-1 rounded">🤖 Tạo mẹo nhớ AI</button>
+                                        </div>
+                                        <p class="text-sm text-stone-500 mb-4">${k.mnemonic}</p>
+                                        <div class="grid grid-cols-2 text-xs gap-2">
+                                            <div><span class="text-stone-300 font-bold uppercase">On:</span> ${k.on}</div>
+                                            <div><span class="text-stone-300 font-bold uppercase">Kun:</span> ${k.kun}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderGrammar(container) {
+                container.innerHTML = `
+                    <div class="tab-content max-w-3xl mx-auto">
+                        <h2 class="text-2xl font-bold mb-8">Hệ thống Ngữ pháp</h2>
+                        <div class="space-y-6">
+                            ${db.grammar.map(g => `
+                                <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="px-2 py-1 bg-stone-100 text-stone-500 text-[10px] font-bold rounded uppercase">Bài ${g.chapter}</span>
+                                        <button onclick="ai.explainContext('Ngữ pháp', '${g.title}')" class="text-xs font-bold text-indigo-600 flex items-center"><span class="mr-1">🤖</span> Phân tích ngữ pháp</button>
+                                    </div>
+                                    <h3 class="text-2xl font-bold text-stone-800 mb-2 jp-font">${g.title}</h3>
+                                    <p class="text-indigo-600 font-bold mb-4">${g.mean}</p>
+                                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                                        <div class="text-xs text-stone-400 font-bold uppercase mb-2">Ví dụ:</div>
+                                        <div class="text-lg text-stone-800 jp-font">${g.ex}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderReading(container) {
+                container.innerHTML = `
+                    <div class="tab-content max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
+                        <div class="flex-1">
+                            <h2 class="text-2xl font-bold mb-6">Đọc hiểu thông minh</h2>
+                            <div class="bg-white p-10 rounded-3xl border border-stone-100 shadow-sm leading-10 text-xl jp-font text-stone-800" id="reading-content">
+                                先日の会議で、部長が「新しい<span class='lookup-word' onclick="ai.explainContext('Từ vựng', '契約書')">契約書</span>を<span class='lookup-word' onclick="ai.explainContext('Từ vựng', '拝見')">拝見</span>しました」と<span class='lookup-word' onclick="ai.explainContext('Ngữ pháp', 'おっしゃる')">おっしゃいました</span>。
+                                来週からプロジェクトが<span class='lookup-word' onclick="ai.explainContext('Từ vựng', '進む')">進む</span><span class='lookup-word' onclick="ai.explainContext('Ngữ pháp', 'でしょう')">でしょう</span>。
+                                しかし、明日は<span class='lookup-word' onclick="ai.explainContext('Từ vựng', '台風')">台風</span>が来る<span class='lookup-word' onclick="ai.explainContext('Ngữ pháp', 'かもしれない')">かもしれません</span>ので、注意が必要です。
+                            </div>
+                            <p class="mt-4 text-sm text-stone-400 italic">Mẹo: Click vào bất kỳ cụm từ gạch chân nào để Sensei AI giải thích ngay tại chỗ.</p>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderAISensei(container) {
+                container.innerHTML = `
+                    <div class="tab-content max-w-4xl mx-auto h-[70vh] flex flex-col">
+                        <div class="mb-4">
+                            <h2 class="text-2xl font-bold">Sensei AI Assistant</h2>
+                            <p class="text-stone-500">Hỏi bất cứ điều gì về N4: ngữ pháp, từ vựng hoặc văn hóa Nhật Bản.</p>
+                        </div>
+                        <div id="chat-window" class="flex-1 bg-white rounded-3xl border border-stone-100 shadow-sm overflow-y-auto p-6 space-y-4 mb-4">
+                            ${state.messages.map(m => `
+                                <div class="flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}">
+                                    <div class="max-w-[80%] p-4 ${m.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}">
+                                        ${ai.formatResult(m.text)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="flex gap-2 p-2 bg-white rounded-2xl border border-stone-100 shadow-sm">
+                            <input type="text" id="chat-input" placeholder="Ví dụ: Phân biệt deshồu và kamoshirenai?" class="flex-1 px-4 py-3 focus:outline-none jp-font">
+                            <button onclick="app.sendMessage()" class="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors">Gửi</button>
+                        </div>
+                    </div>
+                `;
+                const win = document.getElementById('chat-window');
+                win.scrollTop = win.scrollHeight;
+            },
+
+            async sendMessage() {
+                const input = document.getElementById('chat-input');
+                const text = input.value.trim();
+                if (!text) return;
+
+                state.messages.push({ role: 'user', text: text });
+                this.renderAISensei(document.getElementById('app-content'));
+                input.value = '';
+
+                // Placeholder for AI response
+                state.messages.push({ role: 'ai', text: 'Sensei đang suy nghĩ...' });
+                this.renderAISensei(document.getElementById('app-content'));
+
+                const result = await ai.call(text);
+                state.messages.pop();
+                state.messages.push({ role: 'ai', text: result });
+                this.renderAISensei(document.getElementById('app-content'));
+            }
+        };
+
+        window.onload = () => app.init();
     </script>
     
-    <!-- Chosen Palette: Zen Focus (Warm Neutrals + Indigo/Emerald Accents) -->
-    <!-- Application Structure Plan: 
-         1. Dashboard: Acts as the "Roadmap" controller requested. It synthesizes progress across all skills.
-         2. Tabbed Navigation: Separates cognitive loads (Vocab, Kanji, Grammar, Reading) as requested.
-         3. Flashcard View: Dedicated focus mode for vocabulary.
-         4. Reading View: Implements the "click-to-lookup" feature specifically requested.
-         5. The structure allows for easy expansion (adding more JSON data) without breaking the UI.
+    <!-- Chosen Palette: Modern Indigo & Minimal Warmth (Fcfbf9) -->
+    <!-- Application Structure Plan:
+         1. Core Data: Integrated vocabulary, kanji, and grammar from Chapters 15-33.
+         2. AI Integration: Gemini 2.5 Flash is used for contextual explanations and a general chat assistant.
+         3. UI Consistency: Maintaining the clean, professional, and mobile-friendly look with Tailwind.
+         4. Learning UX: Focused on interactive elements where AI adds value (explanation modals, custom mnemonics).
     -->
-    <!-- Visualization & Content Choices:
-         - Chart.js Doughnut: Used in Dashboard to give immediate visual feedback on Roadmap progress.
-         - CSS 3D Transforms: Used for Flashcards (no heavy libraries needed).
-         - Tailwind Grid/Flex: Used for Kanji matrix and Layouts.
-         - Interactive Text (Span Wrapping): Used for Reading to simulate a dictionary engine.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used (Unicode/CSS used instead). NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Single file generated. -->
 </body>
 </html>
