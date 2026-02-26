@@ -300,89 +300,648 @@
         
         const database = {
             vocab: [
-                { id: 1, word: '本物', reading: 'ほんもの', mean: 'hàng thật, đồ thật', type: 'N' },
-                { id: 2, word: '彼', reading: 'かれ', mean: 'anh ấy, bạn trai', type: 'N' },
-                { id: 3, word: '台風', reading: 'たいふう', mean: 'cơn bão', type: 'N' },
-                { id: 4, word: '洗濯物', reading: 'せんたくもの', mean: 'đồ giặt', type: 'N' },
-                { id: 5, word: '遊園地', reading: 'ゆうえんち', mean: 'khu vui chơi giải trí', type: 'N' },
-                { id: 6, word: 'ハイキング', reading: 'ハイキング', mean: 'leo núi, dã ngoại', type: 'N' },
-                { id: 7, word: '厳しい', reading: 'きびしい', mean: 'nghiêm khắc', type: 'A' },
-                { id: 8, word: '混む', reading: 'こむ', mean: 'đông đúc', type: 'V' },
-                { id: 9, word: '上がる', reading: 'あがる', mean: 'leo lên, tăng lên', type: 'V' },
-                { id: 10, word: '下がる', reading: 'さがる', mean: 'giảm xuống, hạ xuống', type: 'V' },
-                { id: 11, word: '乾く', reading: 'かわく', mean: 'khô (quần áo)', type: 'V' },
-                { id: 12, word: '止む', reading: 'やむ', mean: 'tạnh (mưa)', type: 'V' },
-                { id: 13, word: '叶う', reading: 'かなう', mean: 'thành hiện thực', type: 'V' },
-                { id: 14, word: '楽しむ', reading: 'たのしむ', mean: 'tận hưởng', type: 'V' },
-                { id: 15, word: '協力', reading: 'きょうりょく', mean: 'hợp tác, hiệp lực', type: 'N/V' },
-                { id: 16, word: '動画', reading: 'どうが', mean: 'Video, Clip', type: 'N' },
-                { id: 17, word: '感動', reading: 'かんどう', mean: 'cảm động', type: 'N/V' }
+               [
+  { "id": 1, "word": "本物", "reading": "ほんもの", "mean": "hàng thật, đồ thật", "type": "N" },
+  { "id": 2, "word": "彼", "reading": "かれ", "mean": "anh ấy, ông ấy; bạn trai", "type": "N" },
+  { "id": 3, "word": "台風", "reading": "たいふう", "mean": "cơn bão", "type": "N" },
+  { "id": 4, "word": "洗濯物", "reading": "せんたくもの", "mean": "đồ bẩn cần giặt/ đồ đã giặt", "type": "N" },
+  { "id": 5, "word": "遊園地", "reading": "ゆうえんち", "mean": "khu giải trí", "type": "N" },
+  { "id": 6, "word": "ハイキング", "reading": "ハイキング", "mean": "leo núi dã ngoại", "type": "N" },
+  { "id": 7, "word": "厳しい", "reading": "きびしい", "mean": "nghiêm khắc, khắt khe", "type": "A" },
+  { "id": 8, "word": "混む", "reading": "こむ", "mean": "đông đúc, chen lấn", "type": "VI" },
+  { "id": 9, "word": "上がる", "reading": "あがる", "mean": "leo lên; tăng lên", "type": "VI" },
+  { "id": 10, "word": "下がる", "reading": "さがる", "mean": "giảm xuống; hạ xuống", "type": "VI" },
+  { "id": 11, "word": "乾く", "reading": "かわく", "mean": "khô (quần áo, không khí ...)", "type": "VI" },
+  { "id": 12, "word": "止む", "reading": "やむ", "mean": "dừng; tạnh (mưa)", "type": "VI" },
+  { "id": 13, "word": "叶う", "reading": "かなう", "mean": "(ước mơ) thành hiện thực", "type": "VI" },
+  { "id": 14, "word": "楽しむ", "reading": "たのしむ", "mean": "tận hưởng; mong chờ", "type": "VI" },
+  { "id": 15, "word": "返す", "reading": "かえす", "mean": "trả lại", "type": "VI" },
+  { "id": 16, "word": "中止(する)", "reading": "ちゅうし(する)", "mean": "dừng, hoãn", "type": "N/VIII" },
+  { "id": 17, "word": "成功(する)", "reading": "せいこう(する)", "mean": "thành công", "type": "N/VIII" },
+  { "id": 18, "word": "失敗(する)", "reading": "しっぱい(する)", "mean": "thất bại", "type": "N/VIII" },
+  { "id": 19, "word": "きっと", "reading": "きっと", "mean": "nhất định, chắc chắn", "type": "Adv" },
+  { "id": 20, "word": "ただいま", "reading": "ただいま", "mean": "Tôi đã về rồi đây (lời chào khi trở về)", "type": "Expression" },
+  { "id": 21, "word": "おかえり(なさい)", "reading": "おかえり(なさい)", "mean": "Bạn đã về rồi à! (lời chào đón)", "type": "Expression" },
+  { "id": 22, "word": "風邪", "reading": "かぜ", "mean": "cảm lạnh, cảm cúm", "type": "N" },
+  { "id": 23, "word": "救急車", "reading": "きゅうきゅうしゃ", "mean": "xe cấp cứu", "type": "N" },
+  { "id": 24, "word": "事故", "reading": "じこ", "mean": "tai nạn", "type": "N" },
+  { "id": 25, "word": "雷", "reading": "かみなり", "mean": "sấm sét", "type": "N" },
+  { "id": 26, "word": "留守", "reading": "るす", "mean": "vắng nhà", "type": "N" },
+  { "id": 27, "word": "旅館", "reading": "りょかん", "mean": "lữ quán, nhà trọ kiểu Nhật", "type": "N" },
+  { "id": 28, "word": "旅行客", "reading": "りょこうきゃく", "mean": "khách du lịch", "type": "N" },
+  { "id": 29, "word": "入り口", "reading": "いりぐち", "mean": "lối vào", "type": "N" },
+  { "id": 30, "word": "有名人", "reading": "ゆうめいじん", "mean": "người nổi tiếng", "type": "N" },
+  { "id": 31, "word": "調味料", "reading": "ちょうみりょう", "mean": "gia vị", "type": "N" },
+  { "id": 32, "word": "平日", "reading": "へいじつ", "mean": "ngày thường", "type": "N" },
+  { "id": 33, "word": "ガソリン", "reading": "ガソリン", "mean": "xăng dầu", "type": "N" },
+  { "id": 34, "word": "真っ暗", "reading": "まっくら", "mean": "tối om", "type": "Aな" },
+  { "id": 35, "word": "同じ", "reading": "おなじ", "mean": "giống, giống nhau", "type": "Aな" },
+  { "id": 36, "word": "風邪を引く", "reading": "ひく", "mean": "bị cảm lạnh, trúng gió", "type": "VI" },
+  { "id": 37, "word": "集まる", "reading": "あつまる", "mean": "tập trung", "type": "VI" },
+  { "id": 38, "word": "傘を差す", "reading": "さす", "mean": "giương ô", "type": "VI" },
+  { "id": 39, "word": "届く", "reading": "とどく", "mean": "được gửi đến/ đưa đến", "type": "VI" },
+  { "id": 40, "word": "なくなる", "reading": "なくなる", "mean": "mất, biến mất, hết", "type": "VI" },
+  { "id": 41, "word": "ぶつかる", "reading": "ぶつかる", "mean": "va phải, đụng phải", "type": "VI" },
+  { "id": 42, "word": "できる", "reading": "できる", "mean": "hoàn thành", "type": "V II" },
+  { "id": 43, "word": "怪我(する)", "reading": "けが(する)", "mean": "bị thương", "type": "N/VIII" },
+  { "id": 44, "word": "すぐに", "reading": "すぐに", "mean": "ngay lập tức", "type": "Adv" },
+  { "id": 45, "word": "だいぶ", "reading": "だいぶ", "mean": "khá là, đáng kể", "type": "Adv" },
+  { "id": 46, "word": "もしかしたら", "reading": "もしかしたら", "mean": "có lẽ", "type": "Adv" },
+  { "id": 47, "word": "お花見", "reading": "はなみ", "mean": "sự ngắm hoa", "type": "N" },
+  { "id": 48, "word": "最初", "reading": "さいしょ", "mean": "đầu tiên", "type": "N/Adv" },
+  { "id": 49, "word": "最初", "reading": "さいしょ", "mean": "đầu tiên", "type": "N/Adv" }, 
+  { "id": 50, "word": "今週末", "reading": "こんしゅうまつ", "mean": "cuối tuần này", "type": "N/Adv" },
+  [
+  { "id": 51, "word": "今週末", "reading": "こんしゅうまつ", "mean": "cuối tuần này", "type": "N/Adv" },
+  { "id": 52, "word": "地震", "reading": "じしん", "mean": "động đất", "type": "N" },
+  { "id": 53, "word": "昼寝", "reading": "ひるね", "mean": "ngủ trưa", "type": "N" },
+  { "id": 54, "word": "うそ", "reading": "うそ", "mean": "lời nói dối", "type": "N" },
+  { "id": 55, "word": "赤ちゃん", "reading": "あかちゃん", "mean": "em bé, trẻ sơ sinh", "type": "N" },
+  { "id": 56, "word": "火事", "reading": "かじ", "mean": "hoả hoạn", "type": "N" },
+  { "id": 57, "word": "教科書", "reading": "きょうかしょ", "mean": "sách giáo khoa", "type": "N" },
+  { "id": 58, "word": "イギリス", "reading": "イギリス", "mean": "nước Anh", "type": "N" },
+  { "id": 59, "word": "オリンピック", "reading": "オリンピック", "mean": "thế vận hội Olympic", "type": "N" },
+  { "id": 60, "word": "ボーナス", "reading": "ボーナス", "mean": "tiền thưởng, phần thưởng", "type": "N" },
+  { "id": 61, "word": "羨ましい", "reading": "うらやましい", "mean": "ngưỡng mộ, ghen tị", "type": "Aい" },
+  { "id": 62, "word": "勝つ", "reading": "かつ", "mean": "thắng, chiến thắng", "type": "VI" },
+  { "id": 63, "word": "誘う", "reading": "さそう", "mean": "rủ, mời (ai đó)", "type": "VI" },
+  { "id": 64, "word": "亡くなる", "reading": "なくなる", "mean": "mất, qua đời", "type": "VI" },
+  { "id": 65, "word": "別れる", "reading": "わかれる", "mean": "chia tay", "type": "V II" },
+  { "id": 66, "word": "負ける", "reading": "まける", "mean": "thua, bại trận", "type": "V II" },
+  { "id": 67, "word": "売れる", "reading": "うれる", "mean": "bán chạy, nổi tiếng", "type": "V II" },
+  { "id": 68, "word": "生まれる", "reading": "うまれる", "mean": "được sinh ra", "type": "V II" },
+  { "id": 69, "word": "辞める", "reading": "やめる", "mean": "từ bỏ; nghỉ việc", "type": "V II" },
+  { "id": 70, "word": "優勝(する)", "reading": "ゆうしょう(する)", "mean": "vô địch", "type": "N/VIII" },
+  { "id": 71, "word": "びっくり(する)", "reading": "びっくり(する)", "mean": "giật mình", "type": "N/VIII" },
+  { "id": 72, "word": "しかも", "reading": "しかも", "mean": "hơn nữa", "type": "Adv" },
+  { "id": 73, "word": "まじで", "reading": "まじで", "mean": "Thật á? Thật sao?", "type": "Expression" },
+  { "id": 74, "word": "やばい", "reading": "やばい", "mean": "Chết rồi! (giới trẻ hay nói)", "type": "Expression" },
+  { "id": 75, "word": "エイプリル·フール", "reading": "エイプリル·フール", "mean": "Ngày Cá tháng Tư", "type": "N" },
+  { "id": 76, "word": "お礼", "reading": "おれい", "mean": "lời/quà cảm ơn", "type": "N" },
+  { "id": 77, "word": "用事", "reading": "ようじ", "mean": "việc bận", "type": "N" },
+  { "id": 78, "word": "電池", "reading": "でんち", "mean": "cục pin", "type": "N" },
+  { "id": 79, "word": "天気予報", "reading": "てんきよほう", "mean": "dự báo thời tiết", "type": "N" },
+  { "id": 80, "word": "交通", "reading": "こうつう", "mean": "giao thông", "type": "N" },
+  { "id": 81, "word": "形", "reading": "かたち", "mean": "hình dáng", "type": "N" },
+  { "id": 82, "word": "将来", "reading": "しょうらい", "mean": "tương lai", "type": "N/Adv" },
+  { "id": 83, "word": "痛い", "reading": "いたい", "mean": "đau, đau đớn", "type": "Aい" },
+  { "id": 84, "word": "危ない", "reading": "あぶない", "mean": "nguy hiểm", "type": "Aい" },
+  { "id": 85, "word": "引っ越す", "reading": "ひっこす", "mean": "chuyển nhà", "type": "VI" },
+  { "id": 86, "word": "引越し(する)", "reading": "ひっこし(する)", "mean": "chuyển nhà", "type": "N/VIII" },
+  { "id": 87, "word": "おすすめ(する)", "reading": "おすすめ(する)", "mean": "giới thiệu, đề xuất", "type": "N/VIII" },
+  { "id": 88, "word": "こうやって", "reading": "こうやって", "mean": "làm như thế này", "type": "Adv" },
+  { "id": 89, "word": "興味", "reading": "きょうみ", "mean": "hứng thú", "type": "N" },
+  { "id": 90, "word": "意味", "reading": "いみ", "mean": "ý nghĩa", "type": "N" },
+  { "id": 91, "word": "場所", "reading": "ばしょ", "mean": "địa điểm, nơi", "type": "N" },
+  { "id": 92, "word": "知り合い", "reading": "しりあい", "mean": "người quen", "type": "N" },
+  { "id": 93, "word": "選手", "reading": "せんしゅ", "mean": "tuyển thủ", "type": "N" },
+  { "id": 94, "word": "調子", "reading": "ちょうし", "mean": "tình trạng (tốt/xấu)", "type": "N" },
+  { "id": 95, "word": "ミュージカル", "reading": "ミュージカル", "mean": "nhạc kịch", "type": "N" },
+  { "id": 96, "word": "チャット", "reading": "チャット", "mean": "chat, tán gẫu", "type": "N" },
+  { "id": 97, "word": "遠い", "reading": "とおい", "mean": "xa", "type": "Aい" },
+  { "id": 98, "word": "よろしい", "reading": "よろしい", "mean": "được, tốt (lịch sự của 良い)", "type": "Aい" },
+  { "id": 99, "word": "よろしい", "reading": "よろしい", "mean": "được, tốt (dạng lịch sự của 良い)", "type": "Aい" },
+{ "id": 100, "word": "苦い", "reading": "にがい", "mean": "(vị) đắng", "type": "Aい" },
+      [
+  { "id": 101, "word": "大きな", "reading": "おおきな", "mean": "to, lớn", "type": "Aな" },
+  { "id": 102, "word": "似合う", "reading": "にあう", "mean": "hợp với ~", "type": "VI" },
+  { "id": 103, "word": "興味がある", "reading": "きょうみがある", "mean": "có hứng thú với ~", "type": "VI" },
+  { "id": 104, "word": "始める", "reading": "はじめる", "mean": "bắt đầu", "type": "V II" },
+  { "id": 105, "word": "注文(する)", "reading": "ちゅうもん(する)", "mean": "gọi món, đặt mua", "type": "N/VIII" },
+  { "id": 106, "word": "確か", "reading": "たしか", "mean": "hình như, nếu không nhầm thì ~", "type": "Adv" },
+  { "id": 107, "word": "お大事に", "reading": "おだいじに", "mean": "Hãy chú ý giữ gìn sức khoẻ", "type": "Expression" },
+  { "id": 108, "word": "実は", "reading": "じつは", "mean": "thật ra ~", "type": "Expression" },
+  { "id": 109, "word": "市", "reading": "し", "mean": "thành phố", "type": "N" },
+  { "id": 110, "word": "同僚", "reading": "どうりょう", "mean": "đồng nghiệp", "type": "N" },
+  { "id": 111, "word": "貿易", "reading": "ぼうえき", "mean": "ngoại thương, thương mại", "type": "N" },
+  { "id": 112, "word": "着物", "reading": "きもの", "mean": "kimono", "type": "N" },
+  { "id": 113, "word": "具合", "reading": "ぐあい", "mean": "tình trạng sức khoẻ", "type": "N" },
+  { "id": 114, "word": "気分", "reading": "きぶん", "mean": "tâm trạng", "type": "N" },
+  { "id": 115, "word": "デート", "reading": "デート", "mean": "hẹn hò, buổi hẹn", "type": "N" },
+  { "id": 116, "word": "利用(する)", "reading": "りよう(する)", "mean": "sử dụng", "type": "N/VIII" },
+  { "id": 117, "word": "紹介(する)", "reading": "しょうかい(する)", "mean": "giới thiệu ~ (với ai đó)", "type": "N/VIII" },
+  { "id": 118, "word": "カット(する)", "reading": "カット(する)", "mean": "cắt, chia", "type": "N/VIII" },
+  { "id": 119, "word": "する", "reading": "する", "mean": "tốn (OO yên)", "type": "V III" },
+  { "id": 120, "word": "なんで", "reading": "なんで", "mean": "tại sao", "type": "Adv" },
+  { "id": 121, "word": "だから", "reading": "だから", "mean": "bởi vậy, vậy nên ...", "type": "Expression" },
+  { "id": 122, "word": "どうやって", "reading": "どうやって", "mean": "làm thế nào ~", "type": "Expression" },
+  { "id": 123, "word": "砂", "reading": "すな", "mean": "cát", "type": "N" },
+  { "id": 124, "word": "風呂", "reading": "ふろ", "mean": "bồn tắm", "type": "N" },
+  { "id": 125, "word": "敬語", "reading": "けいご", "mean": "kính ngữ", "type": "N" },
+  { "id": 126, "word": "ひも", "reading": "ひも", "mean": "sợi dây", "type": "N" },
+  { "id": 127, "word": "コンセント", "reading": "コンセント", "mean": "ổ cắm", "type": "N" },
+  { "id": 128, "word": "うれしい", "reading": "うれしい", "mean": "vui vẻ", "type": "Aい" },
+  { "id": 129, "word": "強い", "reading": "つよい", "mean": "mạnh, mạnh mẽ", "type": "Aい" },
+  { "id": 130, "word": "弱い", "reading": "よわい", "mean": "yếu, yếu đuối", "type": "Aい" },
+  { "id": 131, "word": "優しい", "reading": "やさしい", "mean": "tử tế, tốt bụng", "type": "Aい" },
+  { "id": 132, "word": "悲しい", "reading": "かなしい", "mean": "buồn bã", "type": "Aい" },
+  { "id": 133, "word": "幸せ", "reading": "しあわせ", "mean": "hạnh phúc", "type": "Aな" },
+  { "id": 134, "word": "真面目", "reading": "まじめ", "mean": "nghiêm túc, chăm chỉ", "type": "Aな" },
+  { "id": 135, "word": "間違える", "reading": "まちがえる", "mean": "nhầm, sai", "type": "V II" },
+  { "id": 136, "word": "切れる", "reading": "きれる", "mean": "bị gãy, bị đứt", "type": "V II" },
+  { "id": 137, "word": "取れる", "reading": "とれる", "mean": "bung ra", "type": "V II" },
+  { "id": 138, "word": "折れる", "reading": "おれる", "mean": "gãy", "type": "V II" },
+  { "id": 139, "word": "消える", "reading": "きえる", "mean": "(điện, đèn...) tắt", "type": "V II" },
+  { "id": 140, "word": "ゴール(する)", "reading": "ゴール(する)", "mean": "ghi bàn, ghi điểm", "type": "N/VIII" },
+  { "id": 141, "word": "もう少しで", "reading": "もうすこしで", "mean": "thêm một chút", "type": "Expression" },
+  { "id": 142, "word": "気持ち", "reading": "きもち", "mean": "tâm trạng", "type": "N" },
+  { "id": 143, "word": "前髪", "reading": "まえがみ", "mean": "tóc mái", "type": "N" },
+  { "id": 144, "word": "くちびる", "reading": "くちびる", "mean": "đôi môi", "type": "N" },
+  { "id": 145, "word": "砂糖", "reading": "さとう", "mean": "đường ăn", "type": "N" },
+  { "id": 146, "word": "電気", "reading": "でんき", "mean": "điện", "type": "N" },
+  { "id": 147, "word": "牛乳", "reading": "ぎゅうにゅう", "mean": "sữa bò", "type": "N" },
+  { "id": 148, "word": "黒板", "reading": "こくばん", "mean": "bảng đen", "type": "N" },
+  { "id": 149, "word": "壁", "reading": "かべ", "mean": "bức tường", "type": "N" },
+  [
+  { "id": 150, "word": "温度", "reading": "おんど", "mean": "nhiệt độ", "type": "N" },
+  { "id": 151, "word": "冷房", "reading": "れいぼう", "mean": "chế độ lạnh của điều hoà", "type": "N" },
+  { "id": 152, "word": "チラシ", "reading": "チラシ", "mean": "tờ rơi quảng cáo", "type": "N" },
+  { "id": 153, "word": "エアコン", "reading": "エアコン", "mean": "điều hòa", "type": "N" },
+  { "id": 154, "word": "暗い", "reading": "くらい", "mean": "tối, u ám", "type": "Aい" },
+  { "id": 155, "word": "暖かい", "reading": "あたたかい", "mean": "ấm", "type": "Aい" },
+  { "id": 156, "word": "薄い", "reading": "うすい", "mean": "mỏng, nông", "type": "Aい" },
+  { "id": 157, "word": "厚い", "reading": "あつい", "mean": "dày", "type": "Aい" },
+  { "id": 158, "word": "白い", "reading": "しろい", "mean": "màu trắng, trắng", "type": "Aい" },
+  { "id": 159, "word": "うるさい", "reading": "うるさい", "mean": "ồn ào, ầm ỹ", "type": "Aい" },
+  { "id": 160, "word": "切る", "reading": "きる", "mean": "cắt ~", "type": "VI" },
+  { "id": 161, "word": "塗る", "reading": "ぬる", "mean": "bôi (thuốc), quét (sơn)", "type": "VI" },
+  { "id": 162, "word": "折る", "reading": "おる", "mean": "bẻ, gập", "type": "VI" },
+  { "id": 163, "word": "冷やす", "reading": "ひやす", "mean": "làm lạnh", "type": "VI" },
+  { "id": 164, "word": "分ける", "reading": "わける", "mean": "chia, phân loại", "type": "V II" },
+  { "id": 165, "word": "換える", "reading": "かえる", "mean": "đổi", "type": "V II" },
+  { "id": 166, "word": "温める/暖める", "reading": "あたためる", "mean": "làm ấm", "type": "V II" },
+  { "id": 167, "word": "もっと", "reading": "もっと", "mean": "hơn, nữa", "type": "Adv" },
+  { "id": 168, "word": "なかなか", "reading": "なかなか", "mean": "mãi mà (không) ~", "type": "Adv" },
+  { "id": 169, "word": "度", "reading": "ど", "mean": "độ C", "type": "N" },
+  { "id": 170, "word": "おめでとう", "reading": "おめでとう", "mean": "chúc mừng (về ~)", "type": "Expression" },
+  { "id": 171, "word": "比べて", "reading": "くらべて", "mean": "so với ~", "type": "Expression" },
+  { "id": 172, "word": "寝室", "reading": "しんしつ", "mean": "phòng ngủ", "type": "N" },
+  { "id": 173, "word": "棚", "reading": "たな", "mean": "tủ, giá", "type": "N" },
+  { "id": 174, "word": "パズル", "reading": "パズル", "mean": "đồ chơi xếp hình", "type": "N" },
+  { "id": 175, "word": "データ", "reading": "データ", "mean": "dữ liệu", "type": "N" },
+  { "id": 176, "word": "タイマー", "reading": "タイマー", "mean": "hẹn giờ", "type": "N" },
+  { "id": 177, "word": "アイドル", "reading": "アイドル", "mean": "thần tượng", "type": "N" },
+  { "id": 178, "word": "大切", "reading": "たいせつ", "mean": "quan trọng", "type": "Aな" },
+  { "id": 179, "word": "育つ", "reading": "そだつ", "mean": "được nuôi nấng", "type": "VI" },
+  { "id": 180, "word": "暖まる/温まる", "reading": "あたたまる", "mean": "ấm lên, nóng lên", "type": "VI" },
+  { "id": 181, "word": "つく", "reading": "つく", "mean": "(điện, đèn...) bật", "type": "VI" },
+  { "id": 182, "word": "沸かす", "reading": "わかす", "mean": "làm nóng, đun nóng", "type": "VI" },
+  { "id": 183, "word": "沸く", "reading": "わく", "mean": "(nước) sôi lên", "type": "VI" },
+  { "id": 184, "word": "治る", "reading": "なおる", "mean": "khỏi (bệnh, ốm)", "type": "VI" },
+  { "id": 185, "word": "治す", "reading": "なおす", "mean": "chữa khỏi", "type": "VI" },
+  { "id": 186, "word": "落とす", "reading": "おとす", "mean": "làm rơi, đánh rơi", "type": "VI" },
+  { "id": 187, "word": "汚す", "reading": "よごす", "mean": "làm bẩn", "type": "VI" },
+  { "id": 188, "word": "消す", "reading": "けす", "mean": "tắt / xóa", "type": "VI" },
+  { "id": 189, "word": "乾かす", "reading": "かわかす", "mean": "làm khô, hong khô", "type": "VI" },
+  { "id": 190, "word": "破る", "reading": "やぶる", "mean": "làm rách", "type": "VI" },
+  { "id": 191, "word": "売る", "reading": "うる", "mean": "bán", "type": "VI" },
+  { "id": 192, "word": "壊す", "reading": "こわす", "mean": "làm hỏng", "type": "VI" },
+  { "id": 193, "word": "割る", "reading": "わる", "mean": "làm vỡ", "type": "VI" },
+  { "id": 194, "word": "倒す", "reading": "たおす", "mean": "chặt đổ, hạ gục", "type": "VI" },
+  { "id": 195, "word": "冷える", "reading": "ひえる", "mean": "lạnh", "type": "V II" },
+  { "id": 196, "word": "捨てる", "reading": "すてる", "mean": "vứt", "type": "V II" },
+  { "id": 197, "word": "助ける", "reading": "たすける", "mean": "giúp đỡ, cứu", "type": "V II" },
+  { "id": 198, "word": "止める", "reading": "とめる", "mean": "cản, ngăn, đỗ", "type": "V II" },
+  { "id": 199, "word": "緊張(する)", "reading": "きんちょう(する)", "mean": "căng thẳng", "type": "N/VIII" },
+  { "id": 200, "word": "結構", "reading": "けっこう", "mean": "khá ~, tương đối ~", "type": "Adv" }
             ],
             kanji: [
-                { id: 1, char: '力', onyomi: 'リョク, リキ', kunyomi: 'ちから', mean: 'LỰC (Sức mạnh)', examples: ['協力 (きょうりょく): Hiệp lực'] },
-                { id: 2, char: '動', onyomi: 'ドウ', kunyomi: 'うご(く)', mean: 'ĐỘNG (Chuyển động)', examples: ['動物 (どうぶつ): Động vật', '運動 (うんどう): Vận động'] },
-                { id: 3, char: '働', onyomi: 'ドウ', kunyomi: 'はたら(く)', mean: 'ĐỘNG (Làm việc)', examples: ['働きます: Làm việc'] },
-                { id: 4, char: '知', onyomi: 'チ', kunyomi: 'し(る)', mean: 'TRI (Biết)', examples: ['知らせる: Thông báo', '知識 (ちしき): Tri thức'] },
-                { id: 5, char: '短', onyomi: 'タン', kunyomi: 'みじか(い)', mean: 'ĐOẢN (Ngắn)', examples: ['短気 (たんき): Nóng tính', '短い: Ngắn'] },
-                { id: 6, char: '医', onyomi: 'イ', kunyomi: '-', mean: 'Y (Y học)', examples: ['医者 (いしゃ): Bác sĩ', '医学 (いがく): Y học'] },
-                { id: 7, char: '皿', onyomi: 'ベイ', kunyomi: 'さら', mean: 'MÃNH (Cái đĩa)', examples: ['お皿: Cái đĩa', '灰皿 (はいざら): Gạt tàn'] },
-                { id: 8, char: '血', onyomi: 'ケツ', kunyomi: 'ち', mean: 'HUYẾT (Máu)', examples: ['出血 (しゅっけつ): Xuất huyết'] },
-                { id: 9, char: '村', onyomi: 'ソン', kunyomi: 'むら', mean: 'THÔN (Làng)', examples: ['村長 (そんちょう): Trưởng thôn'] },
-                { id: 10, char: '区', onyomi: 'ク', kunyomi: '-', mean: 'KHU (Quận)', examples: ['地区 (ちく): Địa khu', '区役所: Ủy ban quận'] },
-                { id: 11, char: '図', onyomi: 'ズ, ト', kunyomi: 'はか(る)', mean: 'ĐỒ (Bản đồ, vẽ)', examples: ['地図 (ちず): Bản đồ', '図書館 (としょかん): Thư viện'] },
-                { id: 12, char: '進', onyomi: 'シン', kunyomi: 'すす(む)', mean: 'TIẾN (Tiến lên)', examples: ['進化 (しんか): Tiến hóa'] },
-                { id: 13, char: '集', onyomi: 'シュウ', kunyomi: 'あつ(める)', mean: 'TẬP (Tập hợp)', examples: ['集中 (しゅうちゅう): Tập trung'] },
-                { id: 14, char: '営', onyomi: 'エイ', kunyomi: 'いとな(む)', mean: 'DOANH (Kinh doanh)', examples: ['営業 (えいぎょう): Kinh doanh'] },
-                { id: 15, char: '業', onyomi: 'ギョウ', kunyomi: 'わざ', mean: 'NGHIỆP (Nghề nghiệp)', examples: ['授業 (じゅぎょう): Giờ học'] }
+                const kanjiN4 = [
+{ id: 1, char: '力', onyomi: 'リョク, リキ', kunyomi: 'ちから', mean: 'LỰC (Sức mạnh)', examples: ['協力 (きょうりょく): Hiệp lực'] },
+{ id: 2, char: '動', onyomi: 'ドウ', kunyomi: 'うごく, うごかす', mean: 'ĐỘNG', examples: ['運動 (うんどう): Vận động'] },
+{ id: 3, char: '働', onyomi: 'ドウ', kunyomi: 'はたらく', mean: 'ĐỘNG (Làm việc)', examples: ['働きます: Làm việc'] },
+{ id: 4, char: '知', onyomi: 'チ', kunyomi: 'しる', mean: 'TRI', examples: ['知ります: Biết'] },
+{ id: 5, char: '短', onyomi: 'タン', kunyomi: 'みじかい', mean: 'ĐOẢN', examples: ['短気 (たんき): Nóng nảy'] },
+{ id: 6, char: '医', onyomi: 'イ', kunyomi: '-', mean: 'Y', examples: ['医者 (いしゃ): Bác sĩ'] },
+{ id: 7, char: '皿', onyomi: '-', kunyomi: 'さら', mean: 'MÃNH', examples: ['お皿 (さら): Cái đĩa'] },
+{ id: 8, char: '血', onyomi: 'ケツ', kunyomi: 'ち', mean: 'HUYẾT', examples: ['血 (ち): Máu'] },
+{ id: 9, char: '工', onyomi: 'コウ, ク', kunyomi: '-', mean: 'CÔNG', examples: ['工場 (こうじょう): Nhà máy'] },
+{ id: 10, char: '空', onyomi: 'クウ', kunyomi: 'そら, から, あく, あける', mean: 'KHÔNG', examples: ['空港 (くうこう): Sân bay'] },
+{ id: 11, char: '試', onyomi: 'シ', kunyomi: 'こころみる, ためす', mean: 'THÍ', examples: ['試験 (しけん): Kỳ thi'] },
+{ id: 12, char: '計', onyomi: 'ケイ', kunyomi: 'はかる, はからう', mean: 'KẾ', examples: ['計画 (けいかく): Kế hoạch'] },
+{ id: 13, char: '説', onyomi: 'セツ, ゼイ', kunyomi: 'とく', mean: 'THUYẾT', examples: ['説明 (せつめい): Giải thích'] },
+{ id: 14, char: '心', onyomi: 'シン', kunyomi: 'こころ', mean: 'TÂM', examples: ['安心 (あんしん): Yên tâm'] },
+{ id: 15, char: '思', onyomi: 'シ', kunyomi: 'おもう', mean: 'TƯ', examples: ['思います: Nghĩ'] },
+{ id: 16, char: '性', onyomi: 'セイ, ショウ', kunyomi: '-', mean: 'TÍNH', examples: ['性格 (せいかく): Tính cách'] },
+{ id: 17, char: '地', onyomi: 'チ, ジ', kunyomi: '-', mean: 'ĐỊA', examples: ['地下鉄 (ちかてつ): Tàu điện ngầm'] },
+{ id: 18, char: '池', onyomi: 'チ', kunyomi: 'いけ', mean: 'TRÌ', examples: ['池 (いけ): Ao'] },
+{ id: 19, char: '公', onyomi: 'コウ', kunyomi: 'おおやけ', mean: 'CÔNG', examples: ['公園 (こうえん): Công viên'] },
+{ id: 20, char: '広', onyomi: 'コウ', kunyomi: 'ひろい, ひろげる, ひろがる', mean: 'QUẢNG', examples: ['広告 (こうこく): Quảng cáo'] },
+{ id: 21, char: '去', onyomi: 'キョ, コ', kunyomi: 'さる', mean: 'KHỨ', examples: ['去年 (きょねん): Năm ngoái'] },
+{ id: 22, char: '転', onyomi: 'テン', kunyomi: 'ころぶ, ころがる', mean: 'CHUYỂN', examples: ['運転 (うんてん): Lái xe'] },
+{ id: 23, char: '遠', onyomi: 'エン', kunyomi: 'とおい', mean: 'VIỄN', examples: ['遠い (とおい): Xa'] },
+{ id: 24, char: '園', onyomi: 'エン', kunyomi: '-', mean: 'VIÊN', examples: ['動物園 (どうぶつえん): Sở thú'] },
+{ id: 25, char: '台', onyomi: 'タイ, ダイ', kunyomi: '-', mean: 'ĐÀI', examples: ['台風 (たいふう): Bão'] },
+{ id: 26, char: '始', onyomi: 'シ', kunyomi: 'はじめる, はじまる', mean: 'THỦY', examples: ['開始 (かいし): Bắt đầu'] },
+{ id: 27, char: '治', onyomi: 'ジ, チ', kunyomi: 'なおす, なおる, おさめる', mean: 'TRỊ', examples: ['政治 (せいじ): Chính trị'] },
+{ id: 28, char: '正', onyomi: 'ショウ, セイ', kunyomi: 'ただしい, ただす, まさ', mean: 'CHÍNH', examples: ['正しい: Đúng'] },
+{ id: 29, char: '政', onyomi: 'セイ, ショウ', kunyomi: 'まつりごと', mean: 'CHÍNH (chính trị)', examples: ['政治 (せいじ): Chính trị'] },
+{ id: 30, char: '王', onyomi: 'オウ', kunyomi: '-', mean: 'VƯƠNG', examples: ['王様 (おうさま): Nhà vua'] },
+{ id: 31, char: '玉', onyomi: 'ギョク', kunyomi: 'たま, だま', mean: 'NGỌC', examples: ['お年玉 (おとしだま): Tiền mừng tuổi'] },
+{ id: 32, char: '国', onyomi: 'コク', kunyomi: 'くに', mean: 'QUỐC', examples: ['外国 (がいこく): Nước ngoài'] },
+{ id: 33, char: '主', onyomi: 'シュ, ス', kunyomi: 'おも, ぬし', mean: 'CHỦ', examples: ['主人公 (しゅじんこう): Nhân vật chính'] },
+{ id: 34, char: '住', onyomi: 'ジュウ', kunyomi: 'すむ, すまう', mean: 'TRÚ', examples: ['住所 (じゅうしょ): Địa chỉ'] },
+{ id: 35, char: '所', onyomi: 'ショ', kunyomi: 'ところ', mean: 'SỞ', examples: ['台所 (だいどころ): Nhà bếp'] },
+{ id: 36, char: '近', onyomi: 'キン', kunyomi: 'ちかい', mean: 'CẬN', examples: ['最近 (さいきん): Gần đây'] },
+{ id: 37, char: '辺', onyomi: 'ヘン', kunyomi: 'あたり, べ', mean: 'BIÊN', examples: ['この辺 (このへん): Khu này'] },
+{ id: 38, char: '切', onyomi: 'セツ, サイ', kunyomi: 'きる, きれる', mean: 'THIẾT', examples: ['大切 (たいせつ): Quan trọng'] },
+{ id: 39, char: '勉', onyomi: 'ベン', kunyomi: '-', mean: 'MIỄN', examples: ['勉強 (べんきょう): Học'] },
+{ id: 40, char: '晩', onyomi: 'バン', kunyomi: '-', mean: 'VÃN', examples: ['今晩 (こんばん): Tối nay'] },
+{ id: 41, char: '色', onyomi: 'シキ, ショク', kunyomi: 'いろ', mean: 'SẮC', examples: ['景色 (けしき): Phong cảnh'] },
+{ id: 42, char: '発', onyomi: 'ハツ, ホツ', kunyomi: '-', mean: 'PHÁT', examples: ['発音 (はつおん): Phát âm'] },
+{ id: 43, char: '黄', onyomi: 'オウ, コウ', kunyomi: 'き', mean: 'HOÀNG', examples: ['黄色 (きいろ): Màu vàng'] },
+{ id: 44, char: '虫', onyomi: 'チュウ', kunyomi: 'むし', mean: 'TRÙNG', examples: ['虫 (むし): Côn trùng'] },
+{ id: 45, char: '風', onyomi: 'フウ, フ', kunyomi: 'かぜ, かざ', mean: 'PHONG', examples: ['風邪 (かぜ): Cảm cúm'] },
+{ id: 46, char: '強', onyomi: 'キョウ, ゴウ', kunyomi: 'つよい', mean: 'CƯỜNG', examples: ['強い (つよい): Mạnh'] },
+{ id: 47, char: '油', onyomi: 'ユ, ユウ', kunyomi: 'あぶら', mean: 'DU', examples: ['石油 (せきゆ): Dầu mỏ'] },
+{ id: 48, char: '決', onyomi: 'ケツ', kunyomi: 'きめる, きまる', mean: 'QUYẾT', examples: ['決めます: Quyết định'] },
+{ id: 49, char: '漢', onyomi: 'カン', kunyomi: '-', mean: 'HÁN', examples: ['漢字 (かんじ): Chữ Hán'] },
+{ id: 50, char: '止', onyomi: 'シ', kunyomi: 'とめる, とまる, やむ', mean: 'CHỈ', examples: ['中止 (ちゅうし): Hủy bỏ'] },
+{ id: 51, char: '歩', onyomi: 'ホ, ブ, フ', kunyomi: 'あるく, あゆむ', mean: 'BỘ', examples: ['散歩 (さんぽ): Đi dạo'] },
+{ id: 52, char: '歴', onyomi: 'レキ', kunyomi: '-', mean: 'LỊCH', examples: ['歴史 (れきし): Lịch sử'] },
+{ id: 53, char: '史', onyomi: 'シ', kunyomi: '-', mean: 'SỬ', examples: ['歴史 (れきし): Lịch sử'] },
+{ id: 54, char: '使', onyomi: 'シ', kunyomi: 'つかう', mean: 'SỬ', examples: ['使用 (しよう): Sử dụng'] },
+{ id: 55, char: '品', onyomi: 'ヒン', kunyomi: 'しな', mean: 'PHẨM', examples: ['商品 (しょうひん): Sản phẩm'] },
+{ id: 56, char: '号', onyomi: 'ゴウ, コウ', kunyomi: '-', mean: 'HIỆU', examples: ['番号 (ばんごう): Số'] },
+{ id: 57, char: '味', onyomi: 'ミ', kunyomi: 'あじ, あじわう', mean: 'VỊ', examples: ['意味 (いみ): Ý nghĩa'] },
+{ id: 58, char: '研', onyomi: 'ケン', kunyomi: 'とぐ', mean: 'NGHIÊN', examples: ['研究 (けんきゅう): Nghiên cứu'] },
+{ id: 59, char: '丸', onyomi: 'ガン', kunyomi: 'まる, まるい', mean: 'HOÀN', examples: ['丸 (まる): Hình tròn'] },
+{ id: 60, char: '究', onyomi: 'キュウ', kunyomi: 'きわめる', mean: 'CỨU', examples: ['研究 (けんきゅう): Nghiên cứu'] },
+{ id: 61, char: '谷', onyomi: 'コク', kunyomi: 'たに', mean: 'CỐC', examples: ['谷 (たに): Thung lũng'] },
+{ id: 62, char: '船', onyomi: 'セン', kunyomi: 'ふね, ふな', mean: 'THUYỀN', examples: ['船 (ふね): Con thuyền'] }
+                    
+];
             ],
             grammar: [
-                {
-                    id: 1,
-                    title: 'Thể thường / N / Aな + でしょう / だろう',
-                    usage: 'Phán đoán (Chắc hẳn là...)',
-                    explain: 'Sử dụng khi đưa ra phán đoán mà người nói tin rằng tỉ lệ xảy ra khá cao.「だろう」 là thể thường của 「でしょう」.',
-                    examples: [
-                        'たくさん勉強したから、きっと合格するだろう。 (Vì đã học nhiều nên chắc chắn sẽ đỗ thôi.)',
-                        '明日は雨でしょう。 (Ngày mai chắc hẳn là mưa.)'
-                    ]
-                },
-                {
-                    id: 2,
-                    title: '～かもしれません',
-                    usage: 'Có lẽ, không biết chừng',
-                    explain: 'Diễn tả phán đoán của người nói với mức độ chắc chắn thấp hơn "deshou" (khoảng 50%).',
-                    examples: [
-                        '約束の時間に間に合わないかもしれません。 (Có lẽ sẽ không kịp giờ hẹn.)'
-                    ]
-                },
-                {
-                    id: 3,
-                    title: '～みたいだ',
-                    usage: 'Hình như (Phán đoán dựa trên giác quan)',
-                    explain: 'Dùng trong văn nói. Giống với "youda" nhưng suồng sã hơn. Phán đoán dựa trên vẻ ngoài hoặc thông tin nghe được.',
-                    examples: [
-                        '彼は疲れているみたいだ。 (Anh ấy có vẻ đang mệt.)'
-                    ]
-                },
-                {
-                    id: 4,
-                    title: '～ようです',
-                    usage: 'Hình như, có vẻ',
-                    explain: 'Phán đoán dựa trên thông tin, cảm nhận chủ quan của người nói. Lịch sự hơn "mitaida".',
-                    examples: [
-                        '外は雨が降っているようです。 (Bên ngoài có vẻ trời đang mưa.)'
-                    ]
-                },
-                {
-                    id: 5,
-                    title: '～はずです',
-                    usage: 'Chắc chắn là',
-                    explain: 'Phán đoán dựa trên lý do xác thực, logic. Người nói rất tin tưởng vào phán đoán này.',
-                    examples: [
-                        '田中さんは日本に10年住んでいたから、日本語が上手なはずです。 (Vì anh Tanaka sống ở Nhật 10 năm nên tiếng Nhật chắc chắn giỏi.)'
-                    ]
-                }
-            ],
+    // Chương 15 (đã có ở trước, tóm tắt lại để đầy đủ)
+    {
+        "id": 1,
+        "chapter": 15,
+        "title": "Thể thường / N / A + でしょう / だろう",
+        "usage": "Phán đoán (Chắc hẳn là...)",
+        "explain": "Phán đoán với độ tin cao, thường kèm 多分/きっと, thêm ね/な/から. Không dùng cho ý chí tương lai của bản thân.",
+        "examples": [
+            "たくさん勉強したから、きっと合格するだろうなあ。",
+            "明日は今日より気温が下がるでしょう。"
+        ]
+    },
+    {
+        "id": 2,
+        "chapter": 15,
+        "title": "Thể thường / N / A + でしょう / だろう",
+        "usage": "Xác nhận, kêu gọi đồng tình (~ phải không?)",
+        "explain": "Lên giọng cuối câu để xác nhận hoặc mong đồng tình.",
+        "examples": [
+            "このかばん、かわいいでしょう？",
+            "明日の飲み会、しょうたくんも行くでしょう？"
+        ]
+    },
+    {
+        "id": 3,
+        "chapter": 15,
+        "title": "Thể thường / N / Aな + かもしれない",
+        "usage": "Có lẽ ~ / Có khi ~",
+        "explain": "Phán đoán khả năng, mức độ chắc chắn linh hoạt.",
+        "examples": [
+            "忙しいから、飲み会に行けないかもしれません。",
+            "このケーキ、おいしくないかもしれない。"
+        ]
+    },
+    {
+        "id": 4,
+        "chapter": 15,
+        "title": "Thể thường / N / Aな + みたいだ",
+        "usage": "Hình như ~ ; Có vẻ ~ (dựa trên quan sát)",
+        "explain": "Phán đoán từ điều nhìn/nghe thấy, văn nói.",
+        "examples": [
+            "人気があるみたいですね。",
+            "誰も住んでいないみたいだね。"
+        ]
+    },
+    {
+        "id": 5,
+        "chapter": 15,
+        "title": "Thể thường / N の / Aな + ようだ",
+        "usage": "Hình như ~ ; Có vẻ ~ (trang trọng)",
+        "explain": "Lịch sự hơn みたいだ, dùng báo cáo/văn viết.",
+        "examples": [
+            "車がここにぶつかったようです。",
+            "この町はだいぶ不便なようだ。"
+        ]
+    },
+    {
+        "id": 6,
+        "chapter": 15,
+        "title": "Thể thường / N の / Aな + はずだ",
+        "usage": "Chắc chắn ~ (dựa trên chứng cứ)",
+        "explain": "Phán đoán khách quan, tin chắc. Dùng はずだけど khi trái thực tế.",
+        "examples": [
+            "きれいなはずです。",
+            "頭の上にありますよ。(さっきここに置いたはずだけど…)"
+        ]
+    },
+
+    // Chương 16 (đã có, tóm tắt)
+    {
+        "id": 7,
+        "chapter": 16,
+        "title": "Thể thường / N / Aな + らしい",
+        "usage": "Nghe nói ~ (tin đồn)",
+        "explain": "Thông tin nghe được, nguồn không rõ hoặc đồn đại.",
+        "examples": [
+            "台風が来るらしいよ。",
+            "田中さんは恋人がいないらしいですよ。"
+        ]
+    },
+    {
+        "id": 8,
+        "chapter": 16,
+        "title": "Thể thường / N / Aな + みたいだ",
+        "usage": "Nghe nói ~ ; Thấy bảo ~",
+        "explain": "Thông tin nghe được, nguồn không rõ.",
+        "examples": [
+            "明日は台風みたいだね。",
+            "ベトナムが優勝したみたいだよ。"
+        ]
+    },
+    {
+        "id": 9,
+        "chapter": 16,
+        "title": "Thể thường / N だ / Aな + そうだ",
+        "usage": "Nghe nói ~ ; Thấy bảo ~ (truyền thông)",
+        "explain": "Từ người khác/TV/báo, nguồn rõ hơn, không phủ định/quá khứ trực tiếp.",
+        "examples": [
+            "田中さんの妹さんは大学生だそうですよ。",
+            "2週間の入院が必要だそうです。"
+        ]
+    },
+    {
+        "id": 10,
+        "chapter": 16,
+        "title": "Thể thường / 「〜」 + と言っていました",
+        "usage": "Đã nói rằng ~",
+        "explain": "Trích dẫn rõ nguồn, có dạng rút gọn って言ってた.",
+        "examples": [
+            "甘いものが好きだと言っていましたよ。",
+            "頭が痛いって言ってたよ。"
+        ]
+    },
+    {
+        "id": 11,
+        "chapter": 16,
+        "title": "Thể thường + し、Thể thường + し、~",
+        "usage": "Vừa ~, vừa ~ (liệt kê lý do/đặc điểm)",
+        "explain": "Liệt kê cùng hướng nghĩa, đổi が/を thành も, thêm それに/しかも.",
+        "examples": [
+            "服も買いたいし、旅行にも行きたいし、お金がほしいなあ。",
+            "この店はおいしいし、おしゃれだし、しかも安い。"
+        ]
+    },
+
+    // Các chương tiếp theo (từ 17 đến 33 - tổng hợp các điểm chính tiêu biểu của Dũng Mori N4)
+    {
+        "id": 12,
+        "chapter": 17,
+        "title": "~て しまう",
+        "usage": "Làm xong (hoàn thành, tiếc nuối)",
+        "explain": "Hành động hoàn tất, thường mang sắc thái tiếc nuối/phí phạm.",
+        "examples": [
+            "全部食べてしまった。",
+            "忘れてしまいました。"
+        ]
+    },
+    {
+        "id": 13,
+        "chapter": 17,
+        "title": "~て おく",
+        "usage": "Làm trước (chuẩn bị)",
+        "explain": "Làm sẵn để chuẩn bị cho sau.",
+        "examples": [
+            "窓を閉めておきます。",
+            "予約しておいたほうがいいよ。"
+        ]
+    },
+    {
+        "id": 14,
+        "chapter": 18,
+        "title": "~ながら",
+        "usage": "Vừa ~ vừa ~ (đồng thời)",
+        "explain": "Hai hành động cùng lúc, chủ ngữ giống nhau.",
+        "examples": [
+            "音楽を聴きながら勉強します。",
+            "歩きながら話しましょう。"
+        ]
+    },
+    {
+        "id": 15,
+        "chapter": 18,
+        "title": "~たり ~たり する",
+        "usage": "Làm ~ rồi ~ (liệt kê không đầy đủ)",
+        "explain": "Liệt kê ví dụ hành động, không liệt kê hết.",
+        "examples": [
+            "本を読んだり、テレビを見たりします。",
+            "行ったり来たりしている。"
+        ]
+    },
+    {
+        "id": 16,
+        "chapter": 19,
+        "title": "~ば",
+        "usage": "Nếu ~ thì ~ (điều kiện)",
+        "explain": "Điều kiện giả định, thường dùng cho khả năng xảy ra.",
+        "examples": [
+            "雨が降れば、行きません。",
+            "早く起きれば、間に合います。"
+        ]
+    },
+    {
+        "id": 17,
+        "chapter": 19,
+        "title": "~たら",
+        "usage": "Khi ~ thì ~ (điều kiện + thời gian)",
+        "explain": "Sau khi hoàn thành điều kiện thì xảy ra việc khác.",
+        "examples": [
+            "家に帰ったら、電話してください。",
+            "食べたら、寝ます。"
+        ]
+    },
+    {
+        "id": 18,
+        "chapter": 20,
+        "title": "~ても",
+        "usage": "Dù ~ cũng ~ (nhượng bộ)",
+        "explain": "Dù có điều kiện cũng không thay đổi kết quả.",
+        "examples": [
+            "雨が降っても行きます。",
+            "高くても買います。"
+        ]
+    },
+    {
+        "id": 19,
+        "chapter": 20,
+        "title": "~前に",
+        "usage": "Trước khi ~",
+        "explain": "Hành động xảy ra trước hành động khác.",
+        "examples": [
+            "寝る前に歯を磨きます。",
+            "帰る前に電話します。"
+        ]
+    },
+    {
+        "id": 20,
+        "chapter": 21,
+        "title": "~てから",
+        "usage": "Sau khi ~",
+        "explain": "Hành động xảy ra sau khi hoàn thành hành động trước.",
+        "examples": [
+            "ご飯を食べてから勉強します。",
+            "終わってから連絡します。"
+        ]
+    },
+    {
+        "id": 21,
+        "chapter": 21,
+        "title": "~ところだ",
+        "usage": "Vừa mới ~ / Đang chuẩn bị ~ / Vừa xong ~",
+        "explain": "Biểu thị thời điểm hành động (bắt đầu/đang/ xong).",
+        "examples": [
+            "今帰ったところです。",
+            "これから食べる所です。"
+        ]
+    },
+    {
+        "id": 22,
+        "chapter": 22,
+        "title": "~そうです (nghe nói)",
+        "usage": "Nghe nói ~ (dạng khác)",
+        "explain": "Thông tin nghe được (tương tự chương 16).",
+        "examples": [
+            "いい天気だそうです。",
+            "彼は来ないそうです。"
+        ]
+    },
+    {
+        "id": 23,
+        "chapter": 23,
+        "title": "~やすい / ~にくい",
+        "usage": "Dễ ~ / Khó ~",
+        "explain": "Dễ/khó thực hiện hành động.",
+        "examples": [
+            "この本は読みやすいです。",
+            "この漢字は覚えにくい。"
+        ]
+    },
+    {
+        "id": 24,
+        "chapter": 24,
+        "title": "~すぎる",
+        "usage": "~ quá (quá mức)",
+        "explain": "Quá mức bình thường, mang ý tiêu cực.",
+        "examples": [
+            "高すぎます。",
+            "食べすぎました。"
+        ]
+    },
+    {
+        "id": 25,
+        "chapter": 25,
+        "title": "~くなる / ~になる",
+        "usage": "Trở nên ~ / Trở thành ~",
+        "explain": "Thay đổi trạng thái.",
+        "examples": [
+            "きれいになりました。",
+            "寒くなりました。"
+        ]
+    },
+    {
+        "id": 26,
+        "chapter": 26,
+        "title": "~て あげる / ~て くれる / ~てもらう",
+        "usage": "Làm cho ai (lợi ích)",
+        "explain": "Biểu thị hành động mang lợi ích cho người khác.",
+        "examples": [
+            "教えてあげます。",
+            "手伝ってくれますか？"
+        ]
+    },
+    {
+        "id": 27,
+        "chapter": 27,
+        "title": "~ば いい",
+        "usage": "Nên ~ / Nếu ~ thì tốt",
+        "explain": "Lời khuyên nhẹ nhàng.",
+        "examples": [
+            "早く寝ればいいです。",
+            "行けばいいじゃない。"
+        ]
+    },
+    {
+        "id": 28,
+        "chapter": 28,
+        "title": "~ように",
+        "usage": "Để ~ / Như là ~",
+        "explain": "Mục đích hoặc so sánh.",
+        "examples": [
+            "早く起きるようにします。",
+            "日本人ように話せます。"
+        ]
+    },
+    {
+        "id": 29,
+        "chapter": 29,
+        "title": "~そうです (trông có vẻ)",
+        "usage": "Trông có vẻ ~ (dựa trên cảm giác)",
+        "explain": "Phán đoán từ vẻ ngoài.",
+        "examples": [
+            "おいしそうです。",
+            "疲れそうです。"
+        ]
+    },
+    {
+        "id": 30,
+        "chapter": 30,
+        "title": "~て みる",
+        "usage": "Thử làm ~",
+        "explain": "Thử xem sao.",
+        "examples": [
+            "食べてみます。",
+            "行ってみましょう。"
+        ]
+    },
+    {
+        "id": 31,
+        "chapter": 31,
+        "title": "~ことにする",
+        "usage": "Quyết định ~",
+        "explain": "Quyết định chủ quan.",
+        "examples": [
+            "毎日運動することにします。",
+            "辞めることにしました。"
+        ]
+    },
+    {
+        "id": 32,
+        "chapter": 32,
+        "title": "~つもりだ",
+        "usage": "Dự định ~",
+        "explain": "Ý định cá nhân.",
+        "examples": [
+            "旅行するつもりです。",
+            "行かないつもりです。"
+        ]
+    },
+    {
+        "id": 33,
+        "chapter": 33,
+        "title": "~かもしれない (nâng cao)",
+        "usage": "Có lẽ ~ (tổng hợp)",
+        "explain": "Ôn lại và mở rộng phán đoán.",
+        "examples": [
+            "遅れるかもしれないです。",
+            "勝つかもしれないね。"
+        ]
+    }
+]
             reading: `
                 <p class="mb-4">
                     今日は日曜日です。天気予報によると、午後は<span class="highlight-word" data-word="台風">台風</span>が来る<span class="highlight-word" data-word="でしょう">でしょう</span>。
@@ -713,3 +1272,4 @@
     <!-- CONFIRMATION: NO SVG graphics used (except inline SVG icons). NO Mermaid JS used. -->
 </body>
 </html>
+
