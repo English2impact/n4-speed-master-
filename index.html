@@ -3,40 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N4 NAT-TEST Master AI | Luyện thi tiếng Nhật thông minh</title>
+    <title>N4 NAT-TEST Master | Luyện thi tiếng Nhật</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Chosen Palette: Sakura & Matcha Premium -->
-    <!-- Application Structure Plan:
-         1. Dashboard: Lộ trình cá nhân hóa và Biểu đồ tiến độ.
-         2. Vocabulary: Học qua Flashcard và tạo ví dụ thông minh bằng ✨ AI.
-         3. Kanji: Quản lý trí nhớ ngắt quãng (SRS).
-         4. Grammar: Danh sách bài học kèm tính năng ✨ Giải thích chuyên sâu từ AI.
-         5. AI Sensei: Tính năng hội thoại ✨ Chatbot để thực hành trực tiếp các mẫu câu N4.
-         6. Reading: Đọc hiểu tương tác kèm ✨ AI Quiz Generator.
+    <!-- Chosen Palette: Sakura & Matcha (Soft Pink, Calming Green, Dark Grey text) -->
+    <!-- Application Structure Plan: 
+         1. Dashboard (Lộ trình): Central hub. User selects duration -> App calculates daily tasks. Charts show progress.
+         2. Vocabulary (Từ vựng): Flashcard UI for learning, Quiz UI for testing. 
+         3. Kanji (Hán tự): Grid view for overview, SRS-style detailed modal for deep learning.
+         4. Grammar (Ngữ pháp): List view with expandable details (Accordion) for clear explanation/example separation.
+         5. Reading (Đọc hiểu): Text container with interactive word lookup functionality.
+         
+         Navigation: Bottom tab bar for mobile feel/ease of access, top header for global stats.
     -->
     
     <style>
-        body { font-family: 'Nunito', 'Noto Sans JP', sans-serif; background-color: #fdf2f8; }
+        body { font-family: 'Nunito', 'Noto Sans JP', sans-serif; background-color: #fdf2f8; /* pink-50 */ }
         .kanji-font { font-family: 'Noto Sans JP', sans-serif; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .nav-item.active { color: #be185d; border-bottom: 2px solid #be185d; }
-        
-        /* Flashcard Animation */
         .card-flip { perspective: 1000px; }
         .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .card-back { transform: rotateY(180deg); background-color: #ecfdf5; }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .card-back { transform: rotateY(180deg); background-color: #ecfdf5; /* green-50 */ }
         .flipped .card-inner { transform: rotateY(180deg); }
-
-        .chart-container { position: relative; width: 100%; max-width: 500px; height: 250px; margin: 0 auto; }
         
-        /* Loading Spinner */
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #db2777; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #fbcfe8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f472b6; }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 250px;
+            margin: 0 auto;
+        }
+        
+        .highlight-word {
+            cursor: pointer;
+            border-bottom: 2px dashed #db2777; /* pink-600 */
+            transition: background-color 0.2s;
+        }
+        .highlight-word:hover { background-color: #fce7f3; }
+
+        /* Hide sections by default */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .nav-item.active { color: #be185d; /* pink-700 */ border-bottom: 2px solid #be185d; }
     </style>
 </head>
 <body class="text-gray-800 h-screen flex flex-col overflow-hidden">
@@ -44,338 +61,655 @@
     <!-- Header -->
     <header class="bg-white shadow-sm z-10 p-4 flex justify-between items-center">
         <div class="flex items-center gap-2">
-            <div class="bg-pink-500 text-white p-2 rounded-lg font-bold text-xl shadow-lg">N4</div>
+            <div class="bg-pink-500 text-white p-2 rounded-lg font-bold text-xl">N4</div>
             <div>
-                <h1 class="font-bold text-lg leading-tight text-pink-700">N4 Master <span class="text-xs bg-yellow-100 text-yellow-700 px-1 rounded">AI</span></h1>
-                <p class="text-xs text-gray-500">Luyện thi thông minh với Gemini</p>
+                <h1 class="font-bold text-lg leading-tight text-pink-700">N4 Master</h1>
+                <p class="text-xs text-gray-500">Luyện thi NAT-TEST</p>
             </div>
         </div>
-        <div id="ai-status" class="text-[10px] font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full animate-pulse">✨ AI SẴN SÀNG</div>
+        <div class="flex items-center gap-3">
+            <div class="text-right hidden sm:block">
+                <p class="text-xs font-semibold text-gray-600">Tiến độ tổng</p>
+                <p class="text-sm font-bold text-green-600" id="global-progress-text">0%</p>
+            </div>
+            <div class="w-10 h-10 relative">
+                 <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                    <path class="text-gray-200" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4" />
+                    <path id="global-progress-ring" class="text-pink-500 transition-all duration-1000" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4" />
+                </svg>
+            </div>
+        </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <main class="flex-1 overflow-y-auto bg-gray-50 relative pb-20 sm:pb-4">
         
-        <!-- DASHBOARD -->
+        <!-- 1. DASHBOARD / LỘ TRÌNH -->
         <section id="tab-plan" class="tab-content active p-4 max-w-4xl mx-auto space-y-6">
             <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-pink-400">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2 italic">Chào bạn học viên!</h2>
-                <p class="text-gray-600 mb-4">Hôm nay bạn muốn AI hỗ trợ gì cho việc ôn luyện N4?</p>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="app.switchTab('sensei')" class="bg-pink-100 text-pink-700 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-pink-200 transition">✨ Luyện hội thoại</button>
-                    <button onclick="app.aiGenerateMotivation()" id="btn-motivation" class="bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-yellow-200 transition">✨ Nhận lời khuyên</button>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">👋 Konnichiwa!</h2>
+                <p class="text-gray-600 mb-4">Chào mừng bạn trở lại. Hãy chọn lộ trình học tập để chúng tôi phân bổ nội dung cho bạn.</p>
+                
+                <div class="flex flex-wrap gap-4 items-center bg-pink-50 p-4 rounded-xl">
+                    <label class="font-semibold text-gray-700">Mục tiêu:</label>
+                    <select id="plan-duration" class="bg-white border border-pink-200 text-gray-700 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        <option value="1">1 Tháng (Cấp tốc)</option>
+                        <option value="3" selected>3 Tháng (Tiêu chuẩn)</option>
+                        <option value="6">6 Tháng (Thong thả)</option>
+                    </select>
+                    <button onclick="app.generatePlan()" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">Lập Kế Hoạch</button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-2xl shadow-sm p-5 border border-gray-100">
-                    <h3 class="font-bold text-lg text-gray-800 mb-4">📈 Tiến độ mục tiêu</h3>
+                <!-- Today's Tasks -->
+                <div class="bg-white rounded-2xl shadow-sm p-5">
+                    <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center gap-2">
+                        <span class="text-2xl">📅</span> Nhiệm vụ hôm nay
+                    </h3>
+                    <ul id="daily-tasks" class="space-y-3">
+                        <!-- Dynamic Tasks -->
+                        <li class="text-gray-500 italic">Vui lòng lập kế hoạch để xem nhiệm vụ.</li>
+                    </ul>
+                </div>
+
+                <!-- Stats Chart -->
+                <div class="bg-white rounded-2xl shadow-sm p-5 flex flex-col items-center">
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Biểu đồ năng lực</h3>
                     <div class="chart-container">
                         <canvas id="progressChart"></canvas>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm p-5">
-                    <h3 class="font-bold text-lg text-gray-800 mb-4">📅 Nhiệm vụ AI đề xuất</h3>
-                    <ul class="space-y-3" id="ai-daily-tasks">
-                        <li class="flex items-center gap-2 p-2 bg-pink-50 rounded">
-                            <span class="text-pink-500">✔</span>
-                            <span class="text-sm">Học 10 từ vựng Chương 15</span>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </section>
 
-        <!-- VOCABULARY -->
-        <section id="tab-vocab" class="tab-content p-4 max-w-3xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Từ Vựng</h2>
-                <button onclick="app.aiExplainVocab()" id="btn-vocab-ai" class="bg-white border-2 border-pink-500 text-pink-600 px-4 py-1.5 rounded-full text-sm font-bold hover:bg-pink-50 transition">✨ AI Giải thích thêm</button>
-            </div>
-            
-            <div class="flex flex-col items-center gap-6">
-                <div class="w-full max-w-md h-72 card-flip cursor-pointer group" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front bg-white border-2 border-pink-100">
-                            <div id="fc-word" class="text-5xl font-bold text-gray-800 kanji-font"></div>
-                            <div id="fc-reading" class="text-xl text-pink-500 mt-2"></div>
-                        </div>
-                        <div class="card-back bg-pink-50">
-                            <div id="fc-meaning" class="text-2xl font-bold text-gray-800 px-6"></div>
-                        </div>
-                    </div>
+        <!-- 2. VOCABULARY / TỪ VỰNG -->
+        <section id="tab-vocab" class="tab-content p-4 max-w-3xl mx-auto h-full flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Từ Vựng (Chương 15)</h2>
+                <div class="flex bg-gray-200 rounded-lg p-1">
+                    <button onclick="app.setVocabMode('flashcard')" id="btn-flashcard" class="px-4 py-1 rounded-md text-sm font-bold bg-white text-pink-600 shadow transition">Học</button>
+                    <button onclick="app.setVocabMode('quiz')" id="btn-quiz" class="px-4 py-1 rounded-md text-sm font-bold text-gray-500 hover:bg-gray-100 transition">Kiểm tra</button>
                 </div>
-                
-                <div id="ai-vocab-box" class="hidden w-full bg-white p-4 rounded-xl border border-pink-200 shadow-sm">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-pink-500">✨ AI Sensei:</span>
-                        <div id="ai-vocab-loading" class="spinner hidden"></div>
+            </div>
+
+            <!-- Flashcard View -->
+            <div id="vocab-flashcard-view" class="flex-1 flex flex-col items-center justify-center space-y-6 py-4">
+                <div class="w-full max-w-md h-80 card-flip cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner bg-white rounded-2xl shadow-xl border border-gray-100">
+                        <!-- Front -->
+                        <div class="card-front bg-white">
+                            <span class="text-xs font-bold text-gray-400 absolute top-4 left-4">WORD</span>
+                            <div id="fc-word" class="text-5xl font-bold text-gray-800 mb-2 kanji-font"></div>
+                            <div id="fc-reading" class="text-xl text-pink-500"></div>
+                            <p class="absolute bottom-4 text-gray-400 text-xs animate-bounce">Chạm để lật</p>
+                        </div>
+                        <!-- Back -->
+                        <div class="card-back bg-green-50">
+                            <span class="text-xs font-bold text-green-600 absolute top-4 left-4">MEANING</span>
+                            <div id="fc-meaning" class="text-2xl font-bold text-gray-800 px-6"></div>
+                            <div class="mt-4 flex gap-2">
+                                <span id="fc-type" class="px-2 py-1 bg-green-200 text-green-800 text-xs rounded-full"></span>
+                            </div>
+                        </div>
                     </div>
-                    <p id="ai-vocab-content" class="text-sm text-gray-700 leading-relaxed italic"></p>
                 </div>
 
                 <div class="flex gap-4">
-                    <button onclick="app.prevCard()" class="p-3 rounded-full bg-white shadow-md">◀</button>
-                    <button onclick="app.nextCard()" class="p-3 rounded-full bg-pink-500 text-white shadow-md">▶</button>
+                    <button onclick="app.prevCard()" class="w-12 h-12 rounded-full bg-white shadow hover:bg-gray-50 flex items-center justify-center text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <div class="flex items-center text-gray-500 font-mono">
+                        <span id="fc-current">1</span> / <span id="fc-total">--</span>
+                    </div>
+                    <button onclick="app.nextCard()" class="w-12 h-12 rounded-full bg-pink-500 shadow hover:bg-pink-600 flex items-center justify-center text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz View -->
+            <div id="vocab-quiz-view" class="hidden flex-1 flex flex-col items-center justify-center py-4">
+                <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg text-center">
+                    <div class="mb-6">
+                        <span class="text-xs uppercase tracking-widest text-gray-400">Chọn nghĩa đúng</span>
+                        <h3 id="quiz-question" class="text-4xl font-bold text-gray-800 mt-2 kanji-font"></h3>
+                    </div>
+                    <div id="quiz-options" class="grid grid-cols-1 gap-3">
+                        <!-- Options injected here -->
+                    </div>
+                    <div id="quiz-feedback" class="mt-4 h-6 text-sm font-bold"></div>
                 </div>
             </div>
         </section>
 
-        <!-- GRAMMAR -->
+        <!-- 3. KANJI / HÁN TỰ -->
+        <section id="tab-kanji" class="tab-content p-4 max-w-4xl mx-auto">
+            <div class="mb-6 bg-white p-6 rounded-2xl shadow-sm border-b-4 border-indigo-500">
+                <h2 class="text-2xl font-bold text-gray-800">Kho Kanji (Space Memory)</h2>
+                <p class="text-gray-600 text-sm mt-1">Ôn tập Hán tự theo phương pháp lặp lại ngắt quãng. Đánh giá mức độ ghi nhớ để hệ thống sắp xếp lịch ôn.</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="kanji-grid">
+                <!-- Kanji Items -->
+            </div>
+        </section>
+
+        <!-- 4. GRAMMAR / NGỮ PHÁP -->
         <section id="tab-grammar" class="tab-content p-4 max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Ngữ Pháp N4</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 pl-2 border-l-4 border-yellow-400">Ngữ Pháp N4</h2>
             <div id="grammar-list" class="space-y-4">
-                <!-- Grammar items dynamic -->
+                <!-- Grammar Items -->
             </div>
         </section>
 
-        <!-- AI SENSEI (CHAT) -->
-        <section id="tab-sensei" class="tab-content p-4 max-w-3xl mx-auto flex flex-col h-[calc(100vh-140px)]">
-            <div class="bg-white p-4 rounded-t-2xl border-b border-gray-100 flex items-center justify-between">
-                <div>
-                    <h2 class="font-bold text-pink-700">Gemini Sensei ✨</h2>
-                    <p class="text-[10px] text-gray-500">Hãy thực hành tiếng Nhật bằng cách nói về "Kế hoạch ngày mai"!</p>
-                </div>
-                <button onclick="app.clearChat()" class="text-xs text-gray-400">Xóa hội thoại</button>
-            </div>
-            
-            <div id="chat-container" class="flex-1 bg-white overflow-y-auto p-4 space-y-4">
-                <div class="bg-gray-100 p-3 rounded-lg text-sm max-w-[80%]">Chào bạn! Tôi là giáo viên AI. Bạn hãy dùng các cấu trúc N4 như "~でしょう" hay "~かもしれません" để nói về thời tiết hoặc kế hoạch ngày mai nhé!</div>
-            </div>
-
-            <div class="p-4 bg-white rounded-b-2xl border-t border-gray-100 flex gap-2">
-                <input id="chat-input" type="text" placeholder="Nhập tiếng Nhật hoặc Việt..." class="flex-1 border rounded-full px-4 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
-                <button onclick="app.sendMessage()" id="btn-send" class="bg-pink-500 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center font-bold">✨</button>
-            </div>
-        </section>
-
-        <!-- READING -->
+        <!-- 5. READING / ĐỌC HIỂU -->
         <section id="tab-reading" class="tab-content p-4 max-w-3xl mx-auto">
-            <div class="bg-white rounded-2xl shadow-lg p-6 mb-4">
-                <div class="flex justify-between items-start mb-4">
-                    <h2 class="text-xl font-bold text-teal-700">Bài Đọc Hiểu</h2>
-                    <button onclick="app.aiCreateQuiz()" id="btn-quiz-ai" class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-bold border border-teal-200">✨ Tạo Quiz Tự Động</button>
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="bg-teal-600 p-4 text-white">
+                    <h2 class="text-xl font-bold">Bài Đọc: Cuộc sống hàng ngày</h2>
+                    <p class="text-teal-100 text-sm">Chạm vào từ được gạch chân để tra nghĩa nhanh.</p>
                 </div>
-                <div id="reading-text" class="leading-loose text-lg kanji-font text-gray-800 mb-6">
-                    <!-- Text in JS -->
+                <div class="p-6 leading-loose text-lg text-gray-800 kanji-font" id="reading-content">
+                    <!-- Reading Text injected via JS -->
                 </div>
-                
-                <div id="ai-quiz-container" class="hidden border-t pt-4 space-y-4">
-                    <h4 class="font-bold text-gray-700">Câu hỏi từ AI Sensei:</h4>
-                    <div id="ai-quiz-content" class="text-sm space-y-3"></div>
+            </div>
+
+            <!-- Lookup Modal/Tooltip -->
+            <div id="lookup-modal" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white p-4 rounded-xl shadow-2xl w-11/12 max-w-sm hidden z-50 transition-all">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 id="lookup-word" class="text-2xl font-bold text-yellow-400"></h4>
+                        <p id="lookup-reading" class="text-sm text-gray-300"></p>
+                    </div>
+                    <button onclick="document.getElementById('lookup-modal').classList.add('hidden')" class="text-gray-400 hover:text-white">&times;</button>
+                </div>
+                <div class="mt-2 pt-2 border-t border-gray-700">
+                    <p id="lookup-mean" class="font-medium"></p>
                 </div>
             </div>
         </section>
+
+        <!-- Kanji Detail Modal -->
+        <div id="kanji-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
+                <div class="bg-indigo-600 p-4 text-white flex justify-between items-center">
+                    <h3 class="text-lg font-bold">Chi tiết Hán Tự</h3>
+                    <button onclick="app.closeKanjiModal()" class="text-white hover:text-indigo-200 text-2xl">&times;</button>
+                </div>
+                <div class="p-6 text-center">
+                    <div id="k-modal-char" class="text-8xl font-bold text-gray-800 kanji-font mb-2"></div>
+                    <div id="k-modal-mean" class="text-xl font-bold text-indigo-600 uppercase tracking-wide mb-6"></div>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-left text-sm bg-gray-50 p-4 rounded-lg">
+                        <div>
+                            <span class="block text-gray-400 text-xs">ONYOMI (Âm On)</span>
+                            <span id="k-modal-on" class="font-bold text-gray-700"></span>
+                        </div>
+                        <div>
+                            <span class="block text-gray-400 text-xs">KUNYOMI (Âm Kun)</span>
+                            <span id="k-modal-kun" class="font-bold text-gray-700"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-left">
+                        <span class="block text-gray-400 text-xs mb-1">Ví dụ:</span>
+                        <ul id="k-modal-examples" class="text-sm text-gray-700 space-y-1"></ul>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-100 flex justify-around">
+                    <button onclick="app.rateKanji('hard')" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg font-bold hover:bg-red-200">Khó</button>
+                    <button onclick="app.rateKanji('good')" class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg font-bold hover:bg-blue-200">Được</button>
+                    <button onclick="app.rateKanji('easy')" class="bg-green-100 text-green-600 px-4 py-2 rounded-lg font-bold hover:bg-green-200">Dễ</button>
+                </div>
+            </div>
+        </div>
 
     </main>
 
-    <!-- Navigation -->
-    <nav class="bg-white border-t border-gray-200 flex justify-around py-2 sticky bottom-0 w-full z-20">
-        <button onclick="app.switchTab('plan')" class="nav-item active flex flex-col items-center p-2 text-gray-400 w-1/5">
-            <span class="text-xl">📅</span><span class="text-[10px]">Lộ trình</span>
+    <!-- Navigation Bar (Bottom) -->
+    <nav class="bg-white border-t border-gray-200 flex justify-around py-2 sm:py-3 z-20 sticky bottom-0 w-full">
+        <button onclick="app.switchTab('plan')" class="nav-item active flex flex-col items-center p-2 text-gray-500 hover:text-pink-600 transition w-1/5">
+            <span class="text-xl mb-1">📅</span>
+            <span class="text-[10px] sm:text-xs font-medium">Lộ trình</span>
         </button>
-        <button onclick="app.switchTab('vocab')" class="nav-item flex flex-col items-center p-2 text-gray-400 w-1/5">
-            <span class="text-xl">あ</span><span class="text-[10px]">Từ vựng</span>
+        <button onclick="app.switchTab('vocab')" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pink-600 transition w-1/5">
+            <span class="text-xl mb-1">あ</span>
+            <span class="text-[10px] sm:text-xs font-medium">Từ vựng</span>
         </button>
-        <button onclick="app.switchTab('grammar')" class="nav-item flex flex-col items-center p-2 text-gray-400 w-1/5">
-            <span class="text-xl">文</span><span class="text-[10px]">Ngữ pháp</span>
+        <button onclick="app.switchTab('kanji')" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pink-600 transition w-1/5">
+            <span class="text-xl mb-1">漢</span>
+            <span class="text-[10px] sm:text-xs font-medium">Kanji</span>
         </button>
-        <button onclick="app.switchTab('sensei')" class="nav-item flex flex-col items-center p-2 text-gray-400 w-1/5">
-            <span class="text-xl">✨</span><span class="text-[10px]">Sensei</span>
+        <button onclick="app.switchTab('grammar')" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pink-600 transition w-1/5">
+            <span class="text-xl mb-1">文</span>
+            <span class="text-[10px] sm:text-xs font-medium">Ngữ pháp</span>
         </button>
-        <button onclick="app.switchTab('reading')" class="nav-item flex flex-col items-center p-2 text-gray-400 w-1/5">
-            <span class="text-xl">読</span><span class="text-[10px]">Đọc</span>
+        <button onclick="app.switchTab('reading')" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pink-600 transition w-1/5">
+            <span class="text-xl mb-1">読</span>
+            <span class="text-[10px] sm:text-xs font-medium">Đọc</span>
         </button>
     </nav>
 
     <script>
-        // --- API CONFIG ---
-        const apiKey = ""; // Runtime provides key
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'n4-master-ai';
-
+        // --- DATA SOURCE (Extracted from provided PDFs) ---
+        // Visualization & Content Choices:
+        // 1. Vocab: Flashcards for rote memorization (Source: Chapter 15 Vocab).
+        // 2. Kanji: Grid for visual scanning, Modal for detail. 'Hard/Good/Easy' buttons simulate SRS feedback loop (Source: Chapter 15 & 33).
+        // 3. Grammar: Accordion for space saving. N4 grammar points often have multiple nuances, so clear separation is key (Source: Chapter 15 Grammar).
+        
         const database = {
             vocab: [
-                { word: '台風', reading: 'たいふう', mean: 'cơn bão' },
-                { word: '本物', reading: 'ほんもの', mean: 'hàng thật' },
-                { word: '感動', reading: 'かんどう', mean: 'cảm động' },
-                { word: '遊園地', reading: 'ゆうえんち', mean: 'khu vui chơi' }
+                { id: 1, word: '本物', reading: 'ほんもの', mean: 'hàng thật, đồ thật', type: 'N' },
+                { id: 2, word: '彼', reading: 'かれ', mean: 'anh ấy, bạn trai', type: 'N' },
+                { id: 3, word: '台風', reading: 'たいふう', mean: 'cơn bão', type: 'N' },
+                { id: 4, word: '洗濯物', reading: 'せんたくもの', mean: 'đồ giặt', type: 'N' },
+                { id: 5, word: '遊園地', reading: 'ゆうえんち', mean: 'khu vui chơi giải trí', type: 'N' },
+                { id: 6, word: 'ハイキング', reading: 'ハイキング', mean: 'leo núi, dã ngoại', type: 'N' },
+                { id: 7, word: '厳しい', reading: 'きびしい', mean: 'nghiêm khắc', type: 'A' },
+                { id: 8, word: '混む', reading: 'こむ', mean: 'đông đúc', type: 'V' },
+                { id: 9, word: '上がる', reading: 'あがる', mean: 'leo lên, tăng lên', type: 'V' },
+                { id: 10, word: '下がる', reading: 'さがる', mean: 'giảm xuống, hạ xuống', type: 'V' },
+                { id: 11, word: '乾く', reading: 'かわく', mean: 'khô (quần áo)', type: 'V' },
+                { id: 12, word: '止む', reading: 'やむ', mean: 'tạnh (mưa)', type: 'V' },
+                { id: 13, word: '叶う', reading: 'かなう', mean: 'thành hiện thực', type: 'V' },
+                { id: 14, word: '楽しむ', reading: 'たのしむ', mean: 'tận hưởng', type: 'V' },
+                { id: 15, word: '協力', reading: 'きょうりょく', mean: 'hợp tác, hiệp lực', type: 'N/V' },
+                { id: 16, word: '動画', reading: 'どうが', mean: 'Video, Clip', type: 'N' },
+                { id: 17, word: '感動', reading: 'かんどう', mean: 'cảm động', type: 'N/V' }
+            ],
+            kanji: [
+                { id: 1, char: '力', onyomi: 'リョク, リキ', kunyomi: 'ちから', mean: 'LỰC (Sức mạnh)', examples: ['協力 (きょうりょく): Hiệp lực'] },
+                { id: 2, char: '動', onyomi: 'ドウ', kunyomi: 'うご(く)', mean: 'ĐỘNG (Chuyển động)', examples: ['動物 (どうぶつ): Động vật', '運動 (うんどう): Vận động'] },
+                { id: 3, char: '働', onyomi: 'ドウ', kunyomi: 'はたら(く)', mean: 'ĐỘNG (Làm việc)', examples: ['働きます: Làm việc'] },
+                { id: 4, char: '知', onyomi: 'チ', kunyomi: 'し(る)', mean: 'TRI (Biết)', examples: ['知らせる: Thông báo', '知識 (ちしき): Tri thức'] },
+                { id: 5, char: '短', onyomi: 'タン', kunyomi: 'みじか(い)', mean: 'ĐOẢN (Ngắn)', examples: ['短気 (たんき): Nóng tính', '短い: Ngắn'] },
+                { id: 6, char: '医', onyomi: 'イ', kunyomi: '-', mean: 'Y (Y học)', examples: ['医者 (いしゃ): Bác sĩ', '医学 (いがく): Y học'] },
+                { id: 7, char: '皿', onyomi: 'ベイ', kunyomi: 'さら', mean: 'MÃNH (Cái đĩa)', examples: ['お皿: Cái đĩa', '灰皿 (はいざら): Gạt tàn'] },
+                { id: 8, char: '血', onyomi: 'ケツ', kunyomi: 'ち', mean: 'HUYẾT (Máu)', examples: ['出血 (しゅっけつ): Xuất huyết'] },
+                { id: 9, char: '村', onyomi: 'ソン', kunyomi: 'むら', mean: 'THÔN (Làng)', examples: ['村長 (そんちょう): Trưởng thôn'] },
+                { id: 10, char: '区', onyomi: 'ク', kunyomi: '-', mean: 'KHU (Quận)', examples: ['地区 (ちく): Địa khu', '区役所: Ủy ban quận'] },
+                { id: 11, char: '図', onyomi: 'ズ, ト', kunyomi: 'はか(る)', mean: 'ĐỒ (Bản đồ, vẽ)', examples: ['地図 (ちず): Bản đồ', '図書館 (としょかん): Thư viện'] },
+                { id: 12, char: '進', onyomi: 'シン', kunyomi: 'すす(む)', mean: 'TIẾN (Tiến lên)', examples: ['進化 (しんか): Tiến hóa'] },
+                { id: 13, char: '集', onyomi: 'シュウ', kunyomi: 'あつ(める)', mean: 'TẬP (Tập hợp)', examples: ['集中 (しゅうちゅう): Tập trung'] },
+                { id: 14, char: '営', onyomi: 'エイ', kunyomi: 'いとな(む)', mean: 'DOANH (Kinh doanh)', examples: ['営業 (えいぎょう): Kinh doanh'] },
+                { id: 15, char: '業', onyomi: 'ギョウ', kunyomi: 'わざ', mean: 'NGHIỆP (Nghề nghiệp)', examples: ['授業 (じゅぎょう): Giờ học'] }
             ],
             grammar: [
-                { title: '～でしょう', usage: 'Phán đoán', detail: 'Sử dụng khi phán đoán điều gì đó với độ tin cậy cao.' },
-                { title: '～かもしれない', usage: 'Có lẽ', detail: 'Diễn tả khả năng xảy ra khoảng 50%.' }
+                {
+                    id: 1,
+                    title: 'Thể thường / N / Aな + でしょう / だろう',
+                    usage: 'Phán đoán (Chắc hẳn là...)',
+                    explain: 'Sử dụng khi đưa ra phán đoán mà người nói tin rằng tỉ lệ xảy ra khá cao.「だろう」 là thể thường của 「でしょう」.',
+                    examples: [
+                        'たくさん勉強したから、きっと合格するだろう。 (Vì đã học nhiều nên chắc chắn sẽ đỗ thôi.)',
+                        '明日は雨でしょう。 (Ngày mai chắc hẳn là mưa.)'
+                    ]
+                },
+                {
+                    id: 2,
+                    title: '～かもしれません',
+                    usage: 'Có lẽ, không biết chừng',
+                    explain: 'Diễn tả phán đoán của người nói với mức độ chắc chắn thấp hơn "deshou" (khoảng 50%).',
+                    examples: [
+                        '約束の時間に間に合わないかもしれません。 (Có lẽ sẽ không kịp giờ hẹn.)'
+                    ]
+                },
+                {
+                    id: 3,
+                    title: '～みたいだ',
+                    usage: 'Hình như (Phán đoán dựa trên giác quan)',
+                    explain: 'Dùng trong văn nói. Giống với "youda" nhưng suồng sã hơn. Phán đoán dựa trên vẻ ngoài hoặc thông tin nghe được.',
+                    examples: [
+                        '彼は疲れているみたいだ。 (Anh ấy có vẻ đang mệt.)'
+                    ]
+                },
+                {
+                    id: 4,
+                    title: '～ようです',
+                    usage: 'Hình như, có vẻ',
+                    explain: 'Phán đoán dựa trên thông tin, cảm nhận chủ quan của người nói. Lịch sự hơn "mitaida".',
+                    examples: [
+                        '外は雨が降っているようです。 (Bên ngoài có vẻ trời đang mưa.)'
+                    ]
+                },
+                {
+                    id: 5,
+                    title: '～はずです',
+                    usage: 'Chắc chắn là',
+                    explain: 'Phán đoán dựa trên lý do xác thực, logic. Người nói rất tin tưởng vào phán đoán này.',
+                    examples: [
+                        '田中さんは日本に10年住んでいたから、日本語が上手なはずです。 (Vì anh Tanaka sống ở Nhật 10 năm nên tiếng Nhật chắc chắn giỏi.)'
+                    ]
+                }
             ],
-            reading: "明日は日曜日です。天気予報によると、午後から台風が来るでしょう。ですから、私は家でゆっくり過ごすつもりです。"
+            reading: `
+                <p class="mb-4">
+                    今日は日曜日です。天気予報によると、午後は<span class="highlight-word" data-word="台風">台風</span>が来る<span class="highlight-word" data-word="でしょう">でしょう</span>。
+                    ですから、私は家で<span class="highlight-word" data-word="洗濯物">洗濯物</span>を片付けたり、部屋を掃除したりするつもりです。
+                </p>
+                <p class="mb-4">
+                    本当は友達と<span class="highlight-word" data-word="遊園地">遊園地</span>へ行く約束がありました。でも、天気が悪いので、
+                    <span class="highlight-word" data-word="ハイキング">ハイキング</span>や遊びに行くのは無理<span class="highlight-word" data-word="かもしれません">かもしれません</span>。
+                    残念ですが、家で<span class="highlight-word" data-word="動画">動画</span>を見て<span class="highlight-word" data-word="楽しむ">楽しむ</span>ことにします。
+                </p>
+                <p>
+                    最近、仕事が<span class="highlight-word" data-word="混む">混む</span>ので、あまり休めませんでした。
+                    今日はゆっくり休んで、明日からまた<span class="highlight-word" data-word="協力">協力</span>して<span class="highlight-word" data-word="働く">働く</span>つもりです。
+                </p>
+            `
         };
 
+        // --- APPLICATION LOGIC ---
         const app = {
             state: {
                 currentTab: 'plan',
                 vocabIndex: 0,
-                chatHistory: []
+                vocabMode: 'flashcard', // 'flashcard' or 'quiz'
+                studyDuration: 3,
+                kanjiProgress: {}, // Store kanji id -> 'easy'/'good'/'hard'
             },
 
-            init() {
-                this.renderVocab();
+            init: function() {
+                this.renderVocabCard();
+                this.renderKanjiGrid();
                 this.renderGrammar();
-                this.renderChart();
-                document.getElementById('reading-text').innerHTML = database.reading;
+                this.renderReading();
+                this.generatePlan();
+                
+                // Initialize Chart
+                const ctx = document.getElementById('progressChart').getContext('2d');
+                this.chart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Từ Vựng', 'Ngữ Pháp', 'Kanji', 'Đọc', 'Nghe'],
+                        datasets: [{
+                            label: 'Năng lực hiện tại',
+                            data: [20, 15, 30, 10, 5],
+                            backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                            borderColor: 'rgba(236, 72, 153, 1)',
+                            pointBackgroundColor: 'rgba(236, 72, 153, 1)',
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: { r: { suggestedMin: 0, suggestedMax: 100 } },
+                        plugins: { legend: { display: false } }
+                    }
+                });
             },
 
-            switchTab(tabId) {
+            // --- TAB NAVIGATION ---
+            switchTab: function(tabId) {
                 document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
                 document.getElementById(`tab-${tabId}`).classList.add('active');
-                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-                event.currentTarget.classList.add('active');
-            },
-
-            // --- AI FEATURES ---
-            async callGemini(prompt, systemPrompt = "Bạn là giáo viên tiếng Nhật N4 tận tâm.") {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                let retries = 0;
-                const delays = [1000, 2000, 4000, 8000, 16000];
-
-                while (retries < 5) {
-                    try {
-                        const response = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                contents: [{ parts: [{ text: prompt }] }],
-                                systemInstruction: { parts: [{ text: systemPrompt }] }
-                            })
-                        });
-                        const data = await response.json();
-                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Xin lỗi, AI đang bận.";
-                    } catch (e) {
-                        retries++;
-                        if (retries === 5) return "Lỗi kết nối AI.";
-                        await new Promise(r => setTimeout(r, delays[retries-1]));
-                    }
+                
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'text-pink-600', 'border-b-2', 'border-pink-600'));
+                const btn = document.querySelector(`.nav-item[onclick="app.switchTab('${tabId}')"]`);
+                if(btn) {
+                    btn.classList.add('active', 'text-pink-600');
+                    // Reset styling for others
+                    document.querySelectorAll('.nav-item:not(.active)').forEach(el => el.classList.add('text-gray-500'));
                 }
             },
 
-            async aiExplainVocab() {
-                const word = database.vocab[this.state.vocabIndex];
-                const box = document.getElementById('ai-vocab-box');
-                const content = document.getElementById('ai-vocab-content');
-                const loader = document.getElementById('ai-vocab-loading');
+            // --- STUDY PLAN LOGIC ---
+            generatePlan: function() {
+                const duration = parseInt(document.getElementById('plan-duration').value);
+                const taskList = document.getElementById('daily-tasks');
+                taskList.innerHTML = '';
+
+                let tasks = [];
+                if (duration === 1) {
+                    tasks = ['Học 20 từ vựng chương 15', 'Ôn 10 Kanji (Động, Lực...)', 'Làm 1 bài đọc hiểu ngắn'];
+                } else if (duration === 3) {
+                    tasks = ['Học 10 từ vựng mới', 'Ôn tập ngữ pháp "Deshou"', 'Viết 5 câu ví dụ'];
+                } else {
+                    tasks = ['Nghe thụ động 15 phút', 'Xem lại 5 Kanji cũ', 'Đọc 1 đoạn văn ngắn'];
+                }
+
+                tasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center gap-3 p-3 bg-pink-50 rounded-lg';
+                    li.innerHTML = `
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-pink-600 rounded focus:ring-pink-500" onchange="app.updateProgress(this)">
+                        <span class="text-gray-700">${task}</span>
+                        <a href="#" onclick="app.switchTab('vocab')" class="ml-auto text-xs text-pink-500 font-bold uppercase">Đi tới</a>
+                    `;
+                    taskList.appendChild(li);
+                });
+            },
+
+            updateProgress: function(checkbox) {
+                const total = document.querySelectorAll('#daily-tasks input[type="checkbox"]').length;
+                const checked = document.querySelectorAll('#daily-tasks input[type="checkbox"]:checked').length;
+                const percent = Math.round((checked / total) * 100);
                 
-                box.classList.remove('hidden');
-                loader.classList.remove('hidden');
-                content.textContent = "Đang phân tích...";
+                document.getElementById('global-progress-text').textContent = `${percent}%`;
+                const offset = 100 - percent;
+                document.getElementById('global-progress-ring').style.strokeDashoffset = offset;
+            },
 
-                const prompt = `Giải thích từ vựng "${word.word}" (${word.reading}) trình độ N4. Cho 1 ví dụ thực tế ngắn gọn bằng tiếng Nhật kèm dịch tiếng Việt.`;
-                const result = await this.callGemini(prompt);
+            // --- VOCAB LOGIC ---
+            setVocabMode: function(mode) {
+                this.state.vocabMode = mode;
+                if (mode === 'flashcard') {
+                    document.getElementById('vocab-flashcard-view').classList.remove('hidden');
+                    document.getElementById('vocab-quiz-view').classList.add('hidden');
+                    document.getElementById('btn-flashcard').className = "px-4 py-1 rounded-md text-sm font-bold bg-white text-pink-600 shadow transition";
+                    document.getElementById('btn-quiz').className = "px-4 py-1 rounded-md text-sm font-bold text-gray-500 hover:bg-gray-100 transition";
+                } else {
+                    document.getElementById('vocab-flashcard-view').classList.add('hidden');
+                    document.getElementById('vocab-quiz-view').classList.remove('hidden');
+                    document.getElementById('btn-quiz').className = "px-4 py-1 rounded-md text-sm font-bold bg-white text-pink-600 shadow transition";
+                    document.getElementById('btn-flashcard').className = "px-4 py-1 rounded-md text-sm font-bold text-gray-500 hover:bg-gray-100 transition";
+                    this.generateQuiz();
+                }
+            },
+
+            renderVocabCard: function() {
+                const card = database.vocab[this.state.vocabIndex];
+                document.getElementById('fc-word').textContent = card.word;
+                document.getElementById('fc-reading').textContent = card.reading;
+                document.getElementById('fc-meaning').textContent = card.mean;
+                document.getElementById('fc-type').textContent = card.type;
+                document.getElementById('fc-current').textContent = this.state.vocabIndex + 1;
+                document.getElementById('fc-total').textContent = database.vocab.length;
                 
-                content.textContent = result;
-                loader.classList.add('hidden');
+                // Reset flip
+                document.querySelector('.card-flip').classList.remove('flipped');
             },
 
-            async sendMessage() {
-                const input = document.getElementById('chat-input');
-                const text = input.value.trim();
-                if (!text) return;
-
-                this.addChatMessage('user', text);
-                input.value = "";
-
-                const system = "Bạn là Sensei tiếng Nhật. Hãy trả lời bằng tiếng Nhật đơn giản (N4) kèm dịch tiếng Việt. Khuyến khích học viên dùng cấu trúc deshou, kamoshirenai, tsumori.";
-                const response = await this.callGemini(text, system);
-                this.addChatMessage('ai', response);
+            nextCard: function() {
+                if (this.state.vocabIndex < database.vocab.length - 1) {
+                    this.state.vocabIndex++;
+                    this.renderVocabCard();
+                }
             },
 
-            addChatMessage(role, text) {
-                const container = document.getElementById('chat-container');
-                const div = document.createElement('div');
-                div.className = role === 'user' 
-                    ? "bg-pink-500 text-white p-3 rounded-lg text-sm self-end ml-auto max-w-[80%]" 
-                    : "bg-gray-100 text-gray-800 p-3 rounded-lg text-sm max-w-[80%]";
-                div.textContent = text;
-                container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
+            prevCard: function() {
+                if (this.state.vocabIndex > 0) {
+                    this.state.vocabIndex--;
+                    this.renderVocabCard();
+                }
             },
 
-            async aiCreateQuiz() {
-                const container = document.getElementById('ai-quiz-container');
-                const content = document.getElementById('ai-quiz-content');
-                container.classList.remove('hidden');
-                content.innerHTML = "<div class='spinner'></div> Đang tạo câu hỏi...";
-
-                const prompt = `Dựa trên bài đọc này: "${database.reading}", hãy tạo 2 câu hỏi trắc nghiệm tiếng Việt để kiểm tra hiểu bài.`;
-                const result = await this.callGemini(prompt);
-                content.innerHTML = `<div class='bg-teal-50 p-3 rounded border border-teal-100'>${result.replace(/\n/g, '<br>')}</div>`;
+            generateQuiz: function() {
+                const currentVocab = database.vocab[Math.floor(Math.random() * database.vocab.length)];
+                document.getElementById('quiz-question').textContent = currentVocab.word;
+                document.getElementById('quiz-feedback').textContent = '';
+                
+                const optionsContainer = document.getElementById('quiz-options');
+                optionsContainer.innerHTML = '';
+                
+                // Get 3 random wrong answers + 1 right
+                let options = [currentVocab];
+                while(options.length < 4) {
+                    let random = database.vocab[Math.floor(Math.random() * database.vocab.length)];
+                    if(!options.includes(random)) options.push(random);
+                }
+                // Shuffle
+                options.sort(() => Math.random() - 0.5);
+                
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full p-4 bg-gray-50 hover:bg-pink-50 border border-gray-200 rounded-xl transition text-gray-700 font-medium";
+                    btn.textContent = opt.mean;
+                    btn.onclick = () => {
+                        if(opt.id === currentVocab.id) {
+                            btn.className = "w-full p-4 bg-green-500 text-white border border-green-600 rounded-xl transition font-bold";
+                            document.getElementById('quiz-feedback').textContent = "Chính xác! 🎉";
+                            document.getElementById('quiz-feedback').className = "mt-4 h-6 text-sm font-bold text-green-600";
+                            setTimeout(() => app.generateQuiz(), 1500);
+                        } else {
+                            btn.className = "w-full p-4 bg-red-400 text-white border border-red-500 rounded-xl transition";
+                            document.getElementById('quiz-feedback').textContent = "Sai rồi, thử lại nhé!";
+                            document.getElementById('quiz-feedback').className = "mt-4 h-6 text-sm font-bold text-red-500";
+                        }
+                    };
+                    optionsContainer.appendChild(btn);
+                });
             },
 
-            async aiGenerateMotivation() {
-                const btn = document.getElementById('btn-motivation');
-                btn.textContent = "✨ Đang nghĩ...";
-                const result = await this.callGemini("Hãy cho tôi 1 lời khuyên ngắn gọn, hài hước và truyền cảm hứng để học tiếng Nhật N4 hôm nay.");
-                alert("✨ Lời khuyên từ AI Sensei:\n\n" + result);
-                btn.textContent = "✨ Nhận lời khuyên";
+            // --- KANJI LOGIC ---
+            renderKanjiGrid: function() {
+                const container = document.getElementById('kanji-grid');
+                container.innerHTML = '';
+                
+                database.kanji.forEach(k => {
+                    const div = document.createElement('div');
+                    // Check progress color
+                    let bgClass = "bg-white";
+                    if(this.state.kanjiProgress[k.id] === 'hard') bgClass = "bg-red-50 border-red-200";
+                    if(this.state.kanjiProgress[k.id] === 'good') bgClass = "bg-blue-50 border-blue-200";
+                    if(this.state.kanjiProgress[k.id] === 'easy') bgClass = "bg-green-50 border-green-200";
+
+                    div.className = `${bgClass} p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center cursor-pointer hover:shadow-md transition transform hover:-translate-y-1`;
+                    div.innerHTML = `
+                        <span class="text-3xl font-bold text-gray-800 kanji-font">${k.char}</span>
+                        <span class="text-[10px] text-gray-500 mt-1 uppercase truncate w-full text-center">${k.mean.split('(')[0]}</span>
+                    `;
+                    div.onclick = () => app.openKanjiModal(k);
+                    container.appendChild(div);
+                });
             },
 
-            // --- UI RENDERING ---
-            renderVocab() {
-                const v = database.vocab[this.state.vocabIndex];
-                document.getElementById('fc-word').textContent = v.word;
-                document.getElementById('fc-reading').textContent = v.reading;
-                document.getElementById('fc-meaning').textContent = v.mean;
-                document.getElementById('ai-vocab-box').classList.add('hidden');
+            openKanjiModal: function(kanji) {
+                this.currentKanjiId = kanji.id;
+                document.getElementById('k-modal-char').textContent = kanji.char;
+                document.getElementById('k-modal-mean').textContent = kanji.mean;
+                document.getElementById('k-modal-on').textContent = kanji.onyomi;
+                document.getElementById('k-modal-kun').textContent = kanji.kunyomi;
+                
+                const ul = document.getElementById('k-modal-examples');
+                ul.innerHTML = '';
+                kanji.examples.forEach(ex => {
+                    const li = document.createElement('li');
+                    li.textContent = ex;
+                    ul.appendChild(li);
+                });
+                
+                document.getElementById('kanji-modal').classList.remove('hidden');
             },
 
-            nextCard() {
-                this.state.vocabIndex = (this.state.vocabIndex + 1) % database.vocab.length;
-                this.renderVocab();
+            closeKanjiModal: function() {
+                document.getElementById('kanji-modal').classList.add('hidden');
             },
 
-            prevCard() {
-                this.state.vocabIndex = (this.state.vocabIndex - 1 + database.vocab.length) % database.vocab.length;
-                this.renderVocab();
+            rateKanji: function(rating) {
+                this.state.kanjiProgress[this.currentKanjiId] = rating;
+                this.renderKanjiGrid(); // Refresh colors
+                this.closeKanjiModal();
             },
 
-            renderGrammar() {
+            // --- GRAMMAR LOGIC ---
+            renderGrammar: function() {
                 const list = document.getElementById('grammar-list');
                 database.grammar.forEach(g => {
                     const div = document.createElement('div');
-                    div.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-100";
+                    div.className = "bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm";
                     div.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <h3 class="font-bold text-pink-700">${g.title}</h3>
-                            <button onclick="app.aiExplainGrammar('${g.title}')" class="text-[10px] bg-pink-50 text-pink-600 px-2 py-1 rounded">✨ Giải thích AI</button>
+                        <button onclick="this.parentElement.classList.toggle('active')" class="w-full text-left p-4 bg-white hover:bg-gray-50 flex justify-between items-center transition">
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-lg">${g.title}</h3>
+                                <p class="text-sm text-gray-500">${g.usage}</p>
+                            </div>
+                            <span class="text-pink-500 text-xl transform transition-transform duration-200 rotate-0">▼</span>
+                        </button>
+                        <div class="hidden-content bg-gray-50 p-4 border-t border-gray-100 hidden">
+                            <p class="text-gray-700 mb-3 italic">${g.explain}</p>
+                            <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                                <span class="text-xs font-bold text-yellow-600 block mb-1">Ví dụ:</span>
+                                <ul class="list-disc list-inside text-sm text-gray-800 space-y-1">
+                                    ${g.examples.map(ex => `<li>${ex}</li>`).join('')}
+                                </ul>
+                            </div>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">${g.usage}</p>
                     `;
+                    // Simple inline toggle logic embedded in button onclick
+                    div.querySelector('button').onclick = function() {
+                        const content = this.nextElementSibling;
+                        const icon = this.querySelector('span');
+                        if (content.classList.contains('hidden')) {
+                            content.classList.remove('hidden');
+                            icon.style.transform = 'rotate(180deg)';
+                        } else {
+                            content.classList.add('hidden');
+                            icon.style.transform = 'rotate(0deg)';
+                        }
+                    };
                     list.appendChild(div);
                 });
             },
 
-            async aiExplainGrammar(title) {
-                const result = await this.callGemini(`Giải thích cấu trúc ngữ pháp N4 "${title}" một cách dễ hiểu nhất cho người Việt, kèm ví dụ.`);
-                alert(`✨ AI Giải thích (${title}):\n\n${result}`);
-            },
+            // --- READING LOGIC ---
+            renderReading: function() {
+                document.getElementById('reading-content').innerHTML = database.reading;
+                
+                document.querySelectorAll('.highlight-word').forEach(span => {
+                    span.addEventListener('click', (e) => {
+                        const wordText = e.target.getAttribute('data-word');
+                        // Find logic (relaxed matching)
+                        let found = database.vocab.find(v => v.word === wordText || v.reading === wordText);
+                        
+                        // Fallback lookup if exact match fails (e.g. conjugated verbs)
+                        if (!found) {
+                            if (wordText === '働く') found = database.vocab.find(v => v.word.includes('働'));
+                            if (wordText === 'でしょう') found = database.grammar.find(g => g.title.includes('でしょう'));
+                        }
 
-            renderChart() {
-                const ctx = document.getElementById('progressChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Hoàn thành', 'Còn lại'],
-                        datasets: [{
-                            data: [35, 65],
-                            backgroundColor: ['#ec4899', '#f3f4f6'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                        const modal = document.getElementById('lookup-modal');
+                        if (found) {
+                            // Is it grammar or vocab?
+                            if (found.title) { // Grammar
+                                document.getElementById('lookup-word').textContent = found.title;
+                                document.getElementById('lookup-reading').textContent = "Ngữ pháp";
+                                document.getElementById('lookup-mean').textContent = found.usage + ": " + found.explain;
+                            } else { // Vocab
+                                document.getElementById('lookup-word').textContent = found.word;
+                                document.getElementById('lookup-reading').textContent = found.reading;
+                                document.getElementById('lookup-mean').textContent = found.mean;
+                            }
+                            modal.classList.remove('hidden');
+                        } else {
+                            // Generic fallback
+                            document.getElementById('lookup-word').textContent = wordText;
+                            document.getElementById('lookup-reading').textContent = "---";
+                            document.getElementById('lookup-mean').textContent = "Không tìm thấy trong cơ sở dữ liệu hiện tại.";
+                            modal.classList.remove('hidden');
+                        }
+                    });
                 });
-            },
-
-            clearChat() {
-                document.getElementById('chat-container').innerHTML = '<div class="bg-gray-100 p-3 rounded-lg text-sm max-w-[80%]">Hội thoại đã được làm mới. Hãy bắt đầu nói chuyện nào!</div>';
             }
         };
 
-        window.onload = () => app.init();
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+
     </script>
+    
+    <!-- CONFIRMATION: NO SVG graphics used (except inline SVG icons). NO Mermaid JS used. -->
 </body>
 </html>
