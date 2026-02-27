@@ -18,7 +18,13 @@ import {
   Loader2,
   Bot,
   Sparkles,
-  X
+  X,
+  Trophy,
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 
 // --- DATA CẤP NHẬT TỪ CÁC FILE PDF ---
@@ -733,103 +739,154 @@ const vocabData = [
   { kanji: "存じます", kana: "ぞんじます", meaning: "biết, nghĩ", type: "Động từ" },
   { kanji: "存じ上げる", kana: "ぞんじあげる", meaning: "biết", type: "Động từ" },
   { kanji: "伝える", kana: "つたえる", meaning: "truyền đạt", type: "Động từ" },
-  { kanji: "おかけください", kana: "おかけください", meaning: "xin mời ngồi", type: "Mẫu câu" }
+  { kanji: "おかけください", kana: "おかけください", meaning: "xin mời ngồi", type: "Mẫu câu" },
+  
+  // --- BỔ SUNG TỪ VỰNG N5 (Mẫu đại diện) ---
+  { kanji: "私", kana: "わたし", meaning: "tôi", type: "Đại từ" },
+  { kanji: "あなた", kana: "あなた", meaning: "bạn", type: "Đại từ" },
+  { kanji: "家族", kana: "かぞく", meaning: "gia đình", type: "Danh từ" },
+  { kanji: "友達", kana: "ともだち", meaning: "bạn bè", type: "Danh từ" },
+  { kanji: "学校", kana: "がっこう", meaning: "trường học", type: "Danh từ" },
+  { kanji: "先生", kana: "せんせい", meaning: "giáo viên", type: "Danh từ" },
+  { kanji: "学生", kana: "がくせい", meaning: "học sinh, sinh viên", type: "Danh từ" },
+  { kanji: "行く", kana: "いく", meaning: "đi", type: "Động từ" },
+  { kanji: "来る", kana: "くる", meaning: "đến", type: "Động từ" },
+  { kanji: "帰る", kana: "かえる", meaning: "trở về", type: "Động từ" },
+  { kanji: "食べる", kana: "たべる", meaning: "ăn", type: "Động từ" },
+  { kanji: "飲む", kana: "のむ", meaning: "uống", type: "Động từ" },
+  { kanji: "見る", kana: "みる", meaning: "nhìn, xem", type: "Động từ" },
+  { kanji: "聞く", kana: "きく", meaning: "nghe, hỏi", type: "Động từ" },
+  { kanji: "読む", kana: "よむ", meaning: "đọc", type: "Động từ" },
+  { kanji: "書く", kana: "かく", meaning: "viết", type: "Động từ" },
+  { kanji: "話す", kana: "はなす", meaning: "nói chuyện", type: "Động từ" },
+  { kanji: "大きい", kana: "おおきい", meaning: "to, lớn", type: "Tính từ đuôi い" },
+  { kanji: "小さい", kana: "ちいさい", meaning: "nhỏ, bé", type: "Tính từ đuôi い" },
+  { kanji: "新しい", kana: "あたらしい", meaning: "mới", type: "Tính từ đuôi い" },
+  { kanji: "古い", kana: "ふるい", meaning: "cũ", type: "Tính từ đuôi い" },
+  { kanji: "良い", kana: "よい/いい", meaning: "tốt", type: "Tính từ đuôi い" },
+  { kanji: "悪い", kana: "わるい", meaning: "xấu, tồi", type: "Tính từ đuôi い" },
+  { kanji: "暑い", kana: "あつい", meaning: "nóng (thời tiết)", type: "Tính từ đuôi い" },
+  { kanji: "寒い", kana: "さむい", meaning: "lạnh (thời tiết)", type: "Tính từ đuôi い" },
+  { kanji: "今日", kana: "きょう", meaning: "hôm nay", type: "Danh từ thời gian" },
+  { kanji: "明日", kana: "あした", meaning: "ngày mai", type: "Danh từ thời gian" },
+  { kanji: "昨日", kana: "きのう", meaning: "hôm qua", type: "Danh từ thời gian" },
+  { kanji: "今", kana: "いま", meaning: "bây giờ", type: "Danh từ thời gian" }
 ];
 
 const kanjiData = [
-  { kanji: "力", onyomi: "リョク, リキ", kunyomi: "ちから", meaning: "LỰC (Sức mạnh)", examples: "協力 (Hợp tác)", mnemonic: "Hình ảnh cánh tay đang gồng lên khoe cơ bắp, thể hiện sức mạnh." },
-  { kanji: "動", onyomi: "ドウ", kunyomi: "うご・く", meaning: "ĐỘNG (Cử động, chuyển động)", examples: "運動 (Vận động), 動物 (Động vật)", mnemonic: "Sức mạnh (力) dồn vào vật nặng (重) làm nó chuyển ĐỘNG." },
-  { kanji: "働", onyomi: "ドウ", kunyomi: "はたら・く", meaning: "ĐỘNG (Làm việc)", examples: "働きます (Làm việc)", mnemonic: "Người (亻) ĐỘNG (動) đậy chân tay liên tục tức là đang làm việc." },
-  { kanji: "知", onyomi: "チ", kunyomi: "し・る", meaning: "TRI (Biết)", examples: "お知らせ (Thông báo)", mnemonic: "Miệng (口) nói ra những điều nhanh như mũi tên (矢) bay, chứng tỏ là người có TRI thức." },
-  { kanji: "短", onyomi: "タン", kunyomi: "みじか・い", meaning: "ĐOẢN (Ngắn)", examples: "短い (Ngắn), 短気 (Nóng nảy)", mnemonic: "Mũi tên (矢) bay cạnh hạt đậu (豆) tạo nên khoảng cách RẤT NGẮN." },
-  { kanji: "医", onyomi: "イ", kunyomi: "-", meaning: "Y (Y học, bác sĩ)", examples: "医者 (Bác sĩ), 医学 (Y học)", mnemonic: "Khu vực che chắn để làm nghề Y." },
-  { kanji: "皿", onyomi: "-", kunyomi: "さら", meaning: "MÃNH (Cái đĩa)", examples: "お皿 (Cái đĩa)", mnemonic: "Hình dáng chiếc đĩa đựng thức ăn." },
-  { kanji: "血", onyomi: "ケツ", kunyomi: "ち", meaning: "HUYẾT (Máu)", examples: "血 (Máu)", mnemonic: "Giọt máu (HUYẾT) rơi trên chiếc đĩa (皿)." },
-  { kanji: "工", onyomi: "コウ, ク", kunyomi: "-", meaning: "CÔNG (Công trường)", examples: "工事 (Thi công), 工場 (Nhà máy)", mnemonic: "Cây thước vuông dùng trong CÔNG trường." },
-  { kanji: "空", onyomi: "クウ", kunyomi: "そら, から, あ・く", meaning: "KHÔNG (Bầu trời, trống không)", examples: "空 (Bầu trời), 空港 (Sân bay)", mnemonic: "Bầu trời (KHÔNG) rộng lớn phía trên hang động (穴) và công trường (工)." },
-  { kanji: "試", onyomi: "シ", kunyomi: "こころ・みる, ため・す", meaning: "THÍ (Thử nghiệm, thi)", examples: "試験 (Kỳ thi), 試合 (Trận đấu)", mnemonic: "Dùng lời nói (言) để làm phép THÍ nghiệm." },
-  { kanji: "計", onyomi: "ケイ", kunyomi: "はか・る", meaning: "KẾ (Kế hoạch, đo lường)", examples: "時計 (Đồng hồ), 計算 (Tính toán)", mnemonic: "Nói (言) ra số đếm từ 1 đến 10 (十) là KẾ toán." },
-  { kanji: "説", onyomi: "セツ, ゼイ", kunyomi: "と・く", meaning: "THUYẾT (Giải thích)", examples: "小説 (Tiểu thuyết), 説明 (Giải thích)", mnemonic: "Dùng lời nói (言) để THUYẾT minh, giải thích." },
-  { kanji: "心", onyomi: "シン", kunyomi: "こころ", meaning: "TÂM (Trái tim)", examples: "安心 (An tâm), 心配 (Lo lắng)", mnemonic: "Hình dáng của trái tim (TÂM)." },
-  { kanji: "思", onyomi: "シ", kunyomi: "おも・う", meaning: "TƯ (Nghĩ)", examples: "思います (Nghĩ), 思い出します (Nhớ ra)", mnemonic: "Ruộng (田) ở trên trái tim (心), trong lòng luôn TƯ lự nghĩ về ruộng đồng." },
-  { kanji: "性", onyomi: "セイ, ショウ", kunyomi: "-", meaning: "TÍNH (Giới tính, tính cách)", examples: "女性 (Nữ giới), 性格 (Tính cách)", mnemonic: "Tâm (忄) sinh (生) ra đã có TÍNH cách riêng." },
-  { kanji: "地", onyomi: "チ, ジ", kunyomi: "-", meaning: "ĐỊA (Đất)", examples: "地図 (Bản đồ), 地下鉄 (Tàu điện ngầm)", mnemonic: "Vùng đất (土) có cả loài bò sát, là ĐỊA cầu." },
-  { kanji: "池", onyomi: "チ", kunyomi: "いけ", meaning: "TRÌ (Cái ao)", examples: "池 (Ao), 電池 (Cục pin)", mnemonic: "Nước (氵) chảy vào chỗ đất trũng (也) tạo thành cái ao (TRÌ)." },
-  { kanji: "公", onyomi: "コウ", kunyomi: "おおやけ", meaning: "CÔNG (Công cộng)", examples: "公園 (Công viên), 主人公 (Nhân vật chính)", mnemonic: "Chia đều đồ vật tạo sự CÔNG bằng." },
-  { kanji: "広", onyomi: "コウ", kunyomi: "ひろ・い", meaning: "QUẢNG (Rộng)", examples: "広い (Rộng), 広告 (Quảng cáo)", mnemonic: "Căn nhà (广) rộng (QUẢNG) lớn." },
-  { kanji: "去", onyomi: "キョ, コ", kunyomi: "さ・る", meaning: "KHỨ (Quá khứ, rời đi)", examples: "去年 (Năm ngoái)", mnemonic: "Chôn giấu đất (土) xuống dưới, để những chuyện trong quá KHỨ rời đi." },
-  { kanji: "転", onyomi: "テン", kunyomi: "ころ・ぶ", meaning: "CHUYỂN (Chuyển động, lăn)", examples: "転びます (Ngã), 運転 (Lái xe)", mnemonic: "Chiếc xe (車) lăn bánh (CHUYỂN) vòng vòng." },
-  { kanji: "遠", onyomi: "エン", kunyomi: "とお・い", meaning: "VIỄN (Xa)", examples: "遠い (Xa)", mnemonic: "Mặc áo dài đi bộ (辶) quãng đường rất VIỄN (xa)." },
-  { kanji: "園", onyomi: "エン", kunyomi: "-", meaning: "VIÊN (Vườn)", examples: "公園 (Công viên), 動物園 (Sở thú)", mnemonic: "Khu vườn (VIÊN) rộng lớn có bao quanh (囗)." },
-  { kanji: "台", onyomi: "タイ, ダイ", kunyomi: "-", meaning: "ĐÀI (Cái bục, đài)", examples: "台所 (Nhà bếp), 台風 (Bão)", mnemonic: "Đứng trên bục (ĐÀI) để nói (口)." },
-  { kanji: "始", onyomi: "シ", kunyomi: "はじ・める, はじ・まる", meaning: "THỦY (Bắt đầu)", examples: "始めます (Bắt đầu), 開始 (Khởi đầu)", mnemonic: "Người phụ nữ (女) THỦY chung bắt đầu (始) một mối quan hệ." },
-  { kanji: "治", onyomi: "ジ, チ", kunyomi: "なお・す", meaning: "TRỊ (Chữa trị)", examples: "治します (Chữa bệnh), 政治 (Chính trị)", mnemonic: "Dùng nước (氵) để điều TRỊ vết thương bên cạnh cái đài (台)." },
-  { kanji: "正", onyomi: "ショウ, セイ", kunyomi: "ただ・しい", meaning: "CHÍNH (Đúng, chính xác)", examples: "正しい (Đúng), お正月 (Tết)", mnemonic: "Một (一) bề tôi luôn CHÍNH trực." },
-  { kanji: "政", onyomi: "セイ, ショウ", kunyomi: "まつりごと", meaning: "CHÍNH (Chính trị)", examples: "政治 (Chính trị)", mnemonic: "Chính (正) quyền dùng vũ lực (攵) để cai trị (CHÍNH)." },
-  { kanji: "王", onyomi: "オウ", kunyomi: "-", meaning: "VƯƠNG (Vua)", examples: "王様 (Nhà vua)", mnemonic: "Người nối liền thiên-địa-nhân là VƯƠNG (Vua)." },
-  { kanji: "玉", onyomi: "ギョク", kunyomi: "たま", meaning: "NGỌC (Viên ngọc, đồng xu)", examples: "お年玉 (Tiền lì xì), 目玉焼き (Trứng ốp la)", mnemonic: "Chữ VƯƠNG (王) thêm dấu chấm thành viên NGỌC." },
-  { kanji: "国", onyomi: "コク", kunyomi: "くに", meaning: "QUỐC (Đất nước)", examples: "国 (Đất nước), 外国 (Nước ngoài)", mnemonic: "Vua (王) cầm ngọc (玉) được bao quanh (囗) bảo vệ đất nước (QUỐC)." },
-  { kanji: "主", onyomi: "シュ, ス", kunyomi: "おも, ぬし", meaning: "CHỦ (Ông chủ, chủ yếu)", examples: "ご主人 (Chồng), 飼い主 (Chủ nuôi)", mnemonic: "Chiếc đèn cầy rực sáng trong phòng của người CHỦ." },
-  { kanji: "住", onyomi: "ジュウ", kunyomi: "す・む", meaning: "TRÚ (Sinh sống)", examples: "住みます (Sống), 住所 (Địa chỉ)", mnemonic: "Người (亻) làm CHỦ (主) một nơi để cư TRÚ." },
-  { kanji: "所", onyomi: "ショ", kunyomi: "ところ", meaning: "SỞ (Nơi chốn)", examples: "所 (Nơi, chỗ), 近所 (Hàng xóm)", mnemonic: "Chỗ chiếc rìu (斤) chặt cánh cửa (戸) là căn SỞ." },
-  { kanji: "近", onyomi: "キン", kunyomi: "ちか・い", meaning: "CẬN (Gần)", examples: "近い (Gần), 最近 (Gần đây)", mnemonic: "Mang rìu (斤) đi (辶) CẬN (gần) đến nơi." },
-  { kanji: "辺", onyomi: "ヘン", kunyomi: "あたり, べ", meaning: "BIÊN (Vùng lân cận)", examples: "この辺 (Vùng này)", mnemonic: "Dùng đao (刀) vạch đường (辶) biên giới." },
-  { kanji: "切", onyomi: "セツ, サイ", kunyomi: "き・る, き・れる", meaning: "THIẾT (Cắt)", examples: "切ります (Cắt), 切符 (Vé)", mnemonic: "Số bảy (七) bị đao (刀) cắt làm hai." },
-  { kanji: "勉", onyomi: "ベン", kunyomi: "-", meaning: "MIỄN (Cố gắng, học)", examples: "勉強します (Học)", mnemonic: "Dùng sức lực (力) để MIỄN cưỡng học tập." },
-  { kanji: "晩", onyomi: "バン", kunyomi: "-", meaning: "VÃN (Buổi tối)", examples: "今晩 (Tối nay), 毎晩 (Mỗi tối)", mnemonic: "Mặt trời (日) lặn là lúc VÃN (chiều tối)." },
-  { kanji: "色", onyomi: "シキ, ショク", kunyomi: "いろ", meaning: "SẮC (Màu sắc)", examples: "色 (Màu sắc), 景色 (Phong cảnh)", mnemonic: "Màu SẮC (色) đa dạng." },
-  { kanji: "発", onyomi: "ハツ, ホツ", kunyomi: "-", meaning: "PHÁT (Phát minh, xuất phát)", examples: "発明 (Phát minh), 発見 (Phát kiến)", mnemonic: "Bước chân (癶) đạp lên xuất PHÁT." },
-  { kanji: "黄", onyomi: "オウ, コウ", kunyomi: "き", meaning: "HOÀNG (Màu vàng)", examples: "黄色 (Màu vàng)", mnemonic: "Cánh đồng (田) chín HOÀNG (vàng)." },
-  { kanji: "虫", onyomi: "チュウ", kunyomi: "むし", meaning: "TRÙNG (Côn trùng)", examples: "虫 (Côn trùng)", mnemonic: "Con sâu, côn TRÙNG." },
-  { kanji: "風", onyomi: "フウ, フ", kunyomi: "かぜ, かざ", meaning: "PHONG (Gió)", examples: "風 (Gió), 台風 (Bão)", mnemonic: "Côn trùng (虫) trú trong vỏ bọc để tránh PHONG (gió)." },
-  { kanji: "強", onyomi: "キョウ, ゴウ", kunyomi: "つよ・い", meaning: "CƯỜNG (Khỏe, mạnh)", examples: "強い (Mạnh), 勉強 (Học tập)", mnemonic: "Sức mạnh phi thường, CƯỜNG tráng." },
-  { kanji: "油", onyomi: "ユ, ユウ", kunyomi: "あぶら", meaning: "DU (Dầu)", examples: "油 (Dầu), 石油 (Dầu mỏ)", mnemonic: "Chất lỏng (氵) có nguồn gốc (由) là DU (dầu)." },
-  { kanji: "決", onyomi: "ケツ", kunyomi: "き・める, き・まる", meaning: "QUYẾT (Quyết định)", examples: "決めます (Quyết định)", mnemonic: "Nước (氵) chảy QUYẾT liệt." },
-  { kanji: "漢", onyomi: "カン", kunyomi: "-", meaning: "HÁN (Chữ Hán, Trung Quốc)", examples: "漢字 (Chữ Hán)", mnemonic: "Nước (氵) sông ở vùng đất HÁN." },
-  { kanji: "止", onyomi: "シ", kunyomi: "と・める, と・まる, や・む", meaning: "CHỈ (Dừng lại)", examples: "止まります (Dừng), 中止 (Hủy bỏ)", mnemonic: "Bước chân CHỈ (dừng lại) không đi nữa." },
-  { kanji: "歩", onyomi: "ホ, ブ, フ", kunyomi: "あゆ・む, ある・く", meaning: "BỘ (Đi bộ)", examples: "歩きます (Đi bộ), 散歩 (Đi dạo)", mnemonic: "Dừng (止) bước chân (少) để đi BỘ." },
-  { kanji: "歴", onyomi: "レキ", kunyomi: "-", meaning: "LỊCH (Lịch sử)", examples: "歴史 (Lịch sử)", mnemonic: "Bước đi qua từng chặng đường tạo nên LỊCH sử." },
-  { kanji: "史", onyomi: "シ", kunyomi: "-", meaning: "SỬ (Lịch sử)", examples: "歴史 (Lịch sử)", mnemonic: "Viết lại lời nói (口) thành SỬ sách." },
-  { kanji: "使", onyomi: "シ", kunyomi: "つか・う", meaning: "SỬ (Sử dụng)", examples: "使います (Sử dụng), 大使館 (Đại sứ quán)", mnemonic: "Người (亻) được SỬ dụng để làm việc." },
-  { kanji: "品", onyomi: "ヒン", kunyomi: "しな", meaning: "PHẨM (Sản phẩm)", examples: "商品 (Sản phẩm), 化粧品 (Mỹ phẩm)", mnemonic: "Nhiều chiếc hộp (口) xếp chồng lên nhau thành hàng hóa (PHẨM)." },
-  { kanji: "号", onyomi: "ゴウ, コウ", kunyomi: "-", meaning: "HIỆU (Số hiệu, ký hiệu)", examples: "信号 (Tín hiệu), 電話番号 (Số điện thoại)", mnemonic: "Số (口) HIỆU để phân biệt." },
-  { kanji: "味", onyomi: "ミ", kunyomi: "あじ, あじ・わう", meaning: "VỊ (Mùi vị)", examples: "味 (Mùi vị), 意味 (Ý nghĩa)", mnemonic: "Miệng (口) nếm xem (未) VỊ thế nào." },
-  { kanji: "研", onyomi: "ケン", kunyomi: "と・ぐ", meaning: "NGHIÊN (Nghiên cứu)", examples: "研究 (Nghiên cứu)", mnemonic: "Dùng đá (石) để NGHIÊN cứu." },
-  { kanji: "丸", onyomi: "ガン", kunyomi: "まる, まる・い", meaning: "HOÀN (Tròn)", examples: "丸 (Hình tròn)", mnemonic: "Số chín (九) thêm một chấm (、) thành viên bi HOÀN (tròn)." },
-  { kanji: "究", onyomi: "キュウ", kunyomi: "きわ・める", meaning: "CỨU (Nghiên cứu)", examples: "研究 (Nghiên cứu)", mnemonic: "Trong hang (穴) tìm hiểu tận CỨU (cùng)." },
-  { kanji: "谷", onyomi: "コク", kunyomi: "たに", meaning: "CỐC (Thung lũng)", examples: "谷 (Thung lũng)", mnemonic: "Nước chảy từ trên núi xuống thung lũng (CỐC)." },
-  { kanji: "船", onyomi: "セン", kunyomi: "ふね, ふな", meaning: "THUYỀN (Cái thuyền)", examples: "船 (Con thuyền, tàu)", mnemonic: "Tàu (舟) chở theo 8 (八) miệng (口) ăn là một con THUYỀN." },
-  { kanji: "里", onyomi: "リ", kunyomi: "さと", meaning: "LÍ (Làng quê, dặm)", examples: "里芋 (Khoai sọ)", mnemonic: "Ruộng (田) và đất (土) làm nên LÍ (làng quê)." },
-  { kanji: "理", onyomi: "リ", kunyomi: "-", meaning: "LÍ (Lý do, nấu ăn)", examples: "料理 (Món ăn), 修理 (Sửa chữa)", mnemonic: "Vua (王) cai quản làng quê (里) có LÍ lẽ." },
-  { kanji: "野", onyomi: "ヤ", kunyomi: "の", meaning: "DÃ (Cánh đồng, hoang dã)", examples: "野菜 (Rau), 野球 (Bóng chày)", mnemonic: "Ngôi làng (里) mở rộng (予) ra thành cánh đồng (DÃ)." },
-  { kanji: "若", onyomi: "ジャク, ニャク", kunyomi: "わか・い", meaning: "NHƯỢC (Trẻ)", examples: "若い (Trẻ trung)", mnemonic: "Người vươn lên nụ cười (口) dưới cỏ cây (艹) là người rất trẻ (NHƯỢC)." },
-  { kanji: "菜", onyomi: "サイ", kunyomi: "な", meaning: "THÁI (Rau)", examples: "野菜 (Rau)", mnemonic: "Cây cỏ (艹) hái (采) về làm THÁI (rau)." },
-  { kanji: "番", onyomi: "バン", kunyomi: "-", meaning: "PHIÊN (Lượt, số)", examples: "一番 (Số 1), 交番 (Đồn cảnh sát)", mnemonic: "Đánh số (PHIÊN) từng mảnh ruộng (田)." },
-  { kanji: "料", onyomi: "リョウ", kunyomi: "-", meaning: "LIỆU (Nguyên liệu, phí)", examples: "無料 (Miễn phí), 料理 (Nấu ăn)", mnemonic: "Dùng gạo (米) làm LIỆU đo lường (斗)." },
-  { kanji: "奥", onyomi: "オウ, イク", kunyomi: "おく", meaning: "ÁO (Bên trong, vợ)", examples: "奥さん (Vợ người khác)", mnemonic: "Người đi vào bên trong (ÁO) góc khuất." },
-  { kanji: "鳥", onyomi: "チョウ", kunyomi: "とり", meaning: "ĐIỂU (Con chim)", examples: "鳥 (Con chim)", mnemonic: "Hình ảnh chú chim (ĐIỂU)." },
-  { kanji: "鳴", onyomi: "メイ", kunyomi: "な・く, な・る", meaning: "MINH (Kêu, hót)", examples: "鳴ります (Reo), 鳴きます (Hót)", mnemonic: "Miệng (口) chim (鳥) hót ríu rít (MINH)." },
-  { kanji: "島", onyomi: "トウ", kunyomi: "しま", meaning: "ĐẢO (Hòn đảo)", examples: "島 (Hòn đảo)", mnemonic: "Đỉnh núi (山) có chim (鳥) đậu gọi là ĐẢO." },
-  { kanji: "化", onyomi: "カ, ケ", kunyomi: "ば・ける", meaning: "HÓA (Biến hóa)", examples: "文化 (Văn hóa), 化粧 (Trang điểm)", mnemonic: "Người (亻) biến HÓA (七)." },
-  { kanji: "便", onyomi: "ビン, ベン", kunyomi: "たよ・り", meaning: "TIỆN (Tiện lợi)", examples: "不便 (Bất tiện), 便利 (Tiện lợi)", mnemonic: "Người (亻) có sự TIỆN lợi (更)." },
-  { kanji: "係", onyomi: "ケイ", kunyomi: "かかり, かかる", meaning: "HỆ (Quan hệ, người phụ trách)", examples: "係の人 (Người phụ trách)", mnemonic: "Người (亻) kết nối bằng sợi dây (系) là có HỆ lụy/quan hệ." },
-  { kanji: "宿", onyomi: "シュク", kunyomi: "やど", meaning: "TÚC (Nơi trọ, bài tập)", examples: "宿題 (Bài tập về nhà)", mnemonic: "Dưới mái nhà (宀) có hàng trăm (百) người cùng tá TÚC." },
-  { kanji: "私", onyomi: "シ", kunyomi: "わたし, わたくし", meaning: "TƯ (Tôi, cá nhân)", examples: "私 (Tôi)", mnemonic: "Cá nhân (TƯ - ム) cầm cây lúa (禾)." },
-  { kanji: "利", onyomi: "リ", kunyomi: "き・く", meaning: "LỢI (Tiện lợi, lợi ích)", examples: "便利 (Tiện lợi), 利用 (Sử dụng)", mnemonic: "Dùng dao (刂) gặt lúa (禾) sẽ đem lại LỢI ích." },
-  { kanji: "科", onyomi: "カ", kunyomi: "-", meaning: "KHOA (Khoa học, môn học)", examples: "科学 (Khoa học), 教科書 (SGK)", mnemonic: "Đo lường (斗) lúa (禾) một cách KHOA học." },
-  { kanji: "顔", onyomi: "ガン", kunyomi: "かお", meaning: "NHAN (Khuôn mặt)", examples: "顔 (Gương mặt)", mnemonic: "Khuôn mặt (NHAN)." },
-  { kanji: "題", onyomi: "ダイ", kunyomi: "-", meaning: "ĐỀ (Đề tài, vấn đề)", examples: "問題 (Vấn đề), 宿題 (Bài tập)", mnemonic: "Dùng trang giấy (頁) để viết ĐỀ bài (是)." },
-  { kanji: "速", onyomi: "ソク", kunyomi: "はや・い", meaning: "TỐC (Nhanh)", examples: "速い (Nhanh)", mnemonic: "Chạy (辶) đi buộc đồ (束) thật TỐC (nhanh)." },
-  { kanji: "通", onyomi: "ツウ, ツ", kunyomi: "かよ・う, とお・る", meaning: "THÔNG (Đi lại, thông qua)", examples: "通います (Đi lại), 交通 (Giao thông)", mnemonic: "Đi (辶) qua lối THÔNG trên đường." },
-  { kanji: "週", onyomi: "シュウ", kunyomi: "-", meaning: "CHU (Tuần)", examples: "先週 (Tuần trước), 今週 (Tuần này)", mnemonic: "Chu kỳ (周) quay vòng đều đặn gọi là CHU (tuần)." },
-  { kanji: "夫", onyomi: "フ, フウ", kunyomi: "おっと", meaning: "PHU (Chồng)", examples: "大丈夫 (Không sao), 夫 (Chồng)", mnemonic: "Người đàn ông lớn (大) trụ cột gia đình (PHU)." },
-  { kanji: "鉄", onyomi: "テツ", kunyomi: "-", meaning: "THIẾT (Sắt, thép)", examples: "地下鉄 (Tàu điện ngầm)", mnemonic: "Mất đi (失) vàng (金) thì chỉ còn THIẾT (sắt)." },
-  { kanji: "妹", onyomi: "マイ", kunyomi: "いもうと", meaning: "MUỘI (Em gái)", examples: "妹 (Em gái)", mnemonic: "Người con gái (女) nhỏ bé chưa trưởng thành (未) là MUỘI (em gái)." },
-  { kanji: "姉", onyomi: "シ", kunyomi: "あね", meaning: "TỈ (Chị gái)", examples: "姉 (Chị gái), 姉妹 (Chị em gái)", mnemonic: "Người phụ nữ (女) đi chợ (市) là TỈ (chị gái)." },
-  { kanji: "妻", onyomi: "サイ", kunyomi: "つま", meaning: "THÊ (Vợ)", examples: "妻 (Vợ mình)", mnemonic: "Phụ nữ (女) dùng chổi quét nhà là THÊ (vợ)." },
-  { kanji: "天", onyomi: "テン", kunyomi: "あめ, あま", meaning: "THIÊN (Trời)", examples: "天気 (Thời tiết)", mnemonic: "Kẻ vĩ đại (大) đội trời (一) là THIÊN." },
-  { kanji: "送", onyomi: "ソウ", kunyomi: "おく・る", meaning: "TỔNG (Gửi, tiễn)", examples: "送ります (Gửi)", mnemonic: "Dùng đường bộ (辶) để TỔNG tiễn." },
-  { kanji: "弟", onyomi: "テイ, ダイ", kunyomi: "おとうと", meaning: "ĐỆ (Em trai)", examples: "弟 (Em trai), 兄弟 (Anh em)", mnemonic: "Em trai (ĐỆ)." }
+  { kanji: "力", onyomi: "リョク, リキ", kunyomi: "ちから", meaning: "LỰC (Sức mạnh)", examples: "協力[きょうりょく] (Hợp tác)", mnemonic: "Hình ảnh cánh tay đang gồng lên khoe cơ bắp, thể hiện sức mạnh." },
+  { kanji: "動", onyomi: "ドウ", kunyomi: "うご・く", meaning: "ĐỘNG (Cử động, chuyển động)", examples: "運動[うんどう] (Vận động), 動物[どうぶつ] (Động vật)", mnemonic: "Sức mạnh (力) dồn vào vật nặng (重) làm nó chuyển ĐỘNG." },
+  { kanji: "働", onyomi: "ドウ", kunyomi: "はたら・く", meaning: "ĐỘNG (Làm việc)", examples: "働きます[はたらきます] (Làm việc)", mnemonic: "Người (亻) ĐỘNG (動) đậy chân tay liên tục tức là đang làm việc." },
+  { kanji: "知", onyomi: "チ", kunyomi: "し・る", meaning: "TRI (Biết)", examples: "お知らせ[おしらせ] (Thông báo)", mnemonic: "Miệng (口) nói ra những điều nhanh như mũi tên (矢) bay, chứng tỏ là người có TRI thức." },
+  { kanji: "短", onyomi: "タン", kunyomi: "みじか・い", meaning: "ĐOẢN (Ngắn)", examples: "短い[みじかい] (Ngắn), 短気[たんき] (Nóng nảy)", mnemonic: "Mũi tên (矢) bay cạnh hạt đậu (豆) tạo nên khoảng cách RẤT NGẮN." },
+  { kanji: "医", onyomi: "イ", kunyomi: "-", meaning: "Y (Y học, bác sĩ)", examples: "医者[いしゃ] (Bác sĩ), 医学[いがく] (Y học)", mnemonic: "Khu vực che chắn để làm nghề Y." },
+  { kanji: "皿", onyomi: "-", kunyomi: "さら", meaning: "MÃNH (Cái đĩa)", examples: "お皿[おさら] (Cái đĩa)", mnemonic: "Hình dáng chiếc đĩa đựng thức ăn." },
+  { kanji: "血", onyomi: "ケツ", kunyomi: "ち", meaning: "HUYẾT (Máu)", examples: "血[ち] (Máu)", mnemonic: "Giọt máu (HUYẾT) rơi trên chiếc đĩa (皿)." },
+  { kanji: "工", onyomi: "コウ, ク", kunyomi: "-", meaning: "CÔNG (Công trường)", examples: "工事[こうじ] (Thi công), 工場[こうじょう] (Nhà máy)", mnemonic: "Cây thước vuông dùng trong CÔNG trường." },
+  { kanji: "空", onyomi: "クウ", kunyomi: "そら, から, あ・く", meaning: "KHÔNG (Bầu trời, trống không)", examples: "空[そら] (Bầu trời), 空港[くうこう] (Sân bay)", mnemonic: "Bầu trời (KHÔNG) rộng lớn phía trên hang động (穴) và công trường (工)." },
+  { kanji: "試", onyomi: "シ", kunyomi: "こころ・みる, ため・す", meaning: "THÍ (Thử nghiệm, thi)", examples: "試験[しけん] (Kỳ thi), 試合[しあい] (Trận đấu)", mnemonic: "Dùng lời nói (言) để làm phép THÍ nghiệm." },
+  { kanji: "計", onyomi: "ケイ", kunyomi: "はか・る", meaning: "KẾ (Kế hoạch, đo lường)", examples: "時計[とけい] (Đồng hồ), 計算[けいさん] (Tính toán)", mnemonic: "Nói (言) ra số đếm từ 1 đến 10 (十) là KẾ toán." },
+  { kanji: "説", onyomi: "セツ, ゼイ", kunyomi: "と・く", meaning: "THUYẾT (Giải thích)", examples: "小説[しょうせつ] (Tiểu thuyết), 説明[せつめい] (Giải thích)", mnemonic: "Dùng lời nói (言) để THUYẾT minh, giải thích." },
+  { kanji: "心", onyomi: "シン", kunyomi: "こころ", meaning: "TÂM (Trái tim)", examples: "安心[あんしん] (An tâm), 心配[しんぱい] (Lo lắng)", mnemonic: "Hình dáng của trái tim (TÂM)." },
+  { kanji: "思", onyomi: "シ", kunyomi: "おも・う", meaning: "TƯ (Nghĩ)", examples: "思います[おもいます] (Nghĩ), 思い出します[おもいだします] (Nhớ ra)", mnemonic: "Ruộng (田) ở trên trái tim (心), trong lòng luôn TƯ lự nghĩ về ruộng đồng." },
+  { kanji: "性", onyomi: "セイ, ショウ", kunyomi: "-", meaning: "TÍNH (Giới tính, tính cách)", examples: "女性[じょせい] (Nữ giới), 性格[せいかく] (Tính cách)", mnemonic: "Tâm (忄) sinh (生) ra đã có TÍNH cách riêng." },
+  { kanji: "地", onyomi: "チ, ジ", kunyomi: "-", meaning: "ĐỊA (Đất)", examples: "地図[ちず] (Bản đồ), 地下鉄[ちかてつ] (Tàu điện ngầm)", mnemonic: "Vùng đất (土) có cả loài bò sát, là ĐỊA cầu." },
+  { kanji: "池", onyomi: "チ", kunyomi: "いけ", meaning: "TRÌ (Cái ao)", examples: "池[いけ] (Ao), 電池[でんち] (Cục pin)", mnemonic: "Nước (氵) chảy vào chỗ đất trũng (也) tạo thành cái ao (TRÌ)." },
+  { kanji: "公", onyomi: "コウ", kunyomi: "おおやけ", meaning: "CÔNG (Công cộng)", examples: "公園[こうえん] (Công viên), 主人公[しゅじんこう] (Nhân vật chính)", mnemonic: "Chia đều đồ vật tạo sự CÔNG bằng." },
+  { kanji: "広", onyomi: "コウ", kunyomi: "ひろ・い", meaning: "QUẢNG (Rộng)", examples: "広い[ひろい] (Rộng), 広告[こうこく] (Quảng cáo)", mnemonic: "Căn nhà (广) rộng (QUẢNG) lớn." },
+  { kanji: "去", onyomi: "キョ, コ", kunyomi: "さ・る", meaning: "KHỨ (Quá khứ, rời đi)", examples: "去年[きょねん] (Năm ngoái)", mnemonic: "Chôn giấu đất (土) xuống dưới, để những chuyện trong quá KHỨ rời đi." },
+  { kanji: "転", onyomi: "テン", kunyomi: "ころ・ぶ", meaning: "CHUYỂN (Chuyển động, lăn)", examples: "転びます[ころびます] (Ngã), 運転[うんてん] (Lái xe)", mnemonic: "Chiếc xe (車) lăn bánh (CHUYỂN) vòng vòng." },
+  { kanji: "遠", onyomi: "エン", kunyomi: "とお・い", meaning: "VIỄN (Xa)", examples: "遠い[とおい] (Xa)", mnemonic: "Mặc áo dài đi bộ (辶) quãng đường rất VIỄN (xa)." },
+  { kanji: "園", onyomi: "エン", kunyomi: "-", meaning: "VIÊN (Vườn)", examples: "公園[こうえん] (Công viên), 動物園[どうぶつえん] (Sở thú)", mnemonic: "Khu vườn (VIÊN) rộng lớn có bao quanh (囗)." },
+  { kanji: "台", onyomi: "タイ, ダイ", kunyomi: "-", meaning: "ĐÀI (Cái bục, đài)", examples: "台所[だいどころ] (Nhà bếp), 台風[たいふう] (Bão)", mnemonic: "Đứng trên bục (ĐÀI) để nói (口)." },
+  { kanji: "始", onyomi: "シ", kunyomi: "はじ・める, はじ・まる", meaning: "THỦY (Bắt đầu)", examples: "始めます[はじめます] (Bắt đầu), 開始[かいし] (Khởi đầu)", mnemonic: "Người phụ nữ (女) THỦY chung bắt đầu (始) một mối quan hệ." },
+  { kanji: "治", onyomi: "ジ, チ", kunyomi: "なお・す", meaning: "TRỊ (Chữa trị)", examples: "治します[なおします] (Chữa bệnh), 政治[せいじ] (Chính trị)", mnemonic: "Dùng nước (氵) để điều TRỊ vết thương bên cạnh cái đài (台)." },
+  { kanji: "正", onyomi: "ショウ, セイ", kunyomi: "ただ・しい", meaning: "CHÍNH (Đúng, chính xác)", examples: "正しい[ただしい] (Đúng), お正月[おしょうがつ] (Tết)", mnemonic: "Một (一) bề tôi luôn CHÍNH trực." },
+  { kanji: "政", onyomi: "セイ, ショウ", kunyomi: "まつりごと", meaning: "CHÍNH (Chính trị)", examples: "政治[せいじ] (Chính trị)", mnemonic: "Chính (正) quyền dùng vũ lực (攵) để cai trị (CHÍNH)." },
+  { kanji: "王", onyomi: "オウ", kunyomi: "-", meaning: "VƯƠNG (Vua)", examples: "王様[おうさま] (Nhà vua)", mnemonic: "Người nối liền thiên-địa-nhân là VƯƠNG (Vua)." },
+  { kanji: "玉", onyomi: "ギョク", kunyomi: "たま", meaning: "NGỌC (Viên ngọc, đồng xu)", examples: "お年玉[おとしだま] (Tiền lì xì), 目玉焼き[めだまやき] (Trứng ốp la)", mnemonic: "Chữ VƯƠNG (王) thêm dấu chấm thành viên NGỌC." },
+  { kanji: "国", onyomi: "コク", kunyomi: "くに", meaning: "QUỐC (Đất nước)", examples: "国[くに] (Đất nước), 外国[がいこく] (Nước ngoài)", mnemonic: "Vua (王) cầm ngọc (玉) được bao quanh (囗) bảo vệ đất nước (QUỐC)." },
+  { kanji: "主", onyomi: "シュ, ス", kunyomi: "おも, ぬし", meaning: "CHỦ (Ông chủ, chủ yếu)", examples: "ご主人[ごしゅじん] (Chồng), 飼い主[かいぬし] (Chủ nuôi)", mnemonic: "Chiếc đèn cầy rực sáng trong phòng của người CHỦ." },
+  { kanji: "住", onyomi: "ジュウ", kunyomi: "す・む", meaning: "TRÚ (Sinh sống)", examples: "住みます[すみます] (Sống), 住所[じゅうしょ] (Địa chỉ)", mnemonic: "Người (亻) làm CHỦ (主) một nơi để cư TRÚ." },
+  { kanji: "所", onyomi: "ショ", kunyomi: "ところ", meaning: "SỞ (Nơi chốn)", examples: "所[ところ] (Nơi, chỗ), 近所[きんじょ] (Hàng xóm)", mnemonic: "Chỗ chiếc rìu (斤) chặt cánh cửa (戸) là căn SỞ." },
+  { kanji: "近", onyomi: "キン", kunyomi: "ちか・い", meaning: "CẬN (Gần)", examples: "近い[ちかい] (Gần), 最近[さいきん] (Gần đây)", mnemonic: "Mang rìu (斤) đi (辶) CẬN (gần) đến nơi." },
+  { kanji: "辺", onyomi: "ヘン", kunyomi: "あたり, べ", meaning: "BIÊN (Vùng lân cận)", examples: "この辺[このへん] (Vùng này)", mnemonic: "Dùng đao (刀) vạch đường (辶) biên giới." },
+  { kanji: "切", onyomi: "セツ, サイ", kunyomi: "き・る, き・れる", meaning: "THIẾT (Cắt)", examples: "切ります[きります] (Cắt), 切符[きっぷ] (Vé)", mnemonic: "Số bảy (七) bị đao (刀) cắt làm hai." },
+  { kanji: "勉", onyomi: "ベン", kunyomi: "-", meaning: "MIỄN (Cố gắng, học)", examples: "勉強します[べんきょうします] (Học)", mnemonic: "Dùng sức lực (力) để MIỄN cưỡng học tập." },
+  { kanji: "晩", onyomi: "バン", kunyomi: "-", meaning: "VÃN (Buổi tối)", examples: "今晩[こんばん] (Tối nay), 毎晩[まいばん] (Mỗi tối)", mnemonic: "Mặt trời (日) lặn là lúc VÃN (chiều tối)." },
+  { kanji: "色", onyomi: "シキ, ショク", kunyomi: "いろ", meaning: "SẮC (Màu sắc)", examples: "色[いろ] (Màu sắc), 景色[けしき] (Phong cảnh)", mnemonic: "Màu SẮC (色) đa dạng." },
+  { kanji: "発", onyomi: "ハツ, ホツ", kunyomi: "-", meaning: "PHÁT (Phát minh, xuất phát)", examples: "発明[はつめい] (Phát minh), 発見[はっけん] (Phát kiến)", mnemonic: "Bước chân (癶) đạp lên xuất PHÁT." },
+  { kanji: "黄", onyomi: "オウ, コウ", kunyomi: "き", meaning: "HOÀNG (Màu vàng)", examples: "黄色[きいろ] (Màu vàng)", mnemonic: "Cánh đồng (田) chín HOÀNG (vàng)." },
+  { kanji: "虫", onyomi: "チュウ", kunyomi: "むし", meaning: "TRÙNG (Côn trùng)", examples: "虫[むし] (Côn trùng)", mnemonic: "Con sâu, côn TRÙNG." },
+  { kanji: "風", onyomi: "フウ, フ", kunyomi: "かぜ, かざ", meaning: "PHONG (Gió)", examples: "風[かぜ] (Gió), 台風[たいふう] (Bão)", mnemonic: "Côn trùng (虫) trú trong vỏ bọc để tránh PHONG (gió)." },
+  { kanji: "強", onyomi: "キョウ, ゴウ", kunyomi: "つよ・い", meaning: "CƯỜNG (Khỏe, mạnh)", examples: "強い[つよい] (Mạnh), 勉強[べんきょう] (Học tập)", mnemonic: "Sức mạnh phi thường, CƯỜNG tráng." },
+  { kanji: "油", onyomi: "ユ, ユウ", kunyomi: "あぶら", meaning: "DU (Dầu)", examples: "油[あぶら] (Dầu), 石油[せきゆ] (Dầu mỏ)", mnemonic: "Chất lỏng (氵) có nguồn gốc (由) là DU (dầu)." },
+  { kanji: "決", onyomi: "ケツ", kunyomi: "き・める, き・まる", meaning: "QUYẾT (Quyết định)", examples: "決めます[きめます] (Quyết định)", mnemonic: "Nước (氵) chảy QUYẾT liệt." },
+  { kanji: "漢", onyomi: "カン", kunyomi: "-", meaning: "HÁN (Chữ Hán, Trung Quốc)", examples: "漢字[かんじ] (Chữ Hán)", mnemonic: "Nước (氵) sông ở vùng đất HÁN." },
+  { kanji: "止", onyomi: "シ", kunyomi: "と・める, と・まる, や・む", meaning: "CHỈ (Dừng lại)", examples: "止まります[とまります] (Dừng), 中止[ちゅうし] (Hủy bỏ)", mnemonic: "Bước chân CHỈ (dừng lại) không đi nữa." },
+  { kanji: "歩", onyomi: "ホ, ブ, フ", kunyomi: "あゆ・む, ある・く", meaning: "BỘ (Đi bộ)", examples: "歩きます[あるきます] (Đi bộ), 散歩[さんぽ] (Đi dạo)", mnemonic: "Dừng (止) bước chân (少) để đi BỘ." },
+  { kanji: "歴", onyomi: "レキ", kunyomi: "-", meaning: "LỊCH (Lịch sử)", examples: "歴史[れきし] (Lịch sử)", mnemonic: "Bước đi qua từng chặng đường tạo nên LỊCH sử." },
+  { kanji: "史", onyomi: "シ", kunyomi: "-", meaning: "SỬ (Lịch sử)", examples: "歴史[れきし] (Lịch sử)", mnemonic: "Viết lại lời nói (口) thành SỬ sách." },
+  { kanji: "使", onyomi: "シ", kunyomi: "つか・う", meaning: "SỬ (Sử dụng)", examples: "使います[つかいます] (Sử dụng), 大使館[たいしかん] (Đại sứ quán)", mnemonic: "Người (亻) được SỬ dụng để làm việc." },
+  { kanji: "品", onyomi: "ヒン", kunyomi: "しな", meaning: "PHẨM (Sản phẩm)", examples: "商品[しょうひん] (Sản phẩm), 化粧品[けしょうひん] (Mỹ phẩm)", mnemonic: "Nhiều chiếc hộp (口) xếp chồng lên nhau thành hàng hóa (PHẨM)." },
+  { kanji: "号", onyomi: "ゴウ, コウ", kunyomi: "-", meaning: "HIỆU (Số hiệu, ký hiệu)", examples: "信号[しんごう] (Tín hiệu), 電話番号[でんわばんごう] (Số điện thoại)", mnemonic: "Số (口) HIỆU để phân biệt." },
+  { kanji: "味", onyomi: "ミ", kunyomi: "あじ, あじ・わう", meaning: "VỊ (Mùi vị)", examples: "味[あじ] (Mùi vị), 意味[いみ] (Ý nghĩa)", mnemonic: "Miệng (口) nếm xem (未) VỊ thế nào." },
+  { kanji: "研", onyomi: "ケン", kunyomi: "と・ぐ", meaning: "NGHIÊN (Nghiên cứu)", examples: "研究[けんきゅう] (Nghiên cứu)", mnemonic: "Dùng đá (石) để NGHIÊN cứu." },
+  { kanji: "丸", onyomi: "ガン", kunyomi: "まる, まる・い", meaning: "HOÀN (Tròn)", examples: "丸[まる] (Hình tròn)", mnemonic: "Số chín (九) thêm một chấm (、) thành viên bi HOÀN (tròn)." },
+  { kanji: "究", onyomi: "キュウ", kunyomi: "きわ・める", meaning: "CỨU (Nghiên cứu)", examples: "研究[けんきゅう] (Nghiên cứu)", mnemonic: "Trong hang (穴) tìm hiểu tận CỨU (cùng)." },
+  { kanji: "谷", onyomi: "コク", kunyomi: "たに", meaning: "CỐC (Thung lũng)", examples: "谷[たに] (Thung lũng)", mnemonic: "Nước chảy từ trên núi xuống thung lũng (CỐC)." },
+  { kanji: "船", onyomi: "セン", kunyomi: "ふね, ふな", meaning: "THUYỀN (Cái thuyền)", examples: "船[ふね] (Con thuyền, tàu)", mnemonic: "Tàu (舟) chở theo 8 (八) miệng (口) ăn là một con THUYỀN." },
+  { kanji: "里", onyomi: "リ", kunyomi: "さと", meaning: "LÍ (Làng quê, dặm)", examples: "里芋[さといも] (Khoai sọ)", mnemonic: "Ruộng (田) và đất (土) làm nên LÍ (làng quê)." },
+  { kanji: "理", onyomi: "リ", kunyomi: "-", meaning: "LÍ (Lý do, nấu ăn)", examples: "料理[りょうり] (Món ăn), 修理[しゅうり] (Sửa chữa)", mnemonic: "Vua (王) cai quản làng quê (里) có LÍ lẽ." },
+  { kanji: "野", onyomi: "ヤ", kunyomi: "の", meaning: "DÃ (Cánh đồng, hoang dã)", examples: "野菜[やさい] (Rau), 野球[やきゅう] (Bóng chày)", mnemonic: "Ngôi làng (里) mở rộng (予) ra thành cánh đồng (DÃ)." },
+  { kanji: "若", onyomi: "ジャク, ニャク", kunyomi: "わか・い", meaning: "NHƯỢC (Trẻ)", examples: "若い[わかい] (Trẻ trung)", mnemonic: "Người vươn lên nụ cười (口) dưới cỏ cây (艹) là người rất trẻ (NHƯỢC)." },
+  { kanji: "菜", onyomi: "サイ", kunyomi: "な", meaning: "THÁI (Rau)", examples: "野菜[やさい] (Rau)", mnemonic: "Cây cỏ (艹) hái (采) về làm THÁI (rau)." },
+  { kanji: "番", onyomi: "バン", kunyomi: "-", meaning: "PHIÊN (Lượt, số)", examples: "一番[いちばん] (Số 1), 交番[こうばん] (Đồn cảnh sát)", mnemonic: "Đánh số (PHIÊN) từng mảnh ruộng (田)." },
+  { kanji: "料", onyomi: "リョウ", kunyomi: "-", meaning: "LIỆU (Nguyên liệu, phí)", examples: "無料[むりょう] (Miễn phí), 料理[りょうり] (Nấu ăn)", mnemonic: "Dùng gạo (米) làm LIỆU đo lường (斗)." },
+  { kanji: "奥", onyomi: "オウ, イク", kunyomi: "おく", meaning: "ÁO (Bên trong, vợ)", examples: "奥さん[おくさん] (Vợ người khác)", mnemonic: "Người đi vào bên trong (ÁO) góc khuất." },
+  { kanji: "鳥", onyomi: "チョウ", kunyomi: "とり", meaning: "ĐIỂU (Con chim)", examples: "鳥[とり] (Con chim)", mnemonic: "Hình ảnh chú chim (ĐIỂU)." },
+  { kanji: "鳴", onyomi: "メイ", kunyomi: "な・く, な・る", meaning: "MINH (Kêu, hót)", examples: "鳴ります[なります] (Reo), 鳴きます[なきます] (Hót)", mnemonic: "Miệng (口) chim (鳥) hót ríu rít (MINH)." },
+  { kanji: "島", onyomi: "トウ", kunyomi: "しま", meaning: "ĐẢO (Hòn đảo)", examples: "島[しま] (Hòn đảo)", mnemonic: "Đỉnh núi (山) có chim (鳥) đậu gọi là ĐẢO." },
+  { kanji: "化", onyomi: "カ, ケ", kunyomi: "ば・ける", meaning: "HÓA (Biến hóa)", examples: "文化[ぶんか] (Văn hóa), 化粧[けしょう] (Trang điểm)", mnemonic: "Người (亻) biến HÓA (七)." },
+  { kanji: "便", onyomi: "ビン, ベン", kunyomi: "たよ・り", meaning: "TIỆN (Tiện lợi)", examples: "不便[ふべん] (Bất tiện), 便利[べんり] (Tiện lợi)", mnemonic: "Người (亻) có sự TIỆN lợi (更)." },
+  { kanji: "係", onyomi: "ケイ", kunyomi: "かかり, かかる", meaning: "HỆ (Quan hệ, người phụ trách)", examples: "係の人[かかりのひと] (Người phụ trách)", mnemonic: "Người (亻) kết nối bằng sợi dây (系) là có HỆ lụy/quan hệ." },
+  { kanji: "宿", onyomi: "シュク", kunyomi: "やど", meaning: "TÚC (Nơi trọ, bài tập)", examples: "宿題[しゅくだい] (Bài tập về nhà)", mnemonic: "Dưới mái nhà (宀) có hàng trăm (百) người cùng tá TÚC." },
+  { kanji: "私", onyomi: "シ", kunyomi: "わたし, わたくし", meaning: "TƯ (Tôi, cá nhân)", examples: "私[わたし] (Tôi)", mnemonic: "Cá nhân (TƯ - ム) cầm cây lúa (禾)." },
+  { kanji: "利", onyomi: "リ", kunyomi: "き・く", meaning: "LỢI (Tiện lợi, lợi ích)", examples: "便利[べんり] (Tiện lợi), 利用[りよう] (Sử dụng)", mnemonic: "Dùng dao (刂) gặt lúa (禾) sẽ đem lại LỢI ích." },
+  { kanji: "科", onyomi: "カ", kunyomi: "-", meaning: "KHOA (Khoa học, môn học)", examples: "科学[かがく] (Khoa học), 教科書[きょうかしょ] (SGK)", mnemonic: "Đo lường (斗) lúa (禾) một cách KHOA học." },
+  { kanji: "顔", onyomi: "ガン", kunyomi: "かお", meaning: "NHAN (Khuôn mặt)", examples: "顔[かお] (Gương mặt)", mnemonic: "Khuôn mặt (NHAN)." },
+  { kanji: "題", onyomi: "ダイ", kunyomi: "-", meaning: "ĐỀ (Đề tài, vấn đề)", examples: "問題[もんだい] (Vấn đề), 宿題[しゅくだい] (Bài tập)", mnemonic: "Dùng trang giấy (頁) để viết ĐỀ bài (是)." },
+  { kanji: "速", onyomi: "ソク", kunyomi: "はや・い", meaning: "TỐC (Nhanh)", examples: "速い[はやい] (Nhanh)", mnemonic: "Chạy (辶) đi buộc đồ (束) thật TỐC (nhanh)." },
+  { kanji: "通", onyomi: "ツウ, ツ", kunyomi: "かよ・う, とお・る", meaning: "THÔNG (Đi lại, thông qua)", examples: "通います[かよいます] (Đi lại), 交通[こうつう] (Giao thông)", mnemonic: "Đi (辶) qua lối THÔNG trên đường." },
+  { kanji: "週", onyomi: "シュウ", kunyomi: "-", meaning: "CHU (Tuần)", examples: "先週[せんしゅう] (Tuần trước), 今週[こんしゅう] (Tuần này)", mnemonic: "Chu kỳ (周) quay vòng đều đặn gọi là CHU (tuần)." },
+  { kanji: "夫", onyomi: "フ, フウ", kunyomi: "おっと", meaning: "PHU (Chồng)", examples: "大丈夫[だいじょうぶ] (Không sao), 夫[おっと] (Chồng)", mnemonic: "Người đàn ông lớn (大) trụ cột gia đình (PHU)." },
+  { kanji: "鉄", onyomi: "テツ", kunyomi: "-", meaning: "THIẾT (Sắt, thép)", examples: "地下鉄[ちかてつ] (Tàu điện ngầm)", mnemonic: "Mất đi (失) vàng (金) thì chỉ còn THIẾT (sắt)." },
+  { kanji: "妹", onyomi: "マイ", kunyomi: "いもうと", meaning: "MUỘI (Em gái)", examples: "妹[いもうと] (Em gái)", mnemonic: "Người con gái (女) nhỏ bé chưa trưởng thành (未) là MUỘI (em gái)." },
+  { kanji: "姉", onyomi: "シ", kunyomi: "あね", meaning: "TỈ (Chị gái)", examples: "姉[あね] (Chị gái), 姉妹[しまい] (Chị em gái)", mnemonic: "Người phụ nữ (女) đi chợ (市) là TỈ (chị gái)." },
+  { kanji: "妻", onyomi: "サイ", kunyomi: "つま", meaning: "THÊ (Vợ)", examples: "妻[つま] (Vợ mình)", mnemonic: "Phụ nữ (女) dùng chổi quét nhà là THÊ (vợ)." },
+  { kanji: "天", onyomi: "テン", kunyomi: "あめ, あま", meaning: "THIÊN (Trời)", examples: "天気[てんき] (Thời tiết)", mnemonic: "Kẻ vĩ đại (大) đội trời (一) là THIÊN." },
+  { kanji: "送", onyomi: "ソウ", kunyomi: "おく・る", meaning: "TỔNG (Gửi, tiễn)", examples: "送ります[おくります] (Gửi)", mnemonic: "Dùng đường bộ (辶) để TỔNG tiễn." },
+  { kanji: "弟", onyomi: "テイ, ダイ", kunyomi: "おとうと", meaning: "ĐỆ (Em trai)", examples: "弟[おとうと] (Em trai), 兄弟[きょうだい] (Anh em)", mnemonic: "Em trai (ĐỆ)." },
+  
+  // --- BỔ SUNG KANJI N5 (Mẫu đại diện) ---
+  { kanji: "一", onyomi: "イチ, イツ", kunyomi: "ひと・つ", meaning: "NHẤT (Một)", examples: "一つ[ひとつ] (1 cái), 一月[いちがつ] (Tháng 1)", mnemonic: "Một gạch ngang là số 1." },
+  { kanji: "二", onyomi: "ニ", kunyomi: "ふた・つ", meaning: "NHỊ (Hai)", examples: "二つ[ふたつ] (2 cái), 二月[にがつ] (Tháng 2)", mnemonic: "Hai gạch ngang là số 2." },
+  { kanji: "三", onyomi: "サン", kunyomi: "みっ・つ", meaning: "TAM (Ba)", examples: "三つ[みっつ] (3 cái), 三月[さんがつ] (Tháng 3)", mnemonic: "Ba gạch ngang là số 3." },
+  { kanji: "四", onyomi: "シ", kunyomi: "よっ・つ, よん", meaning: "TỨ (Bốn)", examples: "四つ[よっつ] (4 cái), 四月[しがつ] (Tháng 4)", mnemonic: "Hình vuông có 4 góc." },
+  { kanji: "五", onyomi: "ゴ", kunyomi: "いつ・つ", meaning: "NGŨ (Năm)", examples: "五つ[いつつ] (5 cái), 五月[ごがつ] (Tháng 5)", mnemonic: "Số 5 viết theo chữ Hán." },
+  { kanji: "六", onyomi: "ロク", kunyomi: "むっ・つ", meaning: "LỤC (Sáu)", examples: "六つ[むっつ] (6 cái), 六月[ろくがつ] (Tháng 6)", mnemonic: "Con người dang 2 tay 2 chân cộng thêm đầu và thân là 6 bộ phận." },
+  { kanji: "七", onyomi: "シチ", kunyomi: "なな・つ", meaning: "THẤT (Bảy)", examples: "七つ[ななつ] (7 cái), 七月[しちがつ] (Tháng 7)", mnemonic: "Giống chữ T bị lộn ngược." },
+  { kanji: "八", onyomi: "ハチ", kunyomi: "やっ・つ", meaning: "BÁT (Tám)", examples: "八つ[やっつ] (8 cái), 八月[はちがつ] (Tháng 8)", mnemonic: "Hai nét phẩy chia ra 2 bên." },
+  { kanji: "九", onyomi: "キュウ, ク", kunyomi: "ここの・つ", meaning: "CỬU (Chín)", examples: "九つ[ここのつ] (9 cái), 九月[くがつ] (Tháng 9)", mnemonic: "Giống người đang chống đẩy." },
+  { kanji: "十", onyomi: "ジュウ", kunyomi: "とお", meaning: "THẬP (Mười)", examples: "十[とお] (10 cái), 十月[じゅうがつ] (Tháng 10)", mnemonic: "Hình chữ thập (+)." },
+  { kanji: "日", onyomi: "ニチ, ジツ", kunyomi: "ひ, か", meaning: "NHẬT (Mặt trời, ngày)", examples: "日曜日[にちようび] (Chủ nhật), 日本[にほん] (Nhật Bản)", mnemonic: "Hình tượng mặt trời hình chữ nhật." },
+  { kanji: "月", onyomi: "ゲツ, ガツ", kunyomi: "つき", meaning: "NGUYỆT (Mặt trăng, tháng)", examples: "月曜日[げつようび] (Thứ 2), 一月[いちがつ] (Tháng 1)", mnemonic: "Hình tượng mặt trăng khuyết." },
+  { kanji: "火", onyomi: "カ", kunyomi: "ひ", meaning: "HỎA (Lửa)", examples: "火曜日[かようび] (Thứ 3), 火山[かざん] (Núi lửa)", mnemonic: "Hình ảnh ngọn lửa đang cháy." },
+  { kanji: "水", onyomi: "スイ", kunyomi: "みず", meaning: "THỦY (Nước)", examples: "水曜日[すいようび] (Thứ 4), 水[みず] (Nước)", mnemonic: "Dòng nước đang chảy." },
+  { kanji: "木", onyomi: "モク, ボク", kunyomi: "き", meaning: "MỘC (Cây, gỗ)", examples: "木曜日[もくようび] (Thứ 5), 木[き] (Cây)", mnemonic: "Hình cái cây có cành và rễ." },
+  { kanji: "金", onyomi: "キン, コン", kunyomi: "かね", meaning: "KIM (Vàng, tiền)", examples: "金曜日[きんようび] (Thứ 6), お金[おかね] (Tiền)", mnemonic: "Vàng được chôn giấu dưới đất (土)." },
+  { kanji: "土", onyomi: "ド, ト", kunyomi: "つち", meaning: "THỔ (Đất)", examples: "土曜日[どようび] (Thứ 7), 土地[とち] (Đất đai)", mnemonic: "Mầm cây mọc lên từ mặt đất." },
+  { kanji: "人", onyomi: "ジン, ニン", kunyomi: "ひと", meaning: "NHÂN (Người)", examples: "日本人[にほんじん] (Người Nhật), 人[ひと] (Người)", mnemonic: "Hình dáng người đang bước đi." }
 ];
 
 const grammarData = [
@@ -871,7 +928,7 @@ const grammarData = [
   {
     structure: "Thể thường + らしい / そうだ",
     meaning: "Nghe nói là ~ / Thấy bảo là ~",
-    explanation: "Truyền đạt lại thông tin nghe được từ người khác. 'そうだ' dùng khi thông tin có nguồn gốc rõ ràng, độ chính xác cao. 'らしい' dùng với thông tin chung chung, tin đồn.",
+    explanation: "Truyền đạt lại thông tin nghe được từ người khác. 'そうだ' dùng khi thôngত্তি thông tin có nguồn gốc rõ ràng, độ chính xác cao. 'らしい' dùng với thông tin chung chung, tin đồn.",
     examples: [
       { jp: "あの店、おいしいらしいね。", vi: "Cửa hàng kia nghe nói ngon lắm đấy." },
       { jp: "田中さん、この前ハワイに行ったそうですよ。", vi: "Nghe nói anh Tanaka mới đi Hawaii đợt trước đấy." }
@@ -1163,9 +1220,30 @@ const readingVocabDict = {
 // --- CÁC COMPONENT CHÍNH ---
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('roadmap');
+  const [activeView, setActiveView] = useState({ tab: 'roadmap', slice: null, title: '' });
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
+
+  // PROGRESS STATE
+  const [progress, setProgress] = useState(() => {
+    try {
+      const saved = localStorage.getItem('n4_progress');
+      const parsed = saved ? JSON.parse(saved) : {};
+      return {
+        roadmap: parsed.roadmap || {}, // old format fallback
+        dailyTasks: parsed.dailyTasks || {},
+        kanjiMastered: parsed.kanjiMastered || [],
+        vocabMastered: parsed.vocabMastered || [],
+        grammarMastered: parsed.grammarMastered || []
+      };
+    } catch (e) {
+      return { roadmap: {}, dailyTasks: {}, kanjiMastered: [], vocabMastered: [], grammarMastered: [] };
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('n4_progress', JSON.stringify(progress));
+  }, [progress]);
 
   const openChatWithPrompt = (text) => {
     setAiPrompt(text);
@@ -1183,7 +1261,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col md:flex-row">
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-white shadow-xl flex-shrink-0 z-10 md:min-h-screen sticky top-0">
+      <aside className="w-full md:w-64 bg-white shadow-xl flex-shrink-0 z-10 md:min-h-screen sticky top-0 flex flex-col">
         <div className="p-6 text-center border-b">
           <h1 className="text-2xl font-bold text-red-500 flex items-center justify-center gap-2">
             <span className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center">N4</span>
@@ -1191,13 +1269,51 @@ export default function App() {
           </h1>
           <p className="text-xs text-slate-500 mt-1">JLPT & NAT-Test Prep</p>
         </div>
-        <nav className="p-4 flex md:flex-col gap-2 overflow-x-auto no-scrollbar">
+        
+        {/* Progress Widget */}
+        <div className="p-5 border-b border-slate-100 bg-slate-50/50 hidden md:block">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tiến độ tổng</span>
+            <Trophy size={16} className="text-amber-500"/>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="text-slate-600 font-medium">Kanji đã thuộc</span>
+                <span className="font-bold text-emerald-600">{progress.kanjiMastered.length}/{kanjiData.length}</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-emerald-500 h-2 rounded-full transition-all duration-500" style={{width: `${(progress.kanjiMastered.length/kanjiData.length)*100}%`}}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="text-slate-600 font-medium">Từ vựng đã thuộc</span>
+                <span className="font-bold text-blue-600">{progress.vocabMastered?.length || 0}/{vocabData.length}</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-blue-500 h-2 rounded-full transition-all duration-500" style={{width: `${((progress.vocabMastered?.length || 0)/vocabData.length)*100}%`}}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-xs mb-1.5">
+                <span className="text-slate-600 font-medium">Ngữ pháp đã học</span>
+                <span className="font-bold text-purple-600">{progress.grammarMastered?.length || 0}/{grammarData.length}</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-purple-500 h-2 rounded-full transition-all duration-500" style={{width: `${((progress.grammarMastered?.length || 0)/grammarData.length)*100}%`}}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <nav className="p-4 flex md:flex-col gap-2 overflow-x-auto no-scrollbar flex-1">
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => setActiveView({ tab: item.id, slice: null, title: '' })}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium whitespace-nowrap md:whitespace-normal
-                ${activeTab === item.id 
+                ${activeView.tab === item.id 
                   ? 'bg-red-50 text-red-600 shadow-sm' 
                   : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'}`}
             >
@@ -1211,19 +1327,19 @@ export default function App() {
       {/* Main Content Area */}
       <main className="flex-1 p-4 md:p-8 overflow-y-auto relative">
         <div className="max-w-5xl mx-auto pb-20">
-          {activeTab === 'roadmap' && <RoadmapTab onNavigate={setActiveTab} />}
-          {activeTab === 'vocab' && <VocabTab />}
-          {activeTab === 'kanji' && <KanjiTab />}
-          {activeTab === 'grammar' && <GrammarTab openChatWithPrompt={openChatWithPrompt} />}
-          {activeTab === 'reading' && <ReadingTab openChatWithPrompt={openChatWithPrompt} />}
+          {activeView.tab === 'roadmap' && <RoadmapTab onNavigate={(tab, slice, title) => setActiveView({ tab, slice, title })} progress={progress} setProgress={setProgress} />}
+          {activeView.tab === 'vocab' && <VocabTab progress={progress} setProgress={setProgress} slice={activeView.slice} customTitle={activeView.title} />}
+          {activeView.tab === 'kanji' && <KanjiTab progress={progress} setProgress={setProgress} slice={activeView.slice} customTitle={activeView.title} />}
+          {activeView.tab === 'grammar' && <GrammarTab progress={progress} setProgress={setProgress} openChatWithPrompt={openChatWithPrompt} slice={activeView.slice} customTitle={activeView.title} />}
+          {activeView.tab === 'reading' && <ReadingTab openChatWithPrompt={openChatWithPrompt} customTitle={activeView.title} />}
         </div>
 
         {/* Nút Chat AI Floating */}
         <button
-          onClick={() => setIsChatOpen(true)}
-          className="fixed bottom-6 right-6 p-4 bg-indigo-600 text-white rounded-full shadow-lg shadow-indigo-600/30 hover:bg-indigo-700 hover:scale-110 transition-all z-50 flex items-center justify-center"
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          className={`fixed bottom-6 right-6 p-4 text-white rounded-full shadow-lg hover:scale-110 transition-all z-50 flex items-center justify-center ${isChatOpen ? 'bg-slate-700 hover:bg-slate-800 shadow-slate-700/30' : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30'}`}
         >
-          <MessageCircle size={28} />
+          {isChatOpen ? <X size={28} /> : <MessageCircle size={28} />}
         </button>
 
         {/* Cửa sổ Chat AI */}
@@ -1242,27 +1358,171 @@ export default function App() {
 /* =========================================
    TAB: LỘ TRÌNH (ROADMAP)
    ========================================= */
-function RoadmapTab({ onNavigate }) {
+function RoadmapTab({ onNavigate, progress, setProgress }) {
   const [duration, setDuration] = useState(3); // 1, 3, 6
+  const [expandedPhase, setExpandedPhase] = useState(0);
 
   const plans = {
     1: [
-      { week: "Tuần 1", title: "Củng cố nền tảng", desc: "Học 100 từ vựng cốt lõi & Ôn tập lại ngữ pháp N5. Nhấn mạnh vào động từ nhóm 1, 2, 3." },
-      { week: "Tuần 2", title: "Kanji & Đọc hiểu nhanh", desc: "Mỗi ngày 15 chữ Kanji N4. Bắt đầu đọc các đoạn văn ngắn 100-150 chữ." },
-      { week: "Tuần 3", title: "Ngữ pháp N4 & Nghe", desc: "Tập trung các cấu trúc: ~みたい, ~かもしれない, Kính ngữ, Khiêm nhường ngữ." },
-      { week: "Tuần 4", title: "Luyện đề thực tế", desc: "Làm 3 đề JLPT/NAT-Test liên tục. Bấm giờ. Rút kinh nghiệm các lỗi sai." }
+      { 
+        week: "Tuần 1", title: "Khởi động & Nền tảng (Chương 15-19)", start: 0, end: 0.25,
+        days: [
+          "Ngày 1: Từ vựng & Ngữ pháp Chương 15 (Phán đoán でしょう, かもしれない)",
+          "Ngày 2: Kanji & Từ vựng Chương 16",
+          "Ngày 3: Ngữ pháp Chương 16 (Truyền đạt そうだ, らしい)",
+          "Ngày 4: Kanji & Từ vựng Chương 17-18",
+          "Ngày 5: Ngữ pháp Chương 17-18 (Trình bày lý do んです, Trông có vẻ そう)",
+          "Ngày 6: Kanji, Từ vựng & Ngữ pháp Chương 19 (Tự động từ, Tha động từ)",
+          "Ngày 7: Ôn tập Tuần 1 & Làm bài Đọc hiểu"
+        ]
+      },
+      { 
+        week: "Tuần 2", title: "Tăng tốc (Chương 20-24)", start: 0.25, end: 0.5,
+        days: [
+          "Ngày 8: Từ vựng & Ngữ pháp Chương 20 (Mệnh đề bổ nghĩa danh từ)",
+          "Ngày 9: Kanji & Từ vựng Chương 21",
+          "Ngày 10: Ngữ pháp Chương 21-22 (Danh từ hóa の, Thể Mệnh lệnh/Cấm đoán)",
+          "Ngày 11: Kanji & Từ vựng Chương 22-23",
+          "Ngày 12: Ngữ pháp Chương 23 (Thể bị động, Thể cho nhận)",
+          "Ngày 13: Kanji, Từ vựng & Ngữ pháp Chương 24",
+          "Ngày 14: Ôn tập Tuần 2 & Làm Quiz Từ vựng"
+        ]
+      },
+      { 
+        week: "Tuần 3", title: "Vượt chướng ngại (Chương 25-29)", start: 0.5, end: 0.75,
+        days: [
+          "Ngày 15: Từ vựng & Ngữ pháp Chương 25 (Quyết định ことにする, Trạng thái ようになる)",
+          "Ngày 16: Kanji & Từ vựng Chương 26",
+          "Ngày 17: Ngữ pháp Chương 26-27 (Lời khuyên ほうがいい, Liệt kê たり)",
+          "Ngày 18: Kanji & Từ vựng Chương 27-28",
+          "Ngày 19: Ngữ pháp Chương 28 (Thể Sai khiến)",
+          "Ngày 20: Kanji, Từ vựng & Ngữ pháp Chương 29",
+          "Ngày 21: Ôn tập Tuần 3 & Thử sức đề Ngữ pháp"
+        ]
+      },
+      { 
+        week: "Tuần 4", title: "Về đích & Luyện đề (Chương 30-33)", start: 0.75, end: 1,
+        days: [
+          "Ngày 22: Từ vựng & Ngữ pháp Chương 30 (Câu điều kiện たら, と, ば)",
+          "Ngày 23: Kanji & Từ vựng Chương 31",
+          "Ngày 24: Ngữ pháp Chương 31-32 (Vì/Mặc dù ので, のに)",
+          "Ngày 25: Kanji, Từ vựng & Ngữ pháp Chương 33 (Tôn kính/Khiêm nhường ngữ)",
+          "Ngày 26: Giải Đề thi thử số 1 (Tính giờ)",
+          "Ngày 27: Giải Đề thi thử số 2 (Tính giờ)",
+          "Ngày 28: Tổng kết, Phân tích lỗi sai với AI Sensei"
+        ]
+      }
     ],
     3: [
-      { week: "Tháng 1", title: "Từ vựng & Kanji chuyên sâu", desc: "Học toàn bộ 300 chữ Kanji N4 và 800 từ vựng. Sử dụng Flashcard mỗi ngày 30 phút." },
-      { week: "Tháng 2", title: "Phá đảo Ngữ pháp", desc: "Học 80 mẫu ngữ pháp N4. Làm bài tập ứng dụng. Bắt đầu luyện đọc dịch từng câu." },
-      { week: "Tháng 3", title: "Luyện Đề & Kỹ năng Đọc/Nghe", desc: "Giải đề mỗi cuối tuần. Luyện tập kỹ năng nghe bắt từ khóa. Ôn lại từ vựng bị sai." }
+      { 
+        week: "Tháng 1", title: "Xây dựng nền tảng (Chương 15-20)", start: 0, end: 0.33,
+        days: [
+          "Tuần 1 (Ngày 1-7): Ch.15-16 (Mỗi ngày học 15 từ vựng, 2 Kanji, 1 cấu trúc ngữ pháp)",
+          "Tuần 2 (Ngày 8-14): Ch.17-18 (Mỗi ngày học 15 từ vựng, 2 Kanji, 1 cấu trúc ngữ pháp)",
+          "Tuần 3 (Ngày 15-21): Ch.19-20 (Mỗi ngày học 15 từ vựng, 2 Kanji, Đọc hiểu bài ngắn)",
+          "Tuần 4 (Ngày 22-28): Ôn tập lại 6 chương đầu & Làm bài test Tháng 1"
+        ]
+      },
+      { 
+        week: "Tháng 2", title: "Mở rộng cấu trúc (Chương 21-27)", start: 0.33, end: 0.66,
+        days: [
+          "Tuần 1 (Ngày 29-35): Ch.21-22 (Trọng tâm: Thể mệnh lệnh, Cấm đoán, Danh từ hóa)",
+          "Tuần 2 (Ngày 36-42): Ch.23-24 (Trọng tâm: Thể bị động, Cách chia Tự/Tha động từ)",
+          "Tuần 3 (Ngày 43-49): Ch.25-26 (Trọng tâm: Quyết định, Thói quen, Thay đổi trạng thái)",
+          "Tuần 4 (Ngày 50-56): Ch.27 & Tổng ôn tập Tháng 2"
+        ]
+      },
+      { 
+        week: "Tháng 3", title: "Hoàn thiện & Luyện đề (Chương 28-33)", start: 0.66, end: 1,
+        days: [
+          "Tuần 1 (Ngày 57-63): Ch.28-29 (Trọng tâm: Thể sai khiến, Bị động sai khiến)",
+          "Tuần 2 (Ngày 64-70): Ch.30-31 (Trọng tâm: Kính ngữ & Khiêm nhường ngữ cơ bản)",
+          "Tuần 3 (Ngày 71-77): Ch.32-33 (Ôn luyện toàn bộ 80 cấu trúc ngữ pháp N4)",
+          "Tuần 4 (Ngày 78-84): Giải 4 đề thi thử JLPT N4, bấm giờ làm bài thực tế."
+        ]
+      }
     ],
     6: [
-      { week: "Tháng 1-2", title: "Xây móng Từ vựng", desc: "Học từ vựng theo chủ đề (Gia đình, Đời sống, Công sở). Kết hợp học 5 Kanji mỗi ngày." },
-      { week: "Tháng 3-4", title: "Ngữ pháp & Hội thoại", desc: "Học ngữ pháp từ từ, áp dụng viết nhật ký. Tập nghe hội thoại thực tế." },
-      { week: "Tháng 5", title: "Tăng tốc Đọc hiểu", desc: "Đọc báo NHK Easy, đọc truyện ngắn. Áp dụng ngữ pháp đã học để dịch đoạn văn dài." },
-      { week: "Tháng 6", title: "Tổng ôn & Luyện đề", desc: "Tháng cuối chỉ tập trung giải đề NAT-Test và JLPT các năm trước. Rèn phản xạ thời gian." }
+      { 
+        week: "Tháng 1", title: "Bước đệm (Chương 15-17)", start: 0, end: 0.16,
+        days: [
+          "Ngày 1-10: Hoàn thành Chương 15 (Từ vựng, Kanji, Ngữ pháp phán đoán)",
+          "Ngày 11-20: Hoàn thành Chương 16 (Từ vựng, Kanji, Ngữ pháp truyền đạt thông tin)",
+          "Ngày 21-30: Hoàn thành Chương 17 & Ôn tập (Ngữ pháp mở lời, Xin phép)"
+        ]
+      },
+      { 
+        week: "Tháng 2", title: "Hình thành câu (Chương 18-20)", start: 0.16, end: 0.33,
+        days: [
+          "Ngày 1-10: Hoàn thành Chương 18 (Từ vựng, Kanji, Đánh giá trạng thái そう)",
+          "Ngày 11-20: Hoàn thành Chương 19 (Từ vựng, Kanji, Tự & Tha động từ)",
+          "Ngày 21-30: Hoàn thành Chương 20 & Ôn tập (Mệnh đề bổ nghĩa danh từ)"
+        ]
+      },
+      { 
+        week: "Tháng 3", title: "Giao tiếp cơ bản (Chương 21-23)", start: 0.33, end: 0.5,
+        days: [
+          "Ngày 1-10: Hoàn thành Chương 21 (Danh từ hóa bằng の)",
+          "Ngày 11-20: Hoàn thành Chương 22 (Thể Mệnh lệnh, Cấm đoán)",
+          "Ngày 21-30: Hoàn thành Chương 23 & Ôn tập (Thể bị động, Cấu trúc cho nhận)"
+        ]
+      },
+      { 
+        week: "Tháng 4", title: "Diễn đạt tình trạng (Chương 24-27)", start: 0.5, end: 0.66,
+        days: [
+          "Ngày 1-7: Chương 24 (Dễ/khó, Quá mức)",
+          "Ngày 8-15: Chương 25 (Quyết định dự định, Cố gắng làm gì đó)",
+          "Ngày 16-23: Chương 26 (Lời khuyên ほうがいい, Liệt kê hành động たり)",
+          "Ngày 24-30: Chương 27 & Ôn tập (Hành động tiếc nuối てしまう, Hoàn thành)"
+        ]
+      },
+      { 
+        week: "Tháng 5", title: "Thể phức tạp (Chương 28-30)", start: 0.66, end: 0.83,
+        days: [
+          "Ngày 1-10: Chương 28 (Thể Sai khiến させる)",
+          "Ngày 11-20: Chương 29 (Bị động sai khiến)",
+          "Ngày 21-30: Chương 30 & Ôn tập (Mẫu câu về thời gian とき, 間に, までに)"
+        ]
+      },
+      { 
+        week: "Tháng 6", title: "Kính ngữ & Luyện đề (Chương 31-33)", start: 0.83, end: 1,
+        days: [
+          "Ngày 1-7: Chương 31-32 (Câu điều kiện たら, と, ば)",
+          "Ngày 8-15: Chương 33 (Tôn kính ngữ, Khiêm nhường ngữ)",
+          "Ngày 16-22: Ôn tập tổng hợp từ vựng và Kanji toàn khóa",
+          "Ngày 23-30: Luyện đề thi thực tế JLPT/NAT-Test và giải thích với AI."
+        ]
+      }
     ]
+  };
+
+  const isPhaseCompleted = (phaseIdx, daysLength) => {
+    if (!daysLength) return false;
+    for (let i = 0; i < daysLength; i++) {
+      if (!progress.dailyTasks?.[`${duration}_${phaseIdx}_${i}`]) return false;
+    }
+    return true;
+  };
+
+  const togglePhase = (e, phaseIdx, daysLength) => {
+    e.stopPropagation(); // Ngăn việc expand card
+    const currentlyCompleted = isPhaseCompleted(phaseIdx, daysLength);
+    const newTasks = { ...progress.dailyTasks };
+    
+    // Nếu phase chưa hoàn thành, thì check all. Nếu đã hoàn thành, thì uncheck all.
+    for (let i = 0; i < daysLength; i++) {
+      newTasks[`${duration}_${phaseIdx}_${i}`] = !currentlyCompleted;
+    }
+    setProgress(prev => ({ ...prev, dailyTasks: newTasks }));
+  };
+
+  const toggleDayTask = (e, phaseIdx, dayIdx) => {
+    e.stopPropagation();
+    const key = `${duration}_${phaseIdx}_${dayIdx}`;
+    setProgress(prev => ({
+      ...prev,
+      dailyTasks: { ...prev.dailyTasks, [key]: !prev.dailyTasks?.[key] }
+    }));
   };
 
   return (
@@ -1270,13 +1530,13 @@ function RoadmapTab({ onNavigate }) {
       <div className="bg-white p-6 rounded-2xl shadow-sm mb-6 flex flex-col md:flex-row justify-between items-start md:items-center border border-slate-100">
         <div>
           <h2 className="text-3xl font-bold text-slate-800 mb-2">Lộ Trình Học Tập</h2>
-          <p className="text-slate-500">Chọn lộ trình phù hợp với thời gian và mục tiêu của bạn.</p>
+          <p className="text-slate-500">Chọn lộ trình và theo dõi công việc mỗi ngày của bạn.</p>
         </div>
         <div className="mt-4 md:mt-0 flex gap-2 bg-slate-100 p-1 rounded-xl">
           {[1, 3, 6].map(m => (
             <button 
               key={m}
-              onClick={() => setDuration(m)}
+              onClick={() => { setDuration(m); setExpandedPhase(0); }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${duration === m ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}
             >
               {m} Tháng
@@ -1285,22 +1545,129 @@ function RoadmapTab({ onNavigate }) {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {plans[duration].map((phase, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-1 h-full bg-red-400 transform -translate-x-1 group-hover:translate-x-0 transition-transform"></div>
-            <div className="flex items-center gap-3 mb-3 text-red-500">
-              <CalendarDays size={20} />
-              <span className="font-bold text-sm tracking-wider uppercase">{phase.week}</span>
+      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+        {plans[duration].map((phase, idx) => {
+          const totalDays = phase.days.length;
+          let completedDays = 0;
+          for (let i=0; i<totalDays; i++) {
+            if (progress.dailyTasks?.[`${duration}_${idx}_${i}`]) completedDays++;
+          }
+          const isCompleted = completedDays === totalDays && totalDays > 0;
+          const isExpanded = expandedPhase === idx;
+
+          return (
+            <div key={idx} className={`bg-white rounded-2xl shadow-sm border transition-all relative overflow-hidden group ${isCompleted ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-100 hover:shadow-md'}`}>
+              {!isCompleted && <div className="absolute top-0 left-0 w-1 h-full bg-red-400"></div>}
+              
+              {/* Card Header (Bấm để mở rộng) */}
+              <div 
+                className="p-6 cursor-pointer"
+                onClick={() => setExpandedPhase(isExpanded ? null : idx)}
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <div className={`flex items-center gap-3 ${isCompleted ? 'text-emerald-600' : 'text-red-500'}`}>
+                    <CalendarDays size={20} />
+                    <span className="font-bold text-sm tracking-wider uppercase">{phase.week}</span>
+                  </div>
+                  <button 
+                    onClick={(e) => togglePhase(e, idx, totalDays)}
+                    className={`p-1.5 rounded-full transition-colors ${isCompleted ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400 hover:bg-emerald-50 hover:text-emerald-500'}`}
+                    title={isCompleted ? "Đánh dấu chưa hoàn thành" : "Đánh dấu hoàn thành toàn bộ"}
+                  >
+                    <CheckCircle2 size={24} />
+                  </button>
+                </div>
+                
+                <h3 className={`text-xl font-bold mb-2 ${isCompleted ? 'text-emerald-800' : 'text-slate-800'}`}>{phase.title}</h3>
+                <p className="text-slate-600 leading-relaxed mb-4">{phase.desc}</p>
+                
+                {/* Thanh tiến độ của chặng */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-400 transition-all duration-300" style={{ width: `${(completedDays / totalDays) * 100}%` }}></div>
+                  </div>
+                  <span className="text-xs font-bold text-slate-400">{completedDays}/{totalDays}</span>
+                </div>
+
+                <div className="mt-4 text-center text-slate-400 flex justify-center items-center gap-1 text-sm font-medium">
+                  {isExpanded ? (
+                    <><ChevronUp size={16}/> Ẩn lịch học từng ngày</>
+                  ) : (
+                    <><ChevronDown size={16}/> Xem chi tiết từng ngày</>
+                  )}
+                </div>
+              </div>
+
+              {/* Phần mở rộng (Checklist từng ngày kèm Nút Học Ngay) */}
+              {isExpanded && (
+                <div className="bg-slate-50 border-t border-slate-100 p-4 space-y-3">
+                  {phase.days.map((dayText, dIdx) => {
+                    const dayDone = progress.dailyTasks?.[`${duration}_${idx}_${dIdx}`];
+                    
+                    // Tính toán slice dữ liệu cho riêng mục (ngày/tuần) này
+                    const blockStart = phase.start + (phase.end - phase.start) * (dIdx / totalDays);
+                    const blockEnd = phase.start + (phase.end - phase.start) * ((dIdx + 1) / totalDays);
+                    const customTitle = dayText.split(':')[0];
+
+                    const textLower = dayText.toLowerCase();
+                    const hasVocab = textLower.includes('từ vựng') || textLower.includes('chương') || textLower.includes('ôn tập');
+                    const hasKanji = textLower.includes('kanji') || textLower.includes('chương') || textLower.includes('ôn tập');
+                    const hasGrammar = textLower.includes('ngữ pháp') || textLower.includes('chương') || textLower.includes('ôn tập');
+                    const hasReading = textLower.includes('đọc hiểu') || textLower.includes('đề') || textLower.includes('test') || textLower.includes('ôn tập');
+
+                    return (
+                      <div 
+                        key={dIdx} 
+                        className={`flex items-start gap-3 p-4 bg-white rounded-xl border transition-colors shadow-sm ${dayDone ? 'border-emerald-200 bg-emerald-50/50' : 'border-slate-100 hover:border-red-200'}`}
+                      >
+                        <button onClick={(e) => toggleDayTask(e, idx, dIdx)} className="mt-0.5 flex-shrink-0 focus:outline-none transition-transform hover:scale-110">
+                          {dayDone ? (
+                            <CheckSquare className="text-emerald-500" size={22} />
+                          ) : (
+                            <Square className="text-slate-300 hover:text-slate-400" size={22} />
+                          )}
+                        </button>
+                        
+                        <div className="flex-1">
+                          <span 
+                            onClick={(e) => toggleDayTask(e, idx, dIdx)} 
+                            className={`text-sm font-bold leading-relaxed block cursor-pointer mb-2 transition-colors ${dayDone ? 'text-slate-400 line-through' : 'text-slate-700 hover:text-red-500'}`}
+                          >
+                            {dayText}
+                          </span>
+                          
+                          {/* Nút hành động vào học ngay của từng ngày */}
+                          <div className={`flex flex-wrap gap-2 transition-opacity duration-300 ${dayDone ? 'opacity-50 hover:opacity-100' : 'opacity-100'}`}>
+                            {hasVocab && (
+                              <button onClick={() => onNavigate('vocab', {start: blockStart, end: blockEnd}, customTitle)} className="text-xs px-2.5 py-1.5 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-600 rounded-lg transition-all flex items-center gap-1.5 font-semibold">
+                                <BookOpen size={14}/> Từ vựng
+                              </button>
+                            )}
+                            {hasKanji && (
+                              <button onClick={() => onNavigate('kanji', {start: blockStart, end: blockEnd}, customTitle)} className="text-xs px-2.5 py-1.5 bg-orange-50 hover:bg-orange-500 hover:text-white text-orange-600 rounded-lg transition-all flex items-center gap-1.5 font-semibold">
+                                <PenTool size={14}/> Kanji
+                              </button>
+                            )}
+                            {hasGrammar && (
+                              <button onClick={() => onNavigate('grammar', {start: blockStart, end: blockEnd}, customTitle)} className="text-xs px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-500 hover:text-white text-indigo-600 rounded-lg transition-all flex items-center gap-1.5 font-semibold">
+                                <Type size={14}/> Ngữ pháp
+                              </button>
+                            )}
+                            {hasReading && (
+                              <button onClick={() => onNavigate('reading', null, customTitle)} className="text-xs px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-500 hover:text-white text-emerald-600 rounded-lg transition-all flex items-center gap-1.5 font-semibold">
+                                <AlignLeft size={14}/> Luyện Đọc
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
-            <h3 className="text-xl font-bold mb-2 text-slate-800">{phase.title}</h3>
-            <p className="text-slate-600 leading-relaxed">{phase.desc}</p>
-            <div className="mt-4 pt-4 border-t border-slate-100 flex gap-2">
-              <button onClick={() => onNavigate('vocab')} className="text-sm px-3 py-1.5 bg-slate-100 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors font-medium">Từ vựng</button>
-              <button onClick={() => onNavigate('grammar')} className="text-sm px-3 py-1.5 bg-slate-100 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors font-medium">Ngữ pháp</button>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );
@@ -1309,15 +1676,22 @@ function RoadmapTab({ onNavigate }) {
 /* =========================================
    TAB: TỪ VỰNG (VOCABULARY - FLASHCARD/QUIZ)
    ========================================= */
-function VocabTab() {
+function VocabTab({ progress, setProgress, slice, customTitle }) {
   const [mode, setMode] = useState('flashcard'); // flashcard, quiz
+
+  const displayData = slice 
+    ? vocabData.slice(Math.floor(slice.start * vocabData.length), Math.floor(slice.end * vocabData.length)) 
+    : vocabData;
+
+  // Handle case where slice is too small
+  const safeData = displayData.length > 0 ? displayData : vocabData;
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex justify-between items-end mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-slate-800">Từ Vựng N4</h2>
-          <p className="text-slate-500 mt-1">Ôn tập bằng Flashcard hoặc kiểm tra với Quiz.</p>
+          <h2 className="text-3xl font-bold text-slate-800">{customTitle ? `Từ Vựng: ${customTitle}` : 'Từ Vựng N4 (Kho Tổng)'}</h2>
+          <p className="text-slate-500 mt-1">Ôn tập bằng Flashcard hoặc kiểm tra với Quiz. ({safeData.length} từ)</p>
         </div>
         <div className="bg-slate-200 p-1 rounded-xl flex">
           <button 
@@ -1335,7 +1709,7 @@ function VocabTab() {
         </div>
       </div>
 
-      {mode === 'flashcard' ? <Flashcards data={vocabData} /> : <VocabQuiz data={vocabData} />}
+      {mode === 'flashcard' ? <Flashcards data={safeData} /> : <VocabQuiz data={safeData} progress={progress} setProgress={setProgress} isFiltered={!!slice} />}
     </div>
   );
 }
@@ -1361,20 +1735,20 @@ function Flashcards({ data }) {
       
       {/* Card Element */}
       <div 
-        className="w-full h-80 bg-transparent cursor-pointer group perspective-1000"
+        className="w-full h-80 bg-transparent cursor-pointer group [perspective:1000px]"
         onClick={() => setIsFlipped(!isFlipped)}
       >
-        <div className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d shadow-xl rounded-3xl ${isFlipped ? 'rotate-y-180' : ''}`}>
+        <div className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] shadow-xl rounded-3xl ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}>
           
           {/* Front */}
-          <div className="absolute w-full h-full backface-hidden bg-white border-2 border-slate-100 rounded-3xl flex flex-col items-center justify-center p-8 text-center hover:border-red-200 transition-colors">
+          <div className="absolute w-full h-full [backface-visibility:hidden] bg-white border-2 border-slate-100 rounded-3xl flex flex-col items-center justify-center p-8 text-center hover:border-red-200 transition-colors">
             <span className="text-slate-400 text-sm mb-4 border border-slate-200 px-3 py-1 rounded-full">{card.type}</span>
             <h3 className="text-7xl font-bold text-slate-800 mb-2">{card.kanji}</h3>
             <p className="text-slate-400 mt-6 flex items-center gap-2"><RotateCcw size={16}/> Chạm để lật</p>
           </div>
 
           {/* Back */}
-          <div className="absolute w-full h-full backface-hidden bg-red-50 border-2 border-red-100 rounded-3xl flex flex-col items-center justify-center p-8 text-center rotate-y-180">
+          <div className="absolute w-full h-full [backface-visibility:hidden] bg-red-50 border-2 border-red-100 rounded-3xl flex flex-col items-center justify-center p-8 text-center [transform:rotateY(180deg)]">
             <h4 className="text-3xl font-semibold text-red-500 mb-2">{card.kana}</h4>
             <div className="w-16 h-1 bg-red-200 rounded-full my-4"></div>
             <p className="text-2xl text-slate-700">{card.meaning}</p>
@@ -1398,21 +1772,23 @@ function Flashcards({ data }) {
   );
 }
 
-function VocabQuiz({ data }) {
+function VocabQuiz({ data, progress, setProgress, isFiltered }) {
   const [qIndex, setQIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [selectedAns, setSelectedAns] = useState(null);
+  const [newMasteredCount, setNewMasteredCount] = useState(0);
 
   const currentQ = data[qIndex];
   
   // Generate random options
   const [options, setOptions] = useState([]);
   useEffect(() => {
-    if (!showResult) {
+    if (!showResult && currentQ) {
       let answers = [currentQ.meaning];
       while(answers.length < 4) {
-        let rand = data[Math.floor(Math.random() * data.length)].meaning;
+        // Sử dụng vocabData tổng để lấy đáp án ngẫu nhiên, tránh lỗi lặp vô hạn khi mảng data (slice) có ít hơn 4 từ
+        let rand = vocabData[Math.floor(Math.random() * vocabData.length)].meaning;
         if (!answers.includes(rand)) answers.push(rand);
       }
       setOptions(answers.sort(() => Math.random() - 0.5));
@@ -1423,7 +1799,19 @@ function VocabQuiz({ data }) {
   const handleAnswer = (ans) => {
     if (selectedAns) return; // Prevent multiple clicks
     setSelectedAns(ans);
-    if (ans === currentQ.meaning) setScore(score + 1);
+    if (ans === currentQ.meaning) {
+      setScore(score + 1);
+      
+      // Ghi nhận từ vựng đã thuộc vào tiến độ chung
+      if (!progress.vocabMastered?.includes(currentQ.kanji)) {
+        setNewMasteredCount(prev => prev + 1);
+        setProgress(prev => {
+          const newSet = new Set(prev.vocabMastered || []);
+          newSet.add(currentQ.kanji);
+          return { ...prev, vocabMastered: Array.from(newSet) };
+        });
+      }
+    }
     
     setTimeout(() => {
       if (qIndex < data.length - 1) {
@@ -1435,15 +1823,20 @@ function VocabQuiz({ data }) {
   };
 
   const restart = () => {
-    setQIndex(0); setScore(0); setShowResult(false); setSelectedAns(null);
+    setQIndex(0); setScore(0); setShowResult(false); setSelectedAns(null); setNewMasteredCount(0);
   };
 
   if (showResult) {
     return (
-      <div className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 text-center max-w-xl mx-auto mt-10">
-        <h3 className="text-2xl font-bold text-slate-800 mb-4">Kết Quả Bài Test</h3>
+      <div className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 text-center max-w-xl mx-auto mt-10 relative overflow-hidden">
+        {newMasteredCount > 0 && (
+          <div className="absolute top-0 left-0 w-full bg-emerald-400 text-emerald-900 py-2 font-bold flex items-center justify-center gap-2">
+            <Trophy size={18} /> Chúc mừng! Bạn vừa thuộc thêm {newMasteredCount} từ vựng mới.
+          </div>
+        )}
+        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-6">Kết Quả Bài Test</h3>
         <div className="text-6xl font-black text-red-500 mb-6">{score} / {data.length}</div>
-        <p className="text-slate-600 mb-8">{score > 7 ? 'Tuyệt vời! Bạn nắm từ vựng rất chắc.' : 'Hãy ôn tập thêm bằng Flashcard nhé!'}</p>
+        <p className="text-slate-600 mb-8">{score > (data.length / 2) ? 'Tuyệt vời! Bạn nắm từ vựng rất chắc.' : 'Hãy ôn tập thêm bằng Flashcard nhé!'}</p>
         <button onClick={restart} className="bg-slate-800 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-700 transition-colors">
           Làm Lại
         </button>
@@ -1487,35 +1880,85 @@ function VocabQuiz({ data }) {
 /* =========================================
    TAB: KANJI (SRS / MNEMONICS)
    ========================================= */
-function KanjiTab() {
-  const [selectedKanji, setSelectedKanji] = useState(kanjiData[0]);
+function KanjiTab({ progress, setProgress, slice, customTitle }) {
+  const displayData = slice 
+    ? kanjiData.slice(Math.floor(slice.start * kanjiData.length), Math.floor(slice.end * kanjiData.length)) 
+    : kanjiData;
+  const safeData = displayData.length > 0 ? displayData : kanjiData;
+
+  const [selectedKanji, setSelectedKanji] = useState(safeData[0]);
+
+  // Reset selection if data changes
+  useEffect(() => {
+    setSelectedKanji(safeData[0]);
+  }, [slice]);
+
+  const isMastered = progress.kanjiMastered.includes(selectedKanji.kanji);
+
+  const handleSRS = (mastered) => {
+    setProgress(prev => {
+      const newSet = new Set(prev.kanjiMastered);
+      if (mastered) newSet.add(selectedKanji.kanji);
+      else newSet.delete(selectedKanji.kanji);
+      return { ...prev, kanjiMastered: Array.from(newSet) };
+    });
+  };
+
+  const renderExamplesWithFurigana = (text) => {
+    if (!text) return null;
+    return text.split(', ').map((item, index) => {
+      const regex = /([^\[]+)\[([^\]]+)\]\s*(\(.*\))/;
+      const match = item.match(regex);
+      if (match) {
+        return (
+          <span key={index} className="inline-block mr-3 mb-2 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm">
+            <ruby className="font-bold text-slate-800 text-lg mr-1">
+              {match[1]}
+              <rt className="text-red-500 text-[10px] tracking-tighter">{match[2]}</rt>
+            </ruby>
+            <span className="text-slate-600 text-sm">{match[3]}</span>
+          </span>
+        );
+      }
+      return <span key={index} className="inline-block mr-3 mb-2 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm text-slate-700">{item}</span>;
+    });
+  };
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-slate-800">Kanji N4 - Học sâu nhớ lâu</h2>
-        <p className="text-slate-500 mt-1">Kết hợp gợi ý nhớ (Mnemonics) và Lặp lại ngắt quãng (SRS).</p>
+        <h2 className="text-3xl font-bold text-slate-800">{customTitle ? `Kanji: ${customTitle}` : 'Kanji N4 (Kho Tổng)'}</h2>
+        <p className="text-slate-500 mt-1">Kết hợp gợi ý nhớ (Mnemonics) và đánh giá tiến độ (SRS). ({safeData.length} chữ)</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">
         {/* List */}
         <div className="md:w-1/3 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 h-fit max-h-[600px] overflow-y-auto">
           <div className="grid grid-cols-5 md:grid-cols-3 gap-2">
-            {kanjiData.map((k, idx) => (
-              <button 
-                key={idx} 
-                onClick={() => setSelectedKanji(k)}
-                className={`aspect-square flex items-center justify-center text-2xl font-bold rounded-xl transition-all
-                  ${selectedKanji.kanji === k.kanji ? 'bg-red-500 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-200'}`}
-              >
-                {k.kanji}
-              </button>
-            ))}
+            {safeData.map((k, idx) => {
+              const mastered = progress.kanjiMastered.includes(k.kanji);
+              return (
+                <button 
+                  key={idx} 
+                  onClick={() => setSelectedKanji(k)}
+                  className={`aspect-square relative flex items-center justify-center text-2xl font-bold rounded-xl transition-all
+                    ${selectedKanji.kanji === k.kanji ? 'bg-red-500 text-white shadow-md' : 'bg-slate-50 text-slate-700 hover:bg-slate-200'}`}
+                >
+                  {mastered && <CheckCircle size={12} className={`absolute top-1 right-1 ${selectedKanji.kanji === k.kanji ? 'text-white' : 'text-emerald-500'}`} />}
+                  {k.kanji}
+                </button>
+              )
+            })}
           </div>
         </div>
 
         {/* Detail Panel */}
-        <div className="md:w-2/3 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+        <div className="md:w-2/3 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col relative">
+          {isMastered && (
+            <div className="absolute top-4 right-4 bg-emerald-500 text-white px-3 py-1.5 rounded-full font-bold text-sm flex items-center gap-1 shadow-md z-10">
+              <Trophy size={16} /> Đã thuộc
+            </div>
+          )}
           <div className="bg-slate-800 p-8 text-center text-white flex-shrink-0">
             <h2 className="text-8xl font-black mb-4 drop-shadow-md">{selectedKanji.kanji}</h2>
             <p className="text-xl font-medium tracking-widest uppercase text-slate-300">{selectedKanji.meaning}</p>
@@ -1534,9 +1977,11 @@ function KanjiTab() {
                 </div>
               </div>
 
-              <div className="mb-6">
-                <p className="text-sm text-slate-500 font-bold mb-2 uppercase tracking-wider">Từ ví dụ</p>
-                <p className="text-slate-800 text-lg">{selectedKanji.examples}</p>
+              <div className="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <p className="text-sm text-slate-500 font-bold mb-3 uppercase tracking-wider">Từ ví dụ</p>
+                <div className="flex flex-wrap">
+                  {renderExamplesWithFurigana(selectedKanji.examples)}
+                </div>
               </div>
 
               <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6">
@@ -1550,12 +1995,12 @@ function KanjiTab() {
 
             {/* Simulated SRS Buttons */}
             <div>
-              <p className="text-center text-xs text-slate-400 mb-3 uppercase tracking-wider font-bold">Mức độ ghi nhớ (Hệ thống SRS)</p>
+              <p className="text-center text-xs text-slate-400 mb-3 uppercase tracking-wider font-bold">Mức độ ghi nhớ của bạn</p>
               <div className="flex gap-2">
-                <button className="flex-1 py-3 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold rounded-xl transition-colors">Lại từ đầu<br/><span className="text-xs font-normal opacity-70">(&lt; 1 phút)</span></button>
-                <button className="flex-1 py-3 bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold rounded-xl transition-colors">Khó<br/><span className="text-xs font-normal opacity-70">(10 phút)</span></button>
-                <button className="flex-1 py-3 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-bold rounded-xl transition-colors">Tốt<br/><span className="text-xs font-normal opacity-70">(1 ngày)</span></button>
-                <button className="flex-1 py-3 bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold rounded-xl transition-colors">Dễ<br/><span className="text-xs font-normal opacity-70">(4 ngày)</span></button>
+                <button onClick={() => handleSRS(false)} className="flex-1 py-3 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl transition-colors border border-rose-200">Lại từ đầu</button>
+                <button onClick={() => handleSRS(false)} className="flex-1 py-3 bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold rounded-xl transition-colors border border-orange-200">Khó</button>
+                <button onClick={() => handleSRS(true)} className="flex-1 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl transition-colors border border-emerald-200">Tốt</button>
+                <button onClick={() => handleSRS(true)} className="flex-1 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-xl transition-colors border border-blue-200">Dễ</button>
               </div>
             </div>
           </div>
@@ -1568,19 +2013,47 @@ function KanjiTab() {
 /* =========================================
    TAB: NGỮ PHÁP (GRAMMAR)
    ========================================= */
-function GrammarTab({ openChatWithPrompt }) {
+function GrammarTab({ progress, setProgress, openChatWithPrompt, slice, customTitle }) {
+  const displayData = slice 
+    ? grammarData.slice(Math.floor(slice.start * grammarData.length), Math.floor(slice.end * grammarData.length)) 
+    : grammarData;
+  const safeData = displayData.length > 0 ? displayData : grammarData;
+
+  const toggleGrammar = (structure) => {
+    setProgress(prev => {
+      const newSet = new Set(prev.grammarMastered || []);
+      if (newSet.has(structure)) {
+        newSet.delete(structure);
+      } else {
+        newSet.add(structure);
+      }
+      return { ...prev, grammarMastered: Array.from(newSet) };
+    });
+  };
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-slate-800">Ngữ pháp N4</h2>
-        <p className="text-slate-500 mt-1">Nắm chắc cấu trúc, ví dụ và cách giải thích.</p>
+        <h2 className="text-3xl font-bold text-slate-800">{customTitle ? `Ngữ pháp: ${customTitle}` : 'Ngữ pháp N4 (Kho Tổng)'}</h2>
+        <p className="text-slate-500 mt-1">Nắm chắc cấu trúc, ví dụ và cách giải thích. ({safeData.length} mẫu)</p>
       </div>
 
       <div className="space-y-6">
-        {grammarData.map((item, idx) => (
-          <div key={idx} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        {safeData.map((item, idx) => {
+          const isMastered = progress.grammarMastered?.includes(item.structure);
+          return (
+          <div key={idx} className={`bg-white rounded-2xl shadow-sm border overflow-hidden transition-colors ${isMastered ? 'border-emerald-200' : 'border-slate-100'}`}>
             <div className="bg-slate-800 px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-4">
-              <h3 className="text-xl font-bold text-white tracking-wide">{item.structure}</h3>
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => toggleGrammar(item.structure)}
+                  className={`transition-colors focus:outline-none flex-shrink-0 ${isMastered ? 'text-emerald-400 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-300'}`}
+                  title={isMastered ? "Bỏ đánh dấu" : "Đánh dấu đã học"}
+                >
+                  <CheckCircle2 size={24} />
+                </button>
+                <h3 className="text-xl font-bold text-white tracking-wide">{item.structure}</h3>
+              </div>
               <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">{item.meaning}</span>
             </div>
             <div className="p-6">
@@ -1590,37 +2063,38 @@ function GrammarTab({ openChatWithPrompt }) {
               </p>
               
               <div>
-              <span className="font-bold text-slate-800 block mb-3">Ví dụ (例文):</span>
-              <div className="space-y-4">
-                {item.examples.map((ex, eIdx) => (
-                  <div key={eIdx} className="pl-4 border-l-4 border-red-400">
-                    <p className="text-lg font-medium text-slate-800 mb-1">{ex.jp}</p>
-                    <p className="text-slate-500">{ex.vi}</p>
-                  </div>
-                ))}
+                <span className="font-bold text-slate-800 block mb-3">Ví dụ (例文):</span>
+                <div className="space-y-4">
+                  {item.examples.map((ex, eIdx) => (
+                    <div key={eIdx} className="pl-4 border-l-4 border-red-400">
+                      <p className="text-lg font-medium text-slate-800 mb-1">{ex.jp}</p>
+                      <p className="text-slate-500">{ex.vi}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+                <button 
+                  onClick={() => openChatWithPrompt(`Hãy giải thích thật chi tiết và cho thêm 3 ví dụ khác về cấu trúc ngữ pháp N4: "${item.structure}" (${item.meaning})`)}
+                  className="flex items-center gap-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-4 py-2 rounded-xl transition-colors font-medium text-sm"
+                >
+                  <Sparkles size={16} /> Nhờ AI giải thích thêm
+                </button>
               </div>
             </div>
-
-            <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end">
-              <button 
-                onClick={() => openChatWithPrompt(`Hãy giải thích thật chi tiết và cho thêm 3 ví dụ khác về cấu trúc ngữ pháp N4: "${item.structure}" (${item.meaning})`)}
-                className="flex items-center gap-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-4 py-2 rounded-xl transition-colors font-medium text-sm"
-              >
-                <Sparkles size={16} /> Nhờ AI giải thích thêm
-              </button>
-            </div>
           </div>
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
-  </div>
   );
 }
 
 /* =========================================
    TAB: ĐỌC HIỂU (READING)
    ========================================= */
-function ReadingTab({ openChatWithPrompt }) {
+function ReadingTab({ openChatWithPrompt, customTitle }) {
   const [selectedWord, setSelectedWord] = useState(null);
 
   const textPassage = [
@@ -1637,7 +2111,7 @@ function ReadingTab({ openChatWithPrompt }) {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-slate-800">Luyện tập Đọc hiểu</h2>
+        <h2 className="text-3xl font-bold text-slate-800">{customTitle ? `Luyện Đọc: ${customTitle}` : 'Luyện tập Đọc hiểu'}</h2>
         <p className="text-slate-500 mt-1">Bấm vào các từ được in đậm để tra nghĩa trực tiếp.</p>
       </div>
 
@@ -1777,9 +2251,9 @@ function GeminiChat({ onClose, initialPrompt, clearInitialPrompt }) {
   };
 
   return (
-    <div className="fixed bottom-24 right-6 w-[340px] md:w-96 bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-8 fade-in duration-300">
+    <div className="fixed bottom-24 right-6 w-[340px] md:w-96 h-[500px] max-h-[80vh] bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-8 fade-in duration-300">
       {/* Header */}
-      <div className="bg-indigo-600 text-white p-4 flex justify-between items-center">
+      <div className="bg-indigo-600 text-white p-4 flex justify-between items-center shrink-0">
         <div className="flex items-center gap-2">
           <Bot size={24} />
           <h3 className="font-bold text-lg">AI Trợ Giảng N4</h3>
@@ -1790,7 +2264,7 @@ function GeminiChat({ onClose, initialPrompt, clearInitialPrompt }) {
       </div>
 
       {/* Chat Body */}
-      <div className="flex-1 p-4 h-96 overflow-y-auto bg-slate-50 flex flex-col gap-4">
+      <div className="flex-1 p-4 overflow-y-auto bg-slate-50 space-y-4">
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
@@ -1810,23 +2284,28 @@ function GeminiChat({ onClose, initialPrompt, clearInitialPrompt }) {
             </div>
           </div>
         )}
-        <div ref={messagesEndRef} />
+        <div ref={messagesEndRef} className="h-px" />
       </div>
 
       {/* Input Area */}
-      <div className="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
-        <input 
-          type="text" 
+      <div className="p-3 bg-white border-t border-slate-100 flex items-end gap-2 shrink-0">
+        <textarea 
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Hỏi AI bất kỳ điều gì..."
-          className="flex-1 bg-slate-100 border-none px-4 py-2.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault(); // Ngăn xuống dòng khi chỉ bấm Enter
+              handleSend();
+            }
+          }}
+          placeholder="Hỏi AI (Shift+Enter để xuống dòng)..."
+          className="flex-1 bg-slate-100 border-none px-4 py-3 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
+          rows={2}
         />
         <button 
           onClick={() => handleSend()}
           disabled={isLoading || !input.trim()}
-          className="p-2.5 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          className="h-10 w-10 mb-0.5 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shrink-0"
         >
           <Send size={18} />
         </button>
